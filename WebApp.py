@@ -1,8 +1,7 @@
 from flask import Flask, render_template, request, jsonify
 import setproctitle
 import config
-from helpers.RedisHelper import RedisHelper
-from helpers import css3colors
+
 
 __author__ = 'joe'
 setproctitle.setproctitle("neatlightsflask")
@@ -18,7 +17,6 @@ def main():
 @app.route('/colors', methods=["GET"])
 def colors():
     response = {}
-    response["colors"] = css3colors.css3colors
     return jsonify(response)
 
 
@@ -37,11 +35,6 @@ def send():
             'color': [request.args.get('color').lower()],  # ['blue'],
             'method_name': request.args.get('method')  # 'room_lighting'
         }
-        if message['color'][0].lower() not in css3colors.css3colors or message[
-                'color'][0].lower() == 'random':
-            message['color'] = css3colors.rand_single_color()
-            response[
-                'info'] = "Random color selected or color not found.  Rancom color was used."
     except Exception as e:
         response['status'] = "error"
         response[
@@ -51,7 +44,6 @@ def send():
 
     try:
         print(message)
-        RedisHelper().publish(channel=config.PUBSUB_NAME, message=message)
         response["status"] = "success"
         response['message'] = message
     except:

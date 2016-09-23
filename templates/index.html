@@ -1,5 +1,5 @@
 <!doctype html>
-<html ng-app="neatlightsweb" ng-cloak="true">
+<html ng-app="pirriweb" ng-cloak="true">
     <head>
         <title>Pirri Scheduler</title>
         <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.7/css/bootstrap.min.css" integrity="sha384-BVYiiSIFeK1dGmJRAkycuHAHRg32OmUcww7on3RYdg4Va+PmSTsz/K68vbdEjh4u" crossorigin="anonymous">
@@ -15,14 +15,14 @@
             </div>
             <!-- Slider for brightness controll -->
             <div id="brightness">
-                Brightness = {[brightness]} 
+                Brightness = {[brightness]}
                 <br>
                 <input ng-change="send()" ng-model="brightness" type="range" name="brightnessSlider" id="brightnessSlider" value="0" min="0" max="100">
             </div>
             <div id="color">
                 Color = <font color="{[color]}">{[ color ]}</font>
                 <br>
-                <select ng-model="color" ng-change="send()"> 
+                <select ng-model="color" ng-change="send()">
                     <option ng-repeat="c in colors" value="{[c]}">{[c]}</option>
                 </select>
             </div>
@@ -30,6 +30,49 @@
                 Length = {[ length ]}
                 <br>
                 <input ng-change="send()" ng-model="length" type="range" name="lengthSlider" id="lengthSlider" value="0" min="0" max="1000">
+            </div>
+            <div>
+                <script type="text/javascript" src="https://cdnjs.cloudflare.com/ajax/libs/Chart.js/2.3.0/Chart.js"></script>
+                <canvas id="myChart" width="400" height="400"></canvas>
+                <script>
+                var ctx = document.getElementById("myChart");
+                var myChart = new Chart(ctx, {
+                type: 'bar',
+                data: {
+                labels: ["Red", "Blue", "Yellow", "Green", "Purple", "Orange"],
+                datasets: [{
+                label: '# of Votes',
+                data: [12, 19, 3, 5, 2, 3],
+                backgroundColor: [
+                'rgba(255, 99, 132, 0.2)',
+                'rgba(54, 162, 235, 0.2)',
+                'rgba(255, 206, 86, 0.2)',
+                'rgba(75, 192, 192, 0.2)',
+                'rgba(153, 102, 255, 0.2)',
+                'rgba(255, 159, 64, 0.2)'
+                ],
+                borderColor: [
+                'rgba(255,99,132,1)',
+                'rgba(54, 162, 235, 1)',
+                'rgba(255, 206, 86, 1)',
+                'rgba(75, 192, 192, 1)',
+                'rgba(153, 102, 255, 1)',
+                'rgba(255, 159, 64, 1)'
+                ],
+                borderWidth: 1
+                }]
+                },
+                options: {
+                scales: {
+                yAxes: [{
+                ticks: {
+                beginAtZero:true
+                }
+                }]
+                }
+                }
+                });
+                </script>
             </div>
         </div>
     </body>

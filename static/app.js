@@ -34,6 +34,6 @@
             })
             .error(function(data, status, headers, config) {})
         };
-        $scope.loadColors();
+
     });
 })();
