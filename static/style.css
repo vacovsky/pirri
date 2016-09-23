@@ -1,0 +1,16 @@
+#ex1Slider .slider-selection {
+    background: #BABABA;
+}
+
+body {
+    padding: 15%;
+    background-color: gray;
+    background-image: url("https://i.redd.it/e8hot6bq90lx.png");
+    background-repeat: no-repeat;
+    background-position: right top;
+    background-attachment: fixed;
+}
+
+#title {
+    text-align: center
+}
