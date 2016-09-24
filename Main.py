@@ -8,7 +8,7 @@ class Main:
     def __init__(self):
         GPIO.setmode(GPIO.BCM)
         for pin in self.relay_pins:
-            GPIO.setup(pin, 0)
+            GPIO.setup(pin, 1)
 
     def start(self):
         pass
