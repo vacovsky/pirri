@@ -15,6 +15,10 @@ class Main:
 
 
 if __name__ == '__main__':
-    main = Main()
-    ButtonControl(relay_pins=main.relay_pins).init_button_listener()
-    main.start()
+    try:
+        main = Main()
+        ButtonControl(relay_pins=main.relay_pins).init_button_listener()
+        main.start()
+    except KeyboardInterrupt:
+        GPIO.cleanup()
+        exit()
