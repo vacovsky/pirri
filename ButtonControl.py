@@ -10,6 +10,7 @@ class ButtonControl:
     current_pindex = None
     max_pindex = None
     relay_pins = None
+    ptog = {}
 
     def __init__(self, gpio_pin=19, relay_pins=[]):
         self.gpio_pin = gpio_pin
@@ -19,6 +20,7 @@ class ButtonControl:
         self.max_pindex = len(relay_pins) - 1
         self.current_pindex = 0
         for pin in relay_pins:
+            self.ptog[pin] = 1
             GPIO.setup(pin, GPIO.OUT)
             # GPIO.setup(pin, 1)
             self.phash[pin] = False
@@ -41,8 +43,10 @@ class ButtonControl:
                 self.relay_pins[self.current_pindex]]
             GPIO.output(
                 self.relay_pins[self.current_pindex], self.phash[self.relay_pins[self.current_pindex]])
+            self.ptog[self.current_pindex]
 
-            if self.current_pindex < self.max_pindex:
-                self.current_pindex += 1
-            else:
-                self.current_pindex = 0
+            if self.ptog[self.relay_pins[self.current_pindex]] % 2 == 0:
+                if self.current_pindex < self.max_pindex:
+                    self.current_pindex += 1
+                else:
+                    self.current_pindex = 0
