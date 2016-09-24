@@ -7,7 +7,6 @@ class ButtonControl:
     phash = {}
     gpio_pin = 19
     relay_active = False
-    relay_pin = 12
     current_pindex = None
     max_pindex = None
 
