@@ -29,13 +29,12 @@ class ButtonControl:
                 time.sleep(0.3)
 
     def execute_button_function(self):
-        if not self.phash[self.current_pindex]:
-            self.phash[self.current_pindex] = not self.phash[
-                self.current_pindex]
+        if not self.phash[self.relay_pins[self.current_pindex]]:
+            self.phash[self.relay_pins[self.current_pindex]] = not self.phash[self.relay_pins[self.current_pindex]]
             GPIO.output(
                 self.relay_pins[self.current_pindex], True)
             print(
-                "Relay connected to GPIO-{0} status: {1}".format(self.relay_pins[self.current_pindex], self.phash[self.current_pindex]))
+                "Relay connected to GPIO-{0} status: {1}".format(self.relay_pins[self.current_pindex], self.phash[self.relay_pins[self.current_pindex]]))
 
         else:
             GPIO.output(
@@ -45,4 +44,4 @@ class ButtonControl:
             else:
                 self.relay_pins[self.current_pindex] = 0
             print(
-                "Relay connected to GPIO-{0} status: {1}".format(self.relay_pins[self.current_pindex], self.phash[self.current_pindex]))
+                "Relay connected to GPIO-{0} status: {1}".format(self.relay_pins[self.current_pindex], self.phash[self.relay_pins[self.current_pindex]]))
