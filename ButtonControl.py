@@ -20,8 +20,11 @@ class ButtonControl:
         self.current_pindex = 0
         for pin in relay_pins:
             GPIO.setup(pin, GPIO.OUT)
-            #  GPIO.setup(pin, 1)
+            GPIO.setup(pin, 1)
             self.phash[pin] = False
+
+    def print_status(self, pin, state):
+        print("Relay connected to GPIO-{0} status: {1}".format(pin, state))
 
     def init_button_listener(self):
         Thread(target=self.button_listener, args=()).start()
@@ -34,19 +37,19 @@ class ButtonControl:
                 time.sleep(0.3)
 
     def execute_button_function(self):
-        print(self.max_pindex, self.current_pindex, self.relay_pins[self.current_pindex], self.phash[self.relay_pins[self.current_pindex]])
+        print(self.max_pindex, self.current_pindex, self.relay_pins[
+              self.current_pindex], self.phash[self.relay_pins[self.current_pindex]])
         if not self.phash[self.relay_pins[self.current_pindex]]:
-            self.phash[self.relay_pins[self.current_pindex]] = not self.phash[self.relay_pins[self.current_pindex]]
+            self.phash[self.relay_pins[self.current_pindex]] = not self.phash[
+                self.relay_pins[self.current_pindex]]
             GPIO.output(
                 self.relay_pins[self.current_pindex], True)
-            print(
-                "Relay connected to GPIO-{0} status: {1}".format(self.relay_pins[self.current_pindex], self.phash[self.relay_pins[self.current_pindex]]))
 
         else:
             GPIO.output(
                 self.relay_pins[self.current_pindex], False)
-            print(
-                "Relay connected to GPIO-{0} status: {1}".format(self.relay_pins[self.current_pindex], self.phash[self.relay_pins[self.current_pindex]]))
+            self.print_status(self.relay_pins[self.current_pindex], self.phash[
+                              self.relay_pins[self.current_pindex]])
             if self.relay_pins[self.current_pindex] != self.max_pindex:
                 self.relay_pins[self.current_pindex] += 1
             else:
