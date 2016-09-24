@@ -16,5 +16,5 @@ class Main:
 
 if __name__ == '__main__':
     main = Main()
-    ButtonControl(relay_pin=main.relay_pin).init_button_listener()
+    ButtonControl(relay_pin=main.relay_pins).init_button_listener()
     main.start()
