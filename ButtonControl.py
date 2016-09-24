@@ -20,7 +20,7 @@ class ButtonControl:
         self.current_pindex = 0
         for pin in relay_pins:
             GPIO.setup(pin, GPIO.OUT)
-            GPIO.setup(pin, 1)
+            # GPIO.setup(pin, 1)
             self.phash[pin] = False
 
     def print_status(self, pin, state):
