@@ -44,7 +44,6 @@ class ButtonControl:
             self.relay_pins[self.current_pindex]]
         GPIO.output(
             self.relay_pins[self.current_pindex], self.phash[self.relay_pins[self.current_pindex]])
-        self.ptog[self.current_pindex]
         self.posctl += 1
 
         if self.posctl == 2:
