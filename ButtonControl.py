@@ -50,7 +50,7 @@ class ButtonControl:
                 self.relay_pins[self.current_pindex], False)
             self.print_status(self.relay_pins[self.current_pindex], self.phash[
                               self.relay_pins[self.current_pindex]])
-            if self.relay_pins[self.current_pindex] != self.max_pindex:
+            if self.relay_pins[self.current_pindex] < self.max_pindex:
                 self.current_pindex += 1
             else:
                 self.relay_pins[self.current_pindex] = 0
