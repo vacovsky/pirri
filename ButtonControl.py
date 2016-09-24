@@ -37,19 +37,11 @@ class ButtonControl:
                 time.sleep(0.3)
 
     def execute_button_function(self):
-        print(self.max_pindex, self.current_pindex, self.relay_pins[
-              self.current_pindex], self.phash[self.relay_pins[self.current_pindex]])
-        if not self.phash[self.relay_pins[self.current_pindex]]:
             self.phash[self.relay_pins[self.current_pindex]] = not self.phash[
                 self.relay_pins[self.current_pindex]]
             GPIO.output(
-                self.relay_pins[self.current_pindex], True)
+                self.relay_pins[self.current_pindex], self.phash[self.relay_pins[self.current_pindex]])
 
-        else:
-            GPIO.output(
-                self.relay_pins[self.current_pindex], False)
-            self.print_status(self.relay_pins[self.current_pindex], self.phash[
-                              self.relay_pins[self.current_pindex]])
             if self.current_pindex < self.max_pindex:
                 self.current_pindex += 1
             else:
