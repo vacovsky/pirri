@@ -19,10 +19,11 @@ class ButtonControl:
         GPIO.setup(gpio_pin, GPIO.IN, pull_up_down=GPIO.PUD_UP)
         self.max_pindex = len(relay_pins) - 1
         self.current_pindex = 0
+        self.posctl = 0
         for pin in relay_pins:
             self.ptog[pin] = 1
             GPIO.setup(pin, GPIO.OUT)
-            # GPIO.setup(pin, 1)
+            #  GPIO.setup(pin, 1)
             self.phash[pin] = False
 
     def print_status(self, pin, state):
