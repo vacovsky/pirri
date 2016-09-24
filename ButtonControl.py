@@ -9,9 +9,11 @@ class ButtonControl:
     relay_active = False
     current_pindex = None
     max_pindex = None
+    relay_pins = None
 
     def __init__(self, gpio_pin=19, relay_pins=[]):
         self.gpio_pin = gpio_pin
+        self.relay_pins = relay_pins
         GPIO.setmode(GPIO.BCM)
         GPIO.setup(gpio_pin, GPIO.IN, pull_up_down=GPIO.PUD_UP)
         self.max_pindex = len(relay_pins) - 1
