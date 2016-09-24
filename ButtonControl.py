@@ -17,6 +17,7 @@ class ButtonControl:
         GPIO.setmode(GPIO.BCM)
         GPIO.setup(gpio_pin, GPIO.IN, pull_up_down=GPIO.PUD_UP)
         self.max_pindex = len(relay_pins) - 1
+        self.current_pindex = 0
         for pin in relay_pins:
             self.phash[pin] = False
 
