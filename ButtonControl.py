@@ -19,6 +19,7 @@ class ButtonControl:
         self.max_pindex = len(relay_pins) - 1
         self.current_pindex = 0
         for pin in relay_pins:
+            GPIO.setup(pin, 1)
             self.phash[pin] = False
 
     def init_button_listener(self):
@@ -32,6 +33,7 @@ class ButtonControl:
                 time.sleep(0.3)
 
     def execute_button_function(self):
+        print(self.max_pindex, self.current_pindex, self.relay_pins[self.current_pindex], self.phash[self.relay_pins[self.current_pindex]])
         if not self.phash[self.relay_pins[self.current_pindex]]:
             self.phash[self.relay_pins[self.current_pindex]] = not self.phash[self.relay_pins[self.current_pindex]]
             GPIO.output(
