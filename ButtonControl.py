@@ -47,6 +47,8 @@ class ButtonControl:
         self.posctl += 1
 
         if self.posctl == 2:
+            GPIO.output(
+                self.relay_pins[self.current_pindex], 1)
             if self.current_pindex < self.max_pindex:
                 self.current_pindex += 1
             else:
