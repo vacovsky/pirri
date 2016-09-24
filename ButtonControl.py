@@ -35,6 +35,9 @@ class ButtonControl:
                 self.current_pindex]
             GPIO.output(
                 self.relay_pins[self.current_pindex], True)
+            print(
+                "Relay connected to GPIO-{0} status: {1}".format(self.relay_pins[self.current_pindex], self.phash[self.current_pindex]))
+
         else:
             GPIO.output(
                 self.relay_pins[self.current_pindex], False)
@@ -42,5 +45,5 @@ class ButtonControl:
                 self.relay_pins[self.current_pindex] += 1
             else:
                 self.relay_pins[self.current_pindex] = 0
-        print(
-            "Relay connected to GPIO-{0} status: {1}".format(self.relay_pin, self.relay_active))
+            print(
+                "Relay connected to GPIO-{0} status: {1}".format(self.relay_pins[self.current_pindex], self.phash[self.current_pindex]))
