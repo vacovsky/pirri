@@ -18,7 +18,8 @@ class Station:
 
     def load(self):
         try:
-            sqlStr = ''' SELECT * FROM STATIONS WHERE id={0}'''.format(self.sid)
+            sqlStr = ''' SELECT * FROM STATIONS WHERE id={0}'''.format(
+                self.sid)
             data = self.sqlConn.read(sqlStr)[0]
             self.gpio_pin = data[1]
         except Exception as e:
