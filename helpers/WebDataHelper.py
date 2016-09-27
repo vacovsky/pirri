@@ -18,7 +18,7 @@ def list_gpio():
 def list_stations():
     sqlConn = SqlHelper()
     stations = []
-    sqlStr = 'SELECT * FROM STATIONS LIMIT 500'
+    sqlStr = 'SELECT * FROM STATIONS ORDER BY ID ASC LIMIT 500'
     data = sqlConn.read(sqlStr)
     for s in data:
         sid = s[0]
