@@ -27,10 +27,9 @@
         };
 
         $scope.loadStations = function() {
-            $http.get('/colors')
+            $http.get('/stations/load')
             .success(function(data, status, headers, config) {
-               $scope.colors = data.colors;
-               $scope.colors.push("random");
+                
             })
             .error(function(data, status, headers, config) {})
         };

@@ -13,77 +13,66 @@
         <script type="text/javascript" src="https://cdnjs.cloudflare.com/ajax/libs/moment.js/2.15.1/moment.min.js"></script>
     </head>
     <body>
-
         <div ng-controller="PirriControl as pc">
-            <div>
-                <h3 id="title"><font color="{[color]}">Pirri Scheduler</font></h3>
-            </div>
-            <!-- Slider for brightness controll -->
-            <div id="brightness">
-                Brightness = {[brightness]}
-                <br>
-                <input ng-change="send()" ng-model="brightness" type="range" name="brightnessSlider" id="brightnessSlider" value="0" min="0" max="100">
-            </div>
-            <div id="color">
-                Color = <font color="{[color]}">{[ color ]}</font>
-                <br>
-                <select ng-model="color" ng-change="send()">
-                    <option ng-repeat="c in colors" value="{[c]}">{[c]}</option>
-                </select>
-            </div>
-            <div id="length">
-                Length = {[ length ]}
-                <br>
-                <input ng-change="send()" ng-model="length" type="range" name="lengthSlider" id="lengthSlider" value="0" min="0" max="1000">
-            </div>
-            <div>
-                <script type="text/javascript" src="https://cdnjs.cloudflare.com/ajax/libs/Chart.js/2.3.0/Chart.js"></script>
-                <canvas id="myChart" width="400" height="400"></canvas>
-                <script>
-                var ctx = document.getElementById("myChart");
-                var myChart = new Chart(ctx, {
-                type: 'bar',
-                data: {
-                labels: ["Red", "Blue", "Yellow", "Green", "Purple", "Orange"],
-                datasets: [{
-                label: '# of Votes',
-                data: [12, 19, 3, 5, 2, 3],
-                backgroundColor: [
-                'rgba(255, 99, 132, 0.2)',
-                'rgba(54, 162, 235, 0.2)',
-                'rgba(255, 206, 86, 0.2)',
-                'rgba(75, 192, 192, 0.2)',
-                'rgba(153, 102, 255, 0.2)',
-                'rgba(255, 159, 64, 0.2)'
-                ],
-                borderColor: [
-                'rgba(255,99,132,1)',
-                'rgba(54, 162, 235, 1)',
-                'rgba(255, 206, 86, 1)',
-                'rgba(75, 192, 192, 1)',
-                'rgba(153, 102, 255, 1)',
-                'rgba(255, 159, 64, 1)'
-                ],
-                borderWidth: 1
-                }]
-                },
-                options: {
-                scales: {
-                yAxes: [{
-                ticks: {
-                beginAtZero:true
-                }
-                }]
-                }
-                }
-                });
-                </script>
-            </div>
-
-            <div>
-                <p>Date Picker</p>
-                <datetimepicker data-ng-model="data.date"></datetimepicker>
-
+            <div id="station-schedules">
+                <section>
+                    <h1>Pirri Scheduler - Stations</h1>
+                    <div  class="tbl-header">
+                        <table cellpadding="0" cellspacing="0" border="0">
+                            <thead>
+                                <th>Station ID</th>
+                                <th>Last Run</th>
+                                <th>Next Run</th>
+                                <th>GPIO</th>
+                                <th>Location</th>
+                                <th>Notes</th>
+                                <th>History</th>
+                                <th>Run Stats</th>
+                            </thead>
+                        </table>
+                    </div>
+                    <div class="tbl-content">
+                        <table cellpadding="0" cellspacing="0" border="0">
+                            <tbody>
+                                <tr>
+                                    <td>1</td>
+                                    <td>Monday at 1000</td>
+                                    <td>Wednesday at 0630</td>
+                                    <td>99</td>
+                                    <td>B1</td>
+                                    <td>Back yard drip line - flower pots and trees</td>
+                                    <td><a href="#">[HISTORY]</a></td>
+                                    <td><a href="#">[STATS]</a></td>
+                                </tr>
+                                <tr>
+                                    <td>2</td>
+                                    <td>Monday at 1000</td>
+                                    <td>Wednesday at 0630</td>
+                                    <td>99</td>
+                                    <td>B2</td>
+                                    <td>back lawn left</td>
+                                    <td><a href="#">[HISTORY]</a></td>
+                                    <td><a href="#">[STATS]</a></td>
+                                </tr>
+                                <tr>
+                                    <td>3</td>
+                                    <td>Monday at 1000</td>
+                                    <td>Wednesday at 0630</td>
+                                    <td>99</td>
+                                    <td>B3</td>
+                                    <td>back lawn right</td>
+                                    <td><a href="#">[HISTORY]</a></td>
+                                    <td><a href="#">[STATS]</a></td>
+                                </tr>
+                            </tbody>
+                        </table>
+                    </div>
+                </section>
+                <div class="made-with-love">
+                    Made with <i>♥</i> by
+                    <a target="_blank" href="">Joe Vacovsky</a>
+                </div>
+                
             </div>
         </div>
     </body>
@@ -94,4 +83,5 @@
     <script src="https://cdnjs.cloudflare.com/ajax/libs/angular-ui-bootstrap/0.14.3/ui-bootstrap-tpls.js"></script>
     <script src="https://cdnjs.cloudflare.com/ajax/libs/bootstrap-slider/9.2.0/bootstrap-slider.min.js"></script>
     <script src="/static/app.js"></script>
+    <script src="/static/table.js"></script>
 </html>
