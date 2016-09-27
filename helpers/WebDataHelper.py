@@ -2,6 +2,19 @@ from helpers.SqlHelper import SqlHelper
 from models.Station import Station
 
 
+def list_gpio():
+    sqlConn = SqlHelper()
+    gpio_pins = []
+    sqlStr = "SELECT * FROM gpio_pins ORDER BY gpio asc"
+    pins = sqlConn.read(sqlStr)
+    for i in pins:
+        gpio_pins.append({
+            'gpio': i[0],
+            'notes': i[1]
+        })
+    return gpio_pins
+
+
 def list_stations():
     sqlConn = SqlHelper()
     stations = []

@@ -15,6 +15,14 @@ def main():
         return render_template("index.html")
 
 
+@app.route('/gpio/list', methods=["GET"])
+def gpio_list():
+    response = {
+        "gpio_pins": WebDataHelper.list_gpio()
+    }
+    return jsonify(response)
+
+
 @app.route('/station/schedule', methods=["GET", "POST"])
 def station_schedule():
     response = {}

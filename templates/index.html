@@ -1,74 +1,127 @@
 <!doctype html>
 <html ng-app="pirriweb" ng-cloak="true">
     <head>
-        <title>Pirri Scheduler</title>
+        <title>Pirri</title>
         <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.7/css/bootstrap.min.css" integrity="sha384-BVYiiSIFeK1dGmJRAkycuHAHRg32OmUcww7on3RYdg4Va+PmSTsz/K68vbdEjh4u" crossorigin="anonymous">
         <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.7/css/bootstrap-theme.min.css" integrity="sha384-rHyoN1iRsVXV4nD0JutlnGaslCJuC7uwjduW9SVrLvRYooPp2bWYgmgJQIXwl/Sp" crossorigin="anonymous">
         <link rel="stylesheet" href="/static/style.css">
         <!-- angular slider -->
-        <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/angularjs-slider/5.5.0/rzslider.min.css">
-        <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/angular-bootstrap-datetimepicker/1.1.2/css/datetimepicker.css" />
-        <script type="text/javascript" src="https://cdnjs.cloudflare.com/ajax/libs/angular-bootstrap-datetimepicker/1.1.2/js/datetimepicker.js"></script>
-        <script type="text/javascript" src="https://cdnjs.cloudflare.com/ajax/libs/angular-bootstrap-datetimepicker/1.1.2/js/datetimepicker.templates.js"></script>
         <script type="text/javascript" src="https://cdnjs.cloudflare.com/ajax/libs/moment.js/2.15.1/moment.min.js"></script>
     </head>
     <body>
         <div ng-controller="PirriControl as pc">
             <div id="station-schedules">
                 <section>
-                    <h1 id="schedtitle">Pirri - Irrigation Manager</h1>
-                    <br/>
+                    <h1 id="schedtitle"><img src="static/icon_text.png"></h1>
                     
-                    <p>
-                        <span class="glyphicon glyphicon-refresh"></span>
-                        <span class="glyphicon glyphicon-plus"></span>
-                        <span class="glyphicon glyphicon-time"></span>
-                        <input type="text" ng-model="search" class="pull-right">                        
-                        <span class="glyphicon glyphicon-search"></span>
-                    </p>
-                    <div  class="tbl-header">
-                        <table cellpadding="0" cellspacing="0" border="0">
-                            <thead>
-                                <th>Station ID</th>
-                                <th>Last Run</th>
-                                <th>Next Run</th>
-                                <th>GPIO</th>
-                                <th>Notes</th>
-                                <th>History</th>
-                                <th>Run Stats</th>
-                            </thead>
-                        </table>
+                    <div id="navicons">
+                        <a href><span class="glyphicon glyphicon-home" ng-click="pc.setPage('home')"></span></a>
+                        <a href><span class="glyphicon glyphicon-refresh" ng-click="loadStations()"></span></a>
+                        <a href><span class="glyphicon glyphicon-plus" ng-click="pc.setPage('add')"></span></a>
+                        <a href><span class="glyphicon glyphicon-time" ng-click="pc.setPage('history')"></span></a>
                     </div>
-                    <div class="tbl-content">
-                        <table cellpadding="0" cellspacing="0" border="0">
-                            <tbody>
-                                <tr ng-repeat="station in stations">
-                                    <td><a href="#"> {[station.sid]} <span class="glyphicon glyphicon-cog"></span></a></td>
-                                    <td>???????</td>
-                                    <td>???????</td>
-                                    <td>{[station.gpio_pin]}</td>
-                                    <td>{[station.notes]}</td>
-                                    <td><a href="#"><span class="glyphicon glyphicon-time"></span></a></td>
-                                    <td><a href="#"><span class="glyphicon glyphicon-stats"></span></a></td>
-                                </tr>
-                            </tbody>
-                        </table>
+                    <!-- START STATIONS LIST -->
+                    <div ng-show="showHome">
+                        <div id="searchTextDiv" class="col-sm-3 pull-right">
+                            <p><input type="text" id="searchText" ng-model="searchText" class="form-control col-sm-2" ng-change="pc.filterForKeys(searchText)"></p>
+                        </div>
+                        <div class="tbl-header">
+                            <table cellpadding="0" cellspacing="0" border="0">
+                                <thead>
+                                    <th>Station ID</th>
+                                    <th>Last Run</th>
+                                    <th>Next Run</th>
+                                    <th>GPIO</th>
+                                    <th>Notes</th>
+                                    <th>History</th>
+                                    <th>Run Stats</th>
+                                </thead>
+                            </table>
+                        </div>
+                        <div class="tbl-content">
+                            <table cellpadding="0" cellspacing="0" border="0">
+                                <tbody>
+                                    <tr ng-repeat="station in stations" ng-hide="showSearchResults">
+                                        <td><a href="#"> {[station.sid]} <span class="glyphicon glyphicon-cog"></span></a></td>
+                                        <td>???????</td>
+                                        <td>???????</td>
+                                        <td>{[station.gpio_pin]}</td>
+                                        <td>{[station.notes]}</td>
+                                        <td><a href="#"><span class="glyphicon glyphicon-time"></span></a></td>
+                                        <td><a href="#"><span class="glyphicon glyphicon-stats"></span></a></td>
+                                    </tr>
+                                    <tr ng-repeat="station in searchResults" ng-show="showSearchResults">
+                                        <td><a href="#"> {[station.sid]} <span class="glyphicon glyphicon-cog"></span></a></td>
+                                        <td>???????</td>
+                                        <td>???????</td>
+                                        <td>{[station.gpio_pin]}</td>
+                                        <td>{[station.notes]}</td>
+                                        <td><a href="#"><span class="glyphicon glyphicon-time"></span></a></td>
+                                        <td><a href="#"><span class="glyphicon glyphicon-stats"></span></a></td>
+                                    </tr>
+                                </tbody>
+                            </table>
+                        </div>
                     </div>
+                    <!-- END STATIONS LIST -->
+                    <!-- START ADD STATION FORM -->
+                    <div id="addform" ng-show="showAdd">
+                        <h3 id="title">Add Station</h3>
+                        <form class="form-horizontal">
+                            <!-- make me an interactive svg if you're cool -->
+                            <div ng-show="addMessage">{[gpio_add_model.message]}</div>
+                            <div class="form-group">
+                                <label class="control-label col-sm-2" for="gpiobutton">GPIO:</label>
+                                <div id="gpiobutton" class="dropdown col-sm-offset-2 col-sm-10">
+                                    <button ng-show="gpio_add_model.GPIO != undefined" class="btn btn-success dropdown-toggle" type="button" data-toggle="dropdown">GPIO: {[gpio_add_model.GPIO]}</button>
+                                    <button ng-hide="gpio_add_model.GPIO != undefined" class="btn btn-success dropdown-toggle" type="button" data-toggle="dropdown">GPIO: {[gpio_add_model.default_message]}</button>
+                                    <span class="caret"></span> <a href="#" ng-click="show_gpio_diagram = !show_gpio_diagram">[show diagram]</a>
+                                    </button>
+                                    <ul class="dropdown-menu">
+                                        <li ng-repeat="gpio in gpio_pins" ng-click="pc.setGPIO(gpio.gpio)"><a href="#">{[gpio.gpio]} - {[gpio.notes]}</a></li>
+                                    </ul>
+                                </div>
+                            </div>
+                            <div class="form-group">
+                                <label class="control-label col-sm-2" for="notes">Notes:</label>
+                                <div class="col-sm-10">
+                                    <input type="text" class="form-control" id="notes" placeholder="Any notes regarding this station.">
+                                </div>
+                            </div>
+                            <div class="form-group">
+                                <div class="col-sm-offset-2 col-sm-10">
+                                    <div class="checkbox">
+                                        <label><input type="checkbox"> Enabled</label>
+                                    </div>
+                                </div>
+                            </div>
+                            <div class="form-group">
+                                <div class="col-sm-offset-2 col-sm-10">
+                                    <button type="submit" class="btn btn-default">Save</button>
+                                </div>
+                            </div>
+                        </form>
+                        <center>
+                        <img id="gpiodiag" ng-show="show_gpio_diagram" src="static/gpio_layout.png" height="300" width="900">
+                        </center>
+                    </div>
+                    <!-- END ADD STATION FORM -->
                 </section>
-                <div class="made-with-love">
-                    Made with <i>♥</i> by
-                    <a target="_blank" href="">Joe Vacovsky</a>
-                </div>
-                
+            </section>
+            <div class="made-with-love">
+                Made with <i>♥</i> by
+                <a target="_blank" href="">Joe Vacovsky Jr.</a>
             </div>
+            
         </div>
-    </body>
-    <script src="https://code.jquery.com/jquery-3.1.0.min.js" integrity="sha256-cCueBR6CsyA4/9szpPfrX3s49M9vUU5BgtiJj06wt/s=" crossorigin="anonymous"></script>
-    <script src="https://ajax.googleapis.com/ajax/libs/angularjs/1.5.6/angular.min.js"></script>
-    <script src="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.7/js/bootstrap.min.js" integrity="sha384-Tc5IQib027qvyjSMfHjOMaLkfuWVxZxUPnCJA7l2mCWNIpG9mGCD8wGNIcPD7Txa" crossorigin="anonymous"></script>
-    <script src="https://cdnjs.cloudflare.com/ajax/libs/angularjs-slider/5.5.0/rzslider.min.js"></script>
-    <script src="https://cdnjs.cloudflare.com/ajax/libs/angular-ui-bootstrap/0.14.3/ui-bootstrap-tpls.js"></script>
-    <script src="https://cdnjs.cloudflare.com/ajax/libs/bootstrap-slider/9.2.0/bootstrap-slider.min.js"></script>
-    <script src="/static/app.js"></script>
-    <script src="/static/table.js"></script>
+    </div>
+</body>
+<script src="https://code.jquery.com/jquery-3.1.0.min.js" integrity="sha256-cCueBR6CsyA4/9szpPfrX3s49M9vUU5BgtiJj06wt/s=" crossorigin="anonymous"></script>
+<script src="https://ajax.googleapis.com/ajax/libs/angularjs/1.5.6/angular.min.js"></script>
+<script src="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.7/js/bootstrap.min.js" integrity="sha384-Tc5IQib027qvyjSMfHjOMaLkfuWVxZxUPnCJA7l2mCWNIpG9mGCD8wGNIcPD7Txa" crossorigin="anonymous"></script>
+<script src="https://cdnjs.cloudflare.com/ajax/libs/angularjs-slider/5.5.0/rzslider.min.js"></script>
+<script src="https://cdnjs.cloudflare.com/ajax/libs/angular-ui-bootstrap/0.14.3/ui-bootstrap-tpls.js"></script>
+<script src="https://cdnjs.cloudflare.com/ajax/libs/bootstrap-slider/9.2.0/bootstrap-slider.min.js"></script>
+<script src="/static/app.js"></script>
+<script src="/static/table.js"></script>
 </html>

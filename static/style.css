@@ -3,7 +3,10 @@
 }
 
 body {
-    padding: 2%;
+    padding-top: 10px;
+    padding-bottom: 10px;
+    padding-right: 25px;
+    padding-left: 25px;
     background-color: gray;
     /*background-image: url("https://i.redd.it/e8hot6bq90lx.png");*/
     background-repeat: no-repeat;
@@ -11,11 +14,31 @@ body {
     background-attachment: fixed;
 }
 
-#title {
-    text-align: center
+#navicons {
+  align-self: center;
+  align-content: center;  
+  text-align: center;
 }
 
+#gpiodiag {
+  align-self: center;
+  align-content: center;  
+  text-align: center;
+}
 
+#title {
+  align-self: center;
+  align-content: center;  
+  text-align: center;
+}
+
+#searchTextDiv {
+  padding-bottom: 0px;
+}
+
+#addform {
+  padding-top: 35px
+}
 
 h1{
   font-size: 30px;
