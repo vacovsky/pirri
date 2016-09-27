@@ -16,7 +16,16 @@
         <div ng-controller="PirriControl as pc">
             <div id="station-schedules">
                 <section>
-                    <h1>Pirri Scheduler - Stations</h1>
+                    <h1 id="schedtitle">Pirri - Irrigation Manager</h1>
+                    <br/>
+                    
+                    <p>
+                        <span class="glyphicon glyphicon-refresh"></span>
+                        <span class="glyphicon glyphicon-plus"></span>
+                        <span class="glyphicon glyphicon-time"></span>
+                        <input type="text" ng-model="search" class="pull-right">                        
+                        <span class="glyphicon glyphicon-search"></span>
+                    </p>
                     <div  class="tbl-header">
                         <table cellpadding="0" cellspacing="0" border="0">
                             <thead>
@@ -24,7 +33,6 @@
                                 <th>Last Run</th>
                                 <th>Next Run</th>
                                 <th>GPIO</th>
-                                <th>Location</th>
                                 <th>Notes</th>
                                 <th>History</th>
                                 <th>Run Stats</th>
@@ -34,35 +42,14 @@
                     <div class="tbl-content">
                         <table cellpadding="0" cellspacing="0" border="0">
                             <tbody>
-                                <tr>
-                                    <td>1</td>
-                                    <td>Monday at 1000</td>
-                                    <td>Wednesday at 0630</td>
-                                    <td>99</td>
-                                    <td>B1</td>
-                                    <td>Back yard drip line - flower pots and trees</td>
-                                    <td><a href="#">[HISTORY]</a></td>
-                                    <td><a href="#">[STATS]</a></td>
-                                </tr>
-                                <tr>
-                                    <td>2</td>
-                                    <td>Monday at 1000</td>
-                                    <td>Wednesday at 0630</td>
-                                    <td>99</td>
-                                    <td>B2</td>
-                                    <td>back lawn left</td>
-                                    <td><a href="#">[HISTORY]</a></td>
-                                    <td><a href="#">[STATS]</a></td>
-                                </tr>
-                                <tr>
-                                    <td>3</td>
-                                    <td>Monday at 1000</td>
-                                    <td>Wednesday at 0630</td>
-                                    <td>99</td>
-                                    <td>B3</td>
-                                    <td>back lawn right</td>
-                                    <td><a href="#">[HISTORY]</a></td>
-                                    <td><a href="#">[STATS]</a></td>
+                                <tr ng-repeat="station in stations">
+                                    <td><a href="#"> {[station.sid]} <span class="glyphicon glyphicon-cog"></span></a></td>
+                                    <td>???????</td>
+                                    <td>???????</td>
+                                    <td>{[station.gpio_pin]}</td>
+                                    <td>{[station.notes]}</td>
+                                    <td><a href="#"><span class="glyphicon glyphicon-time"></span></a></td>
+                                    <td><a href="#"><span class="glyphicon glyphicon-stats"></span></a></td>
                                 </tr>
                             </tbody>
                         </table>

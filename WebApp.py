@@ -1,10 +1,11 @@
 from flask import Flask, render_template, request, jsonify
 import setproctitle
 import config
+from helpers import WebDataHelper
 
 
-__author__ = 'joe'
-setproctitle.setproctitle("neatlightsflask")
+__author__ = 'Joe Vacovsky Jr.'
+setproctitle.setproctitle("pirriweb")
 app = Flask(__name__)
 
 
@@ -14,13 +15,26 @@ def main():
         return render_template("index.html")
 
 
-@app.route('/schedule', methods=["GET", "POST"])
-def schedule():
+@app.route('/station/schedule', methods=["GET", "POST"])
+def station_schedule():
     response = {}
     return jsonify(response)
 
 
-@app.route('/activate', methods=["GET", "POST"])
+@app.route('/station/add', methods=["GET", "POST"])
+def station_add():
+    response = {}
+    return jsonify(response)
+
+
+@app.route('/station/list', methods=["GET"])
+def station_list():
+    response = {}
+    response['stations'] = WebDataHelper.list_stations()
+    return jsonify(response)
+
+
+@app.route('/station/activate', methods=["POST"])
 def send():
     response = {"status": "None"}
     #  thash = request.args.get('hash')

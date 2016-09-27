@@ -4,7 +4,6 @@ from helpers.SqlHelper import SqlHelper
 
 
 class Station:
-    sqlConn = None
     sid = None
     gpio_pin = None
     state = 1
@@ -14,23 +13,27 @@ class Station:
 
     def __init__(self, sid):
         self.sid = sid
-        self.sqlConn = SqlHelper()
+        self.notes = None
 
     def load(self):
+        sqlConn = SqlHelper()
         try:
             sqlStr = ''' SELECT * FROM STATIONS WHERE id={0}'''.format(
                 self.sid)
-            data = self.sqlConn.read(sqlStr)[0]
+            data = sqlConn.read(sqlStr)[0]
             self.gpio_pin = data[1]
+            self.notes = data[2]
         except Exception as e:
             raise e
 
-    def add(self, gpio_pin):
+    def add(self, gpio_pin, notes=''):
+        sqlConn = SqlHelper()
         try:
             self.gpio_pin = gpio_pin
-            sqlStr = '''INSERT INTO stations (ID, GPIO) VALUES ({0}, {1})'''.format(
-                self.sid, self.gpio_pin)
-            self.sqlConn.execute(sqlStr)
+            self.notes = notes
+            sqlStr = '''INSERT INTO stations (ID, GPIO, NOTES) VALUES ({0}, {1}, \'{2}\')'''.format(
+                self.sid, self.gpio_pin, self.notes)
+            sqlConn.execute(sqlStr)
         except Exception as e:
             raise e
 

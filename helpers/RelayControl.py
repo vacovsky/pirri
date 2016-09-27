@@ -1,5 +1,7 @@
 import RPi.GPIO as GPIO
 
+#  Do I use a redis pubsub for this?
+
 
 class RelayController:
     common = None

@@ -9,30 +9,24 @@
     ]); 
 
     app.controller('PirriControl', function ($rootScope, $scope, $http) {
-        $scope.color = "random"
-        $scope.colors = [];
-        $scope.brightness = 1;
-        $scope.length = 630;
+        $scope.stations = undefined;
 
-        $scope.publishChange = function() {
-            var queryString = "";
-            $http.get('/send?' + queryString)
-            .success(function(data, status, headers, config) {
-            })
-            .error(function(data, status, headers, config) {})
-        };
-
-        $scope.send = function() {
-            $scope.publishChange();
-        };
+        // $scope.publishChange = function() {
+        //     var queryString = "";
+        //     $http.get('/send?' + queryString)
+        //     .success(function(data, status, headers, config) {
+        //     })
+        //     .error(function(data, status, headers, config) {})
+        // };
 
         $scope.loadStations = function() {
-            $http.get('/stations/load')
+            $http.get('/station/list')
             .success(function(data, status, headers, config) {
-                
+                $scope.stations = data.stations;
             })
             .error(function(data, status, headers, config) {})
         };
 
+        $scope.loadStations();
     });
 })();
