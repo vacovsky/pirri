@@ -17,6 +17,7 @@
         $scope.searchResults = {};
         $scope.searchText = "";
         $scope.showSearchResults = false;
+        $scope.history = undefined;
         $scope.gpio_add_model = {
             default_message: "Select GPIO",
             GPIO: undefined
@@ -95,6 +96,15 @@
             $http.get('/gpio/list')
             .success(function(data, status, headers, config) {
                 $scope.gpio_pins = data.gpio_pins;
+            })
+            .error(function(data, status, headers, config) {})
+        };
+
+        this.loadHistory = function(station) {
+            var query = '?station=' + station + '&earliest=-168';
+            $http.get('/history' + query)
+            .success(function(data, status, headers, config) {
+                $scope.history = data.history;
             })
             .error(function(data, status, headers, config) {})
         };

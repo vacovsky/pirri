@@ -37,6 +37,20 @@ def list_stations():
     return stations
 
 
+def station_history(sid=None, days=7):
+    sqlConn = SqlHelper()
+    sqlStr = ""
+    if sid is None:
+        sqlStr = "SELECT * FROM history WHERE julianday(starttime) > (julianday('now', '-{0} days'))".format(
+            days)
+    else:
+        pass
+    results = {
+        'history': sqlConn.read(sqlStr)
+    }
+    return results
+
+
 def add_station(sid, gpio_pin):
     Station(sid).add(gpio_pin)
 

@@ -29,6 +29,13 @@ def station_schedule():
     return jsonify(response)
 
 
+@app.route('/history', methods=["GET"])
+def station_history():
+    response = {}
+    response['history'] = WebDataHelper.station_history()
+    return jsonify(response)
+
+
 @app.route('/station/add', methods=["GET", "POST"])
 def station_add():
     response = {}
