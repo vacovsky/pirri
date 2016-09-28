@@ -17,14 +17,12 @@ class SqlHelper:
         c.execute(query)
         for row in c:
             results.append(row)
-        self.close()
         return results
 
     def execute(self, query):
         c = self.conn.cursor()
         c.execute(query)
         self.conn.commit()
-        self.close()
         return True
 
     def close(self):
