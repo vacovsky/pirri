@@ -18,8 +18,7 @@ class RelayController:
             pins.append(pin[0])
         GPIO.setmode(GPIO.BCM)
         for pin in pins:
-            GPIO.setup(pin, GPIO.OUT, initial=CONFIG.GPIO_RELAY_OFFSTATE)
-            GPIO.output(pin, False)
+            GPIO.setup(pin, GPIO.OUT, initial=not CONFIG.GPIO_RELAY_OFFSTATE)
 
     def __reset(self):
         GPIO.setmode(GPIO.BCM)
@@ -45,10 +44,10 @@ class RelayController:
         self.__log_relay_activity(sid, duration, schedule_id)
 
         timer = 0
-        GPIO.output(pin, not CONFIG.GPIO_RELAY_OFFSTATE)
-        GPIO.output(CONFIG.COMMON_WIRE_GPIO, not CONFIG.GPIO_RELAY_OFFSTATE)
+        GPIO.output(pin, CONFIG.GPIO_RELAY_OFFSTATE)
+        GPIO.output(CONFIG.COMMON_WIRE_GPIO, CONFIG.GPIO_RELAY_OFFSTATE)
         while timer < duration:
             sleep(1)
             timer += 1
-        GPIO.output(pin, CONFIG.GPIO_RELAY_OFFSTATE)
-        GPIO.output(CONFIG.COMMON_WIRE_GPIO, CONFIG.GPIO_RELAY_OFFSTATE)
+        GPIO.output(pin, not CONFIG.GPIO_RELAY_OFFSTATE)
+        GPIO.output(CONFIG.COMMON_WIRE_GPIO, not CONFIG.GPIO_RELAY_OFFSTATE)
