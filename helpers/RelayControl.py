@@ -1,16 +1,13 @@
 import RPi.GPIO as GPIO
 from helpers.SqlHelper import SqlHelper
 from datetime.datetime import now
+from data import config as CONFIG
+from time import sleep
 
 
 class RelayController:
-    gpio = None
-    station = None
-    sqlConn = None
-    common = None
-    sid = None
 
-    def __init__(self, common, sid):
+    def __init__(self):
         self.sqlConn = SqlHelper()
         self.__setup_pins()
 
@@ -27,7 +24,7 @@ class RelayController:
         GPIO.setmode(GPIO.BCM)
         self.__setup_pins
 
-    def log_relay_activity(self, sid, duration, schedule_id=0):
+    def __log_relay_activity(self, sid, duration, schedule_id):
         sqlStr = """ INSERT INTO history (sid, schedule_id, duration, starttime)
         VALUES ({0},{1},{2},'{3}')""".format(
             sid,
@@ -41,8 +38,16 @@ class RelayController:
         gpio = self.sqlConn.read(sqlStr)[0]
         return gpio
 
-    def activate_relay(self, sid):
-        self.__reset()
+    def activate_relay(self, sid, duration, schedule_id=0):
+        # self.__reset()
         pin = self.__get_gpio_from_sid(sid)
-        GPIO.output(
-            pin, True)
+        self.__log_relay_activity(sid, duration, schedule_id)
+
+        timer = 0
+        GPIO.output(pin, not CONFIG.GPIO_RELAY_OFFSTATE)
+        GPIO.output(CONFIG.COMMON_WIRE_GPIO, not CONFIG.GPIO_RELAY_OFFSTATE)
+        while timer < duration:
+            sleep(1)
+            timer += 1
+        GPIO.output(pin, CONFIG.GPIO_RELAY_OFFSTATE)
+        GPIO.output(CONFIG.COMMON_WIRE_GPIO, CONFIG.GPIO_RELAY_OFFSTATE)

@@ -1,7 +1,14 @@
 import pika
 from data import config as CONFIG
 import json
-from threading import Thread
+# from threading import Thread
+from psutil import Process
+
+
+if Process().name() == 'pirri':
+    from helpers.RelayControl import RelayController
+else:
+    from helpers.RelayControlFake import RelayControllerFake as RelayController
 
 
 class RMQ:
@@ -36,67 +43,25 @@ class RMQ:
     def close_connection(self):
         self.CONNECTION.close()
 
-    def sp_exec(self, action, job):
-        print(job)
-        if action == "destroy":
-            print("destroying " + job['cookbook'])
-            Thread(target=Kitchen().destroy_kitchen, args=(job['cookbook'], job['cookbook_root'],
-                                                           job['kitchen_bin']))
-        elif action == "converge":
-            print("converging " + job['cookbook'])
-            Thread(target=Kitchen().start_kitchen, args=(job['cookbook'], job['cookbook_root'],
-                                                         job['kitchen_bin']))
-        else:
-            pass
-
-    def callback_2(self, ch, method, properties, body):
-        jobdata = body.decode("utf-8")
-        job = json.loads(jobdata)
-        # DO SOMETHING HERE
-        kitchen = Kitchen()
-        vm_running = kitchen.check_running()
-        if vm_running:
-            print(
-                "VM is already running.  Please close any open virtual machines and re-submit job to use this agent.")
-            self.ack_job(ch, method)
-        else:
-            try:
-                print("Working in the kitchen, please wait...")
-                if job['destroy'] == "true":
-                    self.sp_exec('destroy', job)
-                elif job['destroy'] == "false":
-                    self.sp_exec('converge', job)
-                else:
-                    print("nothing to see here...")
-
-            except Exception as e:
-                print("failure.  check your settings.  error follows.")
-                print(e)
-            finally:
-                if True:
-                    self.ack_job(ch, method)
-                print("task complete.")
-
     def callback(self, ch, method, properties, body):
-        self.ack_job(ch, method)
-        jobdata = body.decode("utf-8")
-        job = json.loads(jobdata)
-        # DO SOMETHING HERE
-        kitchen = Kitchen()
-        print("ALIVE!")
         try:
-            if job['destroy'] == 'false':
-                kitchen.start_kitchen(job['cookbook'], job['cookbook_root'],
-                                      job['kitchen_bin'])
-            if job['destroy'] == 'true':
-                kitchen.destroy_kitchen(job['cookbook'], job['cookbook_root'],
-                                        job['kitchen_bin'])
+            jobdata = body.decode("utf-8")
+            job = json.loads(jobdata)
+            # DO SOMETHING HERE
+            print(job)
+            if 'schedule_id' not in job:
+                job['schedule_id'] = 0
+            RelayController().activate_relay(
+                job['sid'],
+                job['duration'],
+                job['schedule_id'])
+            # Thread(target=RelayController(CONFIG.COMMON_WIRE_GPIO).activate_relay(),
+            # args=(job['sid'], job['duration'], job['schedule_id'])).start()
 
         except Exception as e:
-            print("failure.  check your settings.  error follows.")
             print(e)
         finally:
-            print("task complete.")
+            self.ack_job(ch, method)
 
     def ack_job(self, ch, method):
         ch.basic_ack(delivery_tag=method.delivery_tag)
@@ -108,7 +73,8 @@ class RMQ:
                                    queue=queue,
                                    no_ack=False)
 
-        print(' [*] Waiting for messages. To exit press CTRL+C')
+        print(
+            ' [*] Waiting for messages on "{0}". To exit press CTRL+C'.format(queue))
         self.CHANNEL.start_consuming()
 
 
