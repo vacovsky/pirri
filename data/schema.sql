@@ -1,9 +1,4 @@
 CREATE TABLE sqlite_sequence(name,seq);
-CREATE TABLE "stations" (
-    "id" INTEGER PRIMARY KEY AUTOINCREMENT NOT NULL,
-    "gpio" INTEGER NOT NULL,
-    "notes" TEXT
-);
 CREATE TABLE schedule (
     "id" INTEGER NOT NULL,
     "startdate" INTEGER NOT NULL,
@@ -30,4 +25,10 @@ CREATE TABLE "history" (
     "schedule_id" INTEGER,
     "duration" INTEGER NOT NULL DEFAULT (0),
     "starttime" TEXT NOT NULL DEFAULT ('1899-01-01 00:00:00.01')
+);
+CREATE TABLE "stations" (
+    "id" INTEGER PRIMARY KEY AUTOINCREMENT,
+    "gpio" INTEGER NOT NULL DEFAULT (0),
+    "notes" TEXT,
+    "common" INTEGER
 );
