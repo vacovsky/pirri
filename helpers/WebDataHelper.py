@@ -55,5 +55,19 @@ def add_station(sid, gpio_pin):
     Station(sid).add(gpio_pin)
 
 
+def add_schedule(sid):
+    pass
+
+
 def list_schedules(sid):
     return Station(sid).list_schedules()
+
+
+def find_last(station_list):
+    for station in station_list:
+        print()
+
+
+def find_next(station_list):
+    for station in station_list:
+        print()
