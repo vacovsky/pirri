@@ -1,6 +1,6 @@
 import RPi.GPIO as GPIO
 from helpers.SqlHelper import SqlHelper
-from datetime.datetime import now
+from datetime import datetime
 from data import config as CONFIG
 from time import sleep
 
@@ -30,7 +30,7 @@ class RelayController:
             sid,
             schedule_id,
             duration,
-            now())
+            datetime.now())
         self.sqlConn.execute(sqlStr)
 
     def __get_gpio_from_sid(self, sid):
