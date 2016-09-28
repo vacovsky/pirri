@@ -4,7 +4,7 @@ import json
 # from threading import Thread
 from psutil import Process
 
-
+print(Process().name())
 if Process().name() == 'pirri':
     from helpers.RelayControl import RelayController
 else:

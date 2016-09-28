@@ -1,8 +1,8 @@
 
 class RelayControllerFake:
 
-    def __init__(self, commonwire_gpio):
-        print('FAKE: init RelayControllerFake; commonwire_gpio={0}'.format(commonwire_gpio))
+    def __init__(self):
+        print('FAKE: init RelayControllerFake;')
 
     def log_relay_activity(self, sid, duration, schedule_id=0):
         print('FAKE: log_relay_activity; sid={0}, duration={1}, schedule_id={2}'.format(
