@@ -4,7 +4,7 @@ import sqlite3
 class SqlHelper:
     conn = None
 
-    def __init__(self, dbpath='/home/joe/Projects/pirri/data/pirri.db'):
+    def __init__(self, dbpath='/home/joe/Projects/pirri/data/pirri.sql'):
         self.conn = sqlite3.connect(dbpath)
 
     def setup(self):
