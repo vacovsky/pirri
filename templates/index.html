@@ -13,19 +13,23 @@
         <div ng-controller="PirriControl as pc">
             <div id="station-schedules">
                 <section>
-                    <h1 id="schedtitle"><img src="static/icon_text.png"></h1>
-                    
-                    <div id="navicons">
-                        <a href><span class="glyphicon glyphicon-home" ng-click="pc.setPage('home')"></span></a>
-                        <a href><span class="glyphicon glyphicon-refresh" ng-click="pc.loadStations()"></span></a>
-                        <a href><span class="glyphicon glyphicon-plus" ng-click="pc.setPage('add')"></span></a>
-                        <a href><span class="glyphicon glyphicon-time" ng-click="pc.setPage('history')"></span></a>
+                    <div id="nav">
+                        <h1 id="schedtitle"><img src="static/icon_text.png"></h1>
+                        <div id="searchTextDiv" class="col-sm-3 pull-right">
+                            <p><input type="text" id="searchText" ng-model="searchText" placeholder="Search stations..." class="form-control col-sm-2" ng-change="pc.filterForKeys(searchText)"></p>
+                        </div>
+                        <div id="navicons">
+                            <div>
+                                <a href><span class="glyphicon glyphicon-home" ng-click="pc.setPage('home')"></span></a>
+                                <a href><span class="glyphicon glyphicon-refresh" ng-click="pc.loadStations()"></span></a>
+                                <a href><span class="glyphicon glyphicon-plus" ng-click="pc.setPage('add')"></span></a>
+                                <a href><span class="glyphicon glyphicon-time" ng-click="pc.setPage('history')"></span></a>
+                            </div>
+                        </div>
                     </div>
                     <!-- START STATIONS LIST -->
                     <div ng-show="showHome">
-                        <div id="searchTextDiv" class="col-sm-3 pull-right">
-                            <p><input type="text" id="searchText" ng-model="searchText" class="form-control col-sm-2" ng-change="pc.filterForKeys(searchText)"></p>
-                        </div>
+                        
                         <div class="tbl-header">
                             <table cellpadding="0" cellspacing="0" border="0">
                                 <thead>

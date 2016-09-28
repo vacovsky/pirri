@@ -5,9 +5,9 @@ a {
   color: #fff;
 }
 body {
-  color: #fff;
-    padding-top: 10px;
-    padding-bottom: 10px;
+    color: #fff;
+    padding-top: 0px;
+    padding-bottom: 5px;
     padding-right: 25px;
     padding-left: 25px;
     background-color: gray;
@@ -19,9 +19,7 @@ body {
 }
 
 #navicons {
-  align-self: center;
-  align-content: center;  
-  text-align: center;
+  font-size: 25px;
 }
 
 #gpiodiag {
@@ -37,7 +35,6 @@ body {
 }
 
 #searchTextDiv {
-  padding-bottom: 0px;
 }
 
 #addform {
@@ -61,7 +58,7 @@ table{
   background-color: rgba(255,255,255,0.3);
  }
 .tbl-content{
-  height:600px;
+  height:450px;
   overflow-x:auto;
   margin-top: 0px;
   border: 1px solid rgba(255,255,255,0.3);
