@@ -1,8 +1,11 @@
 #ex1Slider .slider-selection {
     background: #BABABA;
 }
-
+a {
+  color: #fff;
+}
 body {
+  color: #fff;
     padding-top: 10px;
     padding-bottom: 10px;
     padding-right: 25px;
@@ -12,6 +15,7 @@ body {
     background-repeat: no-repeat;
     background-position: right top;
     background-attachment: fixed;
+    overflow: hidden;
 }
 
 #navicons {
@@ -51,6 +55,7 @@ h1{
 table{
   width:100%;
   table-layout: fixed;
+  overflow: auto;
 }
 .tbl-header{
   background-color: rgba(255,255,255,0.3);
@@ -131,9 +136,16 @@ section{
 }
 
 @import url(http://fonts.googleapis.com/css?family=Roboto:400,500,300,700);
-body{
+
+/* body{
   background: -webkit-linear-gradient(left, #25c481, #25b7c4);
   background: linear-gradient(to right, #25c481, #25b7c4);
+  font-family: 'Roboto', sans-serif;
+}
+*/
+body{
+  background: -webkit-linear-gradient(left, #0073e6, #59b300);
+  background: linear-gradient(to right, #0073e6, #59b300);
   font-family: 'Roboto', sans-serif;
 }
 section{

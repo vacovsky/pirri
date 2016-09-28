@@ -1,10 +1,11 @@
 import sqlite3
+from data import config as CONFIG
 
 
 class SqlHelper:
     conn = None
 
-    def __init__(self, dbpath='/home/joe/Projects/pirri/data/pirri.sql'):
+    def __init__(self, dbpath=CONFIG.DBPATH):
         self.conn = sqlite3.connect(dbpath)
 
     def setup(self):
@@ -31,7 +32,7 @@ class SqlHelper:
 
 
 if __name__ == '__main__':
-    sqlConn = SqlHelper(dbpath='/home/joe/Projects/pirri/data/pirri.db')
+    sqlConn = SqlHelper(dbpath='/home/joe/Projects/pirri/data/pirri.sql')
     sid = 1
     sqlStr = ''' SELECT * FROM stations '''
     data = sqlConn.read(sqlStr)

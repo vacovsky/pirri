@@ -1,21 +1,48 @@
 import RPi.GPIO as GPIO
-
-#  Do I use a redis pubsub for this?
+from helpers.SqlHelper import SqlHelper
+from datetime.datetime import now
 
 
 class RelayController:
+    gpio = None
+    station = None
+    sqlConn = None
     common = None
-    relays = []
+    sid = None
 
-    def __init__(self, common, relays):
-        self.setup_pins(common, relays)
+    def __init__(self, common, sid):
+        self.sqlConn = SqlHelper()
+        self.__setup_pins()
 
-    def setup_pins(self):
-        pass
+    def __setup_pins(self):
+        pins = []
+        sqlStr = """SELECT gpio FROM gpio_pins"""
+        for pin in self.sqlConn.read(sqlStr):
+            pins.append(pin[0])
+        GPIO.setmode(GPIO.BCM)
+        for pin in pins:
+            GPIO.output(pin, False)
 
     def __reset(self):
-        pass
+        GPIO.setmode(GPIO.BCM)
+        self.__setup_pins
 
-    def activate_relay(self):
+    def log_relay_activity(self, sid, duration, schedule_id=0):
+        sqlStr = """ INSERT INTO history (sid, schedule_id, duration, starttime)
+        VALUES ({0},{1},{2},'{3}')""".format(
+            sid,
+            schedule_id,
+            duration,
+            now())
+        self.sqlConn.execute(sqlStr)
+
+    def __get_gpio_from_sid(self, sid):
+        sqlStr = """ SELECT gpio FROM stations WHERE id={0}""".format(sid)
+        gpio = self.sqlConn.read(sqlStr)[0]
+        return gpio
+
+    def activate_relay(self, sid):
         self.__reset()
-        pass
+        pin = self.__get_gpio_from_sid(sid)
+        GPIO.output(
+            pin, True)
