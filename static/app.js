@@ -30,6 +30,7 @@
             GPIO: undefined,
             notes: undefined
         };
+        $scope.durationIntervals = [5,10,15,20,25,30,35,40,45,50,55,60];
         $scope.show_gpio_diagram = false;
 
         this.filterForKeys = function(searchText) {
@@ -114,9 +115,33 @@
             //console.log($scope.currentPage)
         };
 
+        this.submitEditStation = function() {
+        };
+        this.submitDeleteStation = function() {
+        };
+        this.submitAddStation = function() {
+        };
+
+        $scope.scheduleModel = {};
+        this.submitAddSchedule = function() {
+        };
+        this.submitEditSchedule = function() {
+        };
+        this.submitDeleteSchedule = function() {
+        };
+
+        $scope.singleRunModel = {};
+        this.submitSingleRun = function() {
+            //stuff
+            console.log($scope.singleRunMinField, $scope.singleRunModel);
+            $scope.singleRunModel = {};
+            $scope.singleRunMinField = undefined;
+        };
+
         this.historyPage = function(sid) {
 
-        }
+        };
+
 
         this.loadStations = function() {
             $http.get('/station/list')
