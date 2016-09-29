@@ -33,13 +33,12 @@
                         <div class="tbl-header">
                             <table cellpadding="0" cellspacing="0" border="0">
                                 <thead>
-                                    <th>Station ID</th>
-                                    <th>Last Run</th>
-                                    <th>Next Run</th>
-                                    <th>GPIO</th>
-                                    <th>Notes</th>
-                                    <th>History</th>
-                                    <th>Run Stats</th>
+                                    <th class="col-md-1">Station</th>
+                                    <th class="col-md-3">Last Run</th>
+                                    <th class="col-md-3">Next Run</th>
+                                    <th class="col-md-1">GPIO</th>
+                                    <th class="col-md-3">Notes</th>
+                                    <th class="col-md-1">Controls</th>
                                 </thead>
                             </table>
                         </div>
@@ -47,13 +46,16 @@
                             <table cellpadding="0" cellspacing="0" border="0">
                                 <tbody>
                                     <tr ng-repeat="station in stations" ng-hide="showSearchResults">
-                                        <td><a href="#"> {[station.sid]} <span class="glyphicon glyphicon-cog"></span></a></td>
-                                        <td>???????</td>
-                                        <td>???????</td>
-                                        <td>{[station.gpio_pin]}</td>
-                                        <td>{[station.notes]}</td>
-                                        <td><a href="#"><span class="glyphicon glyphicon-time"></span></a></td>
-                                        <td><a href="#"><span class="glyphicon glyphicon-stats"></span></a></td>
+                                        <td class="col-md-1"><a href="#"> {[station.sid]} <span class="glyphicon glyphicon-cog"></span></a></td>
+                                        <td class="col-md-3">???????</td>
+                                        <td class="col-md-3">???????</td>
+                                        <td class="col-md-1">{[station.gpio_pin]}</td>
+                                        <td class="col-md-3">{[station.notes]}</td>
+                                        <td class="col-md-1">
+                                            <a href="#"><span class="glyphicon glyphicon-time"></span></a>
+                                            <a href="#"><span class="glyphicon glyphicon-stats"></span></a>
+                                            <a href="#"><span class="glyphicon glyphicon-play"></span></a>
+                                        </td>
                                     </tr>
                                     <tr ng-repeat="station in searchResults" ng-show="showSearchResults">
                                         <td><a href="#"> {[station.sid]} <span class="glyphicon glyphicon-cog"></span></a></td>
@@ -71,31 +73,29 @@
                     <!-- END STATIONS LIST -->
 
                     <!-- START HISTORY -->
-                    <div id="addform" ng-show="showHistory">
+                    <div ng-show="showHistory">
                         <div class="tbl-header">
                             <table cellpadding="0" cellspacing="0" border="0">
                                 <thead>
-                                    <th>H1</th>
-                                    <th>H2</th>
-                                    <th>H3</th>
-                                    <th>H4</th>
-                                    <th>H5</th>
-                                    <th>H6</th>
-                                    <th>H7</th>
+                                    <th class="col-md-1">Station</th>
+                                    <th class="col-md-1">History</th>
+                                    <th class="col-md-3">Started</th>
+                                    <th class="col-md-2">Duration</th>
+                                    <th>Scheduled</th>
+                                    <th>Schedule ID</th>
                                 </thead>
                             </table>
                         </div>
                         <div class="tbl-content">
                             <table cellpadding="0" cellspacing="0" border="0">
                                 <tbody>
-                                    <tr ng-repeat="station in stations" ng-hide="showSearchResults">
-                                        <td><a href="#"> {[station.sid]} <span class="glyphicon glyphicon-cog"></span></a></td>
-                                        <td>???????</td>
-                                        <td>???????</td>
-                                        <td>{[station.gpio_pin]}</td>
-                                        <td>{[station.notes]}</td>
-                                        <td><a href="#"><span class="glyphicon glyphicon-time"></span></a></td>
-                                        <td><a href="#"><span class="glyphicon glyphicon-stats"></span></a></td>
+                                    <tr ng-repeat="hist in history">
+                                        <td class="col-md-1">{[hist.sid]}</td>
+                                        <td class="col-md-1">{[hist.id]}</td>
+                                        <td class="col-md-3">{[pc.prettyTime(hist.starttime)]}</td>
+                                        <td class="col-md-2">{[hist.duration / 60]} minutes</td>
+                                        <td>{[hist.schedule_id != 0]}</td>
+                                        <td>{[hist.schedule_id]}</td>
                                     </tr>
                                 </tbody>
                             </table>

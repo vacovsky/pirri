@@ -18,7 +18,7 @@
         $scope.searchResults = {};
         $scope.searchText = "";
         $scope.showSearchResults = false;
-        $scope.history = undefined;
+        $scope.history = [];
         $scope.historyScope = "All Stations"
         $scope.gpio_add_model = {
             default_message: "Select GPIO",
@@ -80,6 +80,7 @@
                 this.resetAddForm();
             }
             else if ($scope.currentPage == 'history') {
+                this.loadHistory(0);
                 $scope.navTitle = "Watering History"
                 $scope.showHistory = true;
                 $scope.showAdd = false;
@@ -122,6 +123,11 @@
             .error(function(data, status, headers, config) {})
         };
 
+        this.prettyTime = function(uglyTime) {
+            var pt = moment(uglyTime).calendar();
+            //console.log(pt);
+            return pt
+        }
         this.loadStations();
         this.loadGPIO();
     });

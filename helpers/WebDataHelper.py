@@ -41,7 +41,7 @@ def station_history(sid=None, days=7):
     sqlConn = SqlHelper()
     sqlStr = ""
     if sid is None:
-        sqlStr = "SELECT * FROM history WHERE julianday(starttime) > (julianday('now', '-{0} days'))".format(
+        sqlStr = "SELECT * FROM history WHERE julianday(starttime) >= (julianday('now', '-{0} days')) ORDER BY id DESC".format(
             days)
     else:
         pass
