@@ -14,13 +14,11 @@ import json
 class ScheduleControl:
     rmq = RMQ()
     last_queued_dur = 0
-    sqlConn = SqlHelper()
     last_datetime = ''
     today_cache = None
 
     def __init__(self):
         self.post_runlist = []
-        self.sqlConn = SqlHelper()
         self.rmq = RMQ()
 
     def start(self, check_interval):
@@ -59,6 +57,7 @@ class ScheduleControl:
         }
 
     def get_current_tasks(self):
+        sqlConn = SqlHelper()
         if str(self.today_cache['day']) + str(self.today_cache['time']) != self.last_datetime:
             sqlStr = """SELECT id, station, duration from schedule
                             where (startdate < date('now') and enddate < date('now'))
@@ -68,7 +67,7 @@ class ScheduleControl:
                 self.today_cache['day'],
                 self.today_cache['time']
             )
-            return self.sqlConn.read(sqlStr)
+            return sqlConn.read(sqlStr)
         else:
             pass
 
