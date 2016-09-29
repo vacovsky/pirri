@@ -20,7 +20,7 @@ class Main:
 if __name__ == '__main__':
     try:
         main = Main()
-        Thread(target=ScheduleControl().start, args=()).start()
+        ScheduleControl().start_threaded(59)
         # ButtonControl(relay_pins=main.relay_pins).init_button_listener()
         main.start()
     except KeyboardInterrupt:

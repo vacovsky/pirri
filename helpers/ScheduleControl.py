@@ -10,6 +10,7 @@ from threading import Thread
 import time
 import json
 
+
 class ScheduleControl:
     rmq = RMQ()
     last_queued_dur = 0
@@ -22,7 +23,7 @@ class ScheduleControl:
         self.sqlConn = SqlHelper()
         self.rmq = RMQ()
 
-    def start(self):
+    def start(self, check_interval):
         while True:
             self.find_now_info()
             self.queue_schedule_items()
@@ -43,8 +44,8 @@ class ScheduleControl:
                 )
             )
 
-    def start_threaded(self):
-        Thread(target=self.start, args=()).start()
+    def start_threaded(self, check_interval):
+        Thread(target=self.start, args=(check_interval)).start()
 
     def find_curr_time(self):
         dtnow = str(datetime.now()).split(' ')[1]
