@@ -45,7 +45,7 @@ class ScheduleControl:
             )
 
     def start_threaded(self, check_interval):
-        Thread(target=self.start, args=(check_interval)).start()
+        Thread(target=self.start, args=(check_interval,)).start()
 
     def find_curr_time(self):
         dtnow = str(datetime.now()).split(' ')[1]
