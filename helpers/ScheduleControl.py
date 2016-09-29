@@ -2,7 +2,6 @@
 # execution.
 
 from helpers.MessageHelper import RMQ
-import dateutil
 import calendar
 from datetime import datetime
 from helpers.SqlHelper import SqlHelper
@@ -14,13 +13,11 @@ import json
 class ScheduleControl:
     rmq = RMQ()
     last_queued_dur = 0
-    sqlConn = SqlHelper()
     last_datetime = ''
     today_cache = None
 
     def __init__(self):
         self.post_runlist = []
-        self.sqlConn = SqlHelper()
         self.rmq = RMQ()
 
     def start(self, check_interval):
@@ -31,21 +28,25 @@ class ScheduleControl:
 
     def queue_schedule_items(self):
         tasks = self.get_current_tasks()
-        self.last_datetime = str(self.today_cache['day']) + str(self.today_cache['time'])
+        self.last_datetime = str(
+            self.today_cache['day']) + str(self.today_cache['time'])
 
-        for task in tasks:
-            self.rmq.publish_message(
-                json.dumps(
-                    {
-                        'sid': task[1],
-                        'schedule_id': task[0],
-                        'duration': task[2]
-                    }
+        try:
+            for task in tasks:
+                self.rmq.publish_message(
+                    json.dumps(
+                        {
+                            'sid': task[1],
+                            'schedule_id': task[0],
+                            'duration': task[2]
+                        }
+                    )
                 )
-            )
+        except TypeError as e:
+            print(e)
 
     def start_threaded(self, check_interval):
-        Thread(target=self.start, args=(check_interval)).start()
+        Thread(target=self.start, args=(check_interval,)).start()
 
     def find_curr_time(self):
         dtnow = str(datetime.now()).split(' ')[1]
@@ -59,6 +60,7 @@ class ScheduleControl:
         }
 
     def get_current_tasks(self):
+        sqlConn = SqlHelper()
         if str(self.today_cache['day']) + str(self.today_cache['time']) != self.last_datetime:
             sqlStr = """SELECT id, station, duration from schedule
                             where (startdate < date('now') and enddate < date('now'))
@@ -68,7 +70,7 @@ class ScheduleControl:
                 self.today_cache['day'],
                 self.today_cache['time']
             )
-            return self.sqlConn.read(sqlStr)
+            return sqlConn.read(sqlStr)
         else:
             pass
 

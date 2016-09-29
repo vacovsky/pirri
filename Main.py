@@ -1,9 +1,8 @@
-import RPi.GPIO as GPIO
-from helpers.ScheduleControl import ScheduleControl
-# from ButtonControl import ButtonControl
 import setproctitle
 setproctitle.setproctitle("pirri")
 
+import RPi.GPIO as GPIO
+from helpers.ScheduleControl import ScheduleControl
 from threading import Thread
 from helpers.MessageHelper import RMQ
 
