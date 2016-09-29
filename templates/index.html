@@ -24,7 +24,7 @@
                                 <a href><span class="glyphicon glyphicon-refresh" ng-click="pc.loadStations()"></span></a>
                                 <a href><span class="glyphicon glyphicon-plus" ng-click="pc.setPage('add')"></span></a>
                                 <a href><span class="glyphicon glyphicon-time" ng-click="pc.setPage('history')"></span></a>
-                                <span  id="navTitle"> - {[navTitle]}</span>
+                                <span id="navTitle"> - {[navTitle]}</span>
                             </div>
                         </div>
                     </div>
@@ -39,14 +39,14 @@
                                     <th class="col-md-1">GPIO</th>
                                     <th class="col-md-3">Notes</th>
                                     <th class="col-md-1">Controls</th>
-                                </thead>
+                                </thead>￼
                             </table>
                         </div>
                         <div class="tbl-content">
                             <table cellpadding="0" cellspacing="0" border="0">
                                 <tbody>
                                     <tr ng-repeat="station in stations" ng-hide="showSearchResults">
-                                        <td class="col-md-1"><a href="#"> {[station.sid]} <span class="glyphicon glyphicon-cog"></span></a></td>
+                                        <td class="col-md-1"><a href="#"> {[station.sid]} <span ng-click="pc.setEditingStationInfo(station.sid, station.gpio_pin, station.notes); pc.setPage('editstation')" class="glyphicon glyphicon-cog"></span></a></td>
                                         <td class="col-md-3">???????</td>
                                         <td class="col-md-3">???????</td>
                                         <td class="col-md-1">{[station.gpio_pin]}</td>
@@ -111,19 +111,18 @@
                             <div class="form-group">
                                 <label class="control-label col-sm-2" for="gpiobutton">GPIO:</label>
                                 <div id="gpiobutton" class="dropdown col-sm-8">
-                                    <button ng-show="gpio_add_model.GPIO != undefined" class="btn btn-success dropdown-toggle" type="button" data-toggle="dropdown">GPIO: {[gpio_add_model.GPIO]}</button>
-                                    <button ng-hide="gpio_add_model.GPIO != undefined" class="btn btn-success dropdown-toggle" type="button" data-toggle="dropdown">GPIO: {[gpio_add_model.default_message]}</button>
+                                    <button class="btn btn-success dropdown-toggle" type="button" data-toggle="dropdown">{[edit_station_model.GPIO]}</button>
                                     <span class="caret"></span> <a href="#" ng-click="show_gpio_diagram = !show_gpio_diagram">[show diagram]</a>
                                     </button>
                                     <ul class="dropdown-menu">
-                                        <li ng-repeat="gpio in gpio_pins" ng-click="pc.setGPIO(gpio.gpio)"><a href="#">{[gpio.gpio]} - {[gpio.notes]}</a></li>
+                                        <li ng-repeat="gpio in gpio_pins" ng-click="edit_station_model.GPIO = gpio.gpio"><a href="#">{[gpio.gpio]} - {[gpio.notes]}</a></li>
                                     </ul>
                                 </div>
                             </div>
                             <div class="form-group">
                                 <label class="control-label col-sm-2" for="notes">Notes:</label>
                                 <div class="col-sm-8">
-                                    <input type="text" class="form-control" id="notes" placeholder="Any notes regarding this station.">
+                                    <input type="text" class="form-control" id="notes" placeholder="{[edit_station_model.notes]}">
                                 </div>
                             </div>
                             <div class="form-group">
@@ -144,6 +143,7 @@
                         </center>
                     </div>
                     <!-- END STATION EDIT FORM -->
+
                     <!-- START ADD STATION FORM -->
                     <div id="addform" ng-show="showAdd">
                         <form class="form-horizontal">
