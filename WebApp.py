@@ -31,8 +31,8 @@ def station_schedule():
 
 @app.route('/history', methods=["GET"])
 def station_history():
-    response = {}
-    response['history'] = WebDataHelper.station_history()
+    response = None
+    response = WebDataHelper.station_history()
     return jsonify(response)
 
 

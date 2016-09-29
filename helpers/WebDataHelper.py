@@ -45,18 +45,18 @@ def station_history(sid=None, days=7):
             days)
     else:
         pass
-    results = {
+    history_json = {
         'history': []
     }
     for hist in sqlConn.read(sqlStr):
-        results['history'].append({
+        history_json['history'].append({
             'id': hist[0],
             'sid': hist[1],
             'schedule_id': hist[2],
             'duration': hist[3],
             'starttime': hist[4]
         })
-    return results
+    return history_json
 
 
 def add_station(sid, gpio_pin):
