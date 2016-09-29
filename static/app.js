@@ -82,12 +82,14 @@
             if ($scope.currentPage == 'home') {
                 $scope.navTitle = "All Stations"
                 $scope.showEditStation = false;
+                $scope.showEditSchedule = false;
                 $scope.showHome = true;
                 $scope.showHistory = false;
                 $scope.showAdd = false;
                 this.resetAddForm();
             }
             else if ($scope.currentPage == 'add') {
+                $scope.showEditSchedule = false;
                 $scope.showEditStation = false;
                 $scope.navTitle = "Add a Station"
                 $scope.showAdd = true;
@@ -95,8 +97,18 @@
                 $scope.showHome = false;
                 this.resetAddForm();
             }
+            else if ($scope.currentPage == 'calendar') {
+                $scope.showEditSchedule = true;
+                $scope.showEditStation = false;
+                $scope.navTitle = "Add a Station"
+                $scope.showAdd = false;
+                $scope.showHistory =false;
+                $scope.showHome = false;
+                this.resetAddForm();
+            }
             else if ($scope.currentPage == 'editstation') {
                 $scope.navTitle = "Editing Station " + $scope.edit_station_model.SID + " - (" + $scope.edit_station_model.notes + ")";
+                $scope.showEditSchedule = false;
                 $scope.showEditStation = true;
                 $scope.showAdd = false;
                 $scope.showHistory =false;
@@ -105,6 +117,7 @@
             }
             else if ($scope.currentPage == 'history') {
                 this.loadHistory(0);
+                $scope.showEditSchedule = false;
                 $scope.navTitle = "Watering History"
                 $scope.showEditStation = false;
                 $scope.showHistory = true;
