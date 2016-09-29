@@ -8,25 +8,43 @@ from datetime import datetime
 from helpers.SqlHelper import SqlHelper
 from threading import Thread
 import time
-
+import json
 
 class ScheduleControl:
+    rmq = RMQ()
     last_queued_dur = 0
     sqlConn = SqlHelper()
-    post_runlist = []
+    last_datetime = ''
     today_cache = None
 
     def __init__(self):
         self.post_runlist = []
         self.sqlConn = SqlHelper()
+        self.rmq = RMQ()
 
     def start(self):
         while True:
-            
-            time.sleep(self.last_queued_dur)
+            self.find_now_info()
+            self.queue_schedule_items()
+            time.sleep(59)
+
+    def queue_schedule_items(self):
+        tasks = self.get_current_tasks()
+        self.last_datetime = str(self.today_cache['day']) + str(self.today_cache['time'])
+
+        for task in tasks:
+            self.rmq.publish_message(
+                json.dumps(
+                    {
+                        'sid': task[1],
+                        'schedule_id': task[0],
+                        'duration': task[2]
+                    }
+                )
+            )
 
     def start_threaded(self):
-        Thread(target=start, args=()).start()
+        Thread(target=self.start, args=()).start()
 
     def find_curr_time(self):
         dtnow = str(datetime.now()).split(' ')[1]
@@ -39,17 +57,19 @@ class ScheduleControl:
             'time': self.find_curr_time()
         }
 
-    def get_next_task(self):
-        sqlStr = """select * from schedule
-where (startdate < date('now') and enddate < date('now'))
-    and {0}=1
-    and starttime
-
-    """.format(self.today_cache['day'])
-        print(self.sqlConn.read(sqlStr))
-
-    def check_schedule(self):
-        sqlStr = ''' SELECT * FROM schedules WHERE '''
+    def get_current_tasks(self):
+        if str(self.today_cache['day']) + str(self.today_cache['time']) != self.last_datetime:
+            sqlStr = """SELECT id, station, duration from schedule
+                            where (startdate < date('now') and enddate < date('now'))
+                                and {0}=1
+                                and starttime={1}
+        """.format(
+                self.today_cache['day'],
+                self.today_cache['time']
+            )
+            return self.sqlConn.read(sqlStr)
+        else:
+            pass
 
     def exec_schedule_item(self, task):
         RMQ().publish_message(task)
