@@ -14,3 +14,4 @@ RMQ().publish_message(json.dumps({
     'duration': 3,
     'schedule_id': 0
 }))
+# negative activates, positive turns off

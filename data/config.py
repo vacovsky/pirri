@@ -8,4 +8,5 @@ RMQ_USER = 'rabbit'  # rmq server username
 RMQ_PASS = 'bunnyrabbit!!'  # password to rmq server
 
 COMMON_WIRE_GPIO = 21
-GPIO_RELAY_OFFSTATE = True
+GPIO_RELAY_OFFSTATE = 1
+GPIO_RELAY_ONSTATE = 1
