@@ -60,8 +60,8 @@ class RMQ:
 
         except Exception as e:
             print(e)
-        finally:
-            self.ack_job(ch, method)
+        #finally:
+        #    self.ack_job(ch, method)
 
     def ack_job(self, ch, method):
         ch.basic_ack(delivery_tag=method.delivery_tag)
@@ -71,7 +71,7 @@ class RMQ:
         self.CHANNEL.queue_declare(queue=queue)
         self.CHANNEL.basic_consume(self.callback,
                                    queue=queue,
-                                   no_ack=False)
+                                   no_ack=True)
 
         print(
             ' [*] Waiting for messages on "{0}". To exit press CTRL+C'.format(queue))

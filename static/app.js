@@ -30,7 +30,7 @@
             GPIO: undefined,
             notes: undefined
         };
-        $scope.durationIntervals = [5,10,15,20,25,30,35,40,45,50,55,60];
+        $scope.durationIntervals = [1,5,10,15,20,25,30,35,40,45,50,55,60];
         $scope.show_gpio_diagram = false;
 
         this.filterForKeys = function(searchText) {
