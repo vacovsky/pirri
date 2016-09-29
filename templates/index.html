@@ -57,7 +57,7 @@
                                                 <button ng-hide="singleRunModel.duration != undefined" class="btn btn-success dropdown-toggle" type="button" data-toggle="dropdown">0 min</button>
                                                 <button ng-show="singleRunModel.duration != undefined" class="btn btn-success dropdown-toggle" type="button" data-toggle="dropdown">{[singleRunModel.duration]} min</button>
                                                 <ul class="dropdown-menu">
-                                                    <li ng-repeat="interval in durationIntervals" ng-click="singleRunModel.duration = interval; pc.submitSingleRun()"><a href="#">{[interval]} min</a></li>
+                                                    <li ng-repeat="interval in durationIntervals" ng-click="singleRunModel.duration = interval * 60; pc.submitSingleRun()"><a href="#">{[interval]} min</a></li>
                                                 </ul>
                                             </div>
                                         </td>
@@ -65,8 +65,7 @@
                                             <a href="#"><span class="glyphicon glyphicon-time"></span></a>
                                             <a href="#"><span class="glyphicon glyphicon-stats"></span></a>
                                             <a href="#"><span ng-hide="singleRunModel.sid == station.sid"" ng-click="singleRunModel.sid = station.sid; singleRunModel.sid = station.sid;" class="glyphicon glyphicon-play"></span></a>
-                                            <a href="#"><span ng-show="singleRunModel.sid == station.sid"" ng-click="singleRunModel = {};" class="glyphicon glyphicon-stop"></span></a>
-                                            
+                                            <a href="#"><span ng-show="singleRunModel.sid == station.sid"" ng-click="singleRunModel.sid = undefined; singleRunModel.duration = undefined;" class="glyphicon glyphicon-stop"></span></a>
                                         </td>
                                     </tr>
                                     <tr ng-repeat="station in searchResults" ng-show="showSearchResults">

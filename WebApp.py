@@ -2,6 +2,8 @@ from flask import Flask, render_template, request, jsonify
 import setproctitle
 import config
 from helpers import WebDataHelper
+from helpers.MessageHelper import RMQ
+import json
 
 
 __author__ = 'Joe Vacovsky Jr.'
@@ -39,6 +41,17 @@ def station_history():
 @app.route('/station/add', methods=["GET", "POST"])
 def station_add():
     response = {}
+    return jsonify(response)
+
+
+@app.route('/station/run', methods=["POST"])
+def station_run():
+    data = json.loads(request.data.decode('utf8'))
+    RMQ().publish_message(json.dumps({
+        "sid": data['sid'],
+        "duration": data['duration']
+    }))
+    response = {"status": "submitted"}
     return jsonify(response)
 
 

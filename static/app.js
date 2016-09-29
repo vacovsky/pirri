@@ -133,7 +133,12 @@
         $scope.singleRunModel = {};
         this.submitSingleRun = function() {
             //stuff
-            console.log($scope.singleRunMinField, $scope.singleRunModel);
+            $http.post('/station/run', $scope.singleRunModel)
+            .success(function(data, status, headers, config) {
+                console.log($scope.singleRunModel, data)
+            })
+            .error(function(data, status, headers, config) {})
+            // cleanup
             $scope.singleRunModel = {};
             $scope.singleRunMinField = undefined;
         };
