@@ -20,13 +20,14 @@
                         </div>
                         <div id="navicons">
                             <div>
-                                <a href><span class="glyphicon glyphicon-home" ng-click="pc.setPage('home')"></span></a>
                                 <a href><span class="glyphicon glyphicon-refresh" ng-click="pc.loadStations()"></span></a>
+                                <span> - - - </span>
+                                <a href><span class="glyphicon glyphicon-home" ng-click="pc.setPage('home')"></span></a>
                                 <a href><span class="glyphicon glyphicon-calendar" ng-click="pc.setPage('calendar')"></span></a>
                                 <a href><span class="glyphicon glyphicon-plus" ng-click="pc.setPage('add')"></span></a>
                                 <a href><span class="glyphicon glyphicon-time" ng-click="pc.setPage('history')"></span></a>
                                 <a href><span class="glyphicon glyphicon-stats" ng-click="pc.setPage('stats')"></span></a>
-                                <span id="navTitle"> - {[navTitle]}</span>
+                                <span id="navTitle"> - - - {[navTitle]}</span>
                             </div>
                         </div>
                     </div>
@@ -87,7 +88,7 @@
                     <!-- END STATIONS LIST -->
                     <!-- START EDIT SCHEDULE --> 
 
-                    <!-- END EDIT SCHEDULE -->
+                    <!-- END EDIT SCHEDULE-->
                     <!-- START HISTORY -->
                     <div ng-show="showHistory">
                         <div class="tbl-header">
