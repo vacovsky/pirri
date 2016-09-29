@@ -18,7 +18,8 @@ class RelayController:
             pins.append(pin[0])
         GPIO.setmode(GPIO.BCM)
         for pin in pins:
-            GPIO.setup(pin, GPIO.OUT, initial=not CONFIG.GPIO_RELAY_OFFSTATE)
+            # , initial=not CONFIG.GPIO_RELAY_OFFSTATE)
+            GPIO.setup(pin, GPIO.OUT)
 
     def __reset(self):
         GPIO.setmode(GPIO.BCM)

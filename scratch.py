@@ -11,6 +11,6 @@ print(Process().name())
 from helpers.MessageHelper import RMQ
 RMQ().publish_message(json.dumps({
     'sid': 52,
-    'duration': 10,
+    'duration': 3,
     'schedule_id': 0
 }))
