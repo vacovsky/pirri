@@ -11,6 +11,7 @@
     app.controller('PirriControl', function ($rootScope, $scope, $http) {
         $scope.currentPage = 'home'; // history / home / settings / add
         $scope.stations = undefined;
+        $scope.navTitle = "All Stations"
         $scope.showHome = true;
         $scope.showAdd = false;
         $scope.gpio_pins = undefined;
@@ -18,6 +19,7 @@
         $scope.searchText = "";
         $scope.showSearchResults = false;
         $scope.history = undefined;
+        $scope.historyScope = "All Stations"
         $scope.gpio_add_model = {
             default_message: "Select GPIO",
             GPIO: undefined
@@ -64,12 +66,23 @@
         this.setPage = function(pageName) {
             $scope.currentPage = pageName;
             if ($scope.currentPage == 'home') {
+                $scope.navTitle = "All Stations"
                 $scope.showHome = true;
+                $scope.showHistory = false;
                 $scope.showAdd = false;
                 this.resetAddForm();
             }
-            if ($scope.currentPage == 'add') {
+            else if ($scope.currentPage == 'add') {
+                $scope.navTitle = "Add a Station"
                 $scope.showAdd = true;
+                $scope.showHistory =false;
+                $scope.showHome = false;
+                this.resetAddForm();
+            }
+            else if ($scope.currentPage == 'history') {
+                $scope.navTitle = "Watering History"
+                $scope.showHistory = true;
+                $scope.showAdd = false;
                 $scope.showHome = false;
                 this.resetAddForm();
             }
