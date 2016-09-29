@@ -2,7 +2,6 @@
 # execution.
 
 from helpers.MessageHelper import RMQ
-import dateutil
 import calendar
 from datetime import datetime
 from helpers.SqlHelper import SqlHelper
@@ -29,18 +28,22 @@ class ScheduleControl:
 
     def queue_schedule_items(self):
         tasks = self.get_current_tasks()
-        self.last_datetime = str(self.today_cache['day']) + str(self.today_cache['time'])
+        self.last_datetime = str(
+            self.today_cache['day']) + str(self.today_cache['time'])
 
-        for task in tasks:
-            self.rmq.publish_message(
-                json.dumps(
-                    {
-                        'sid': task[1],
-                        'schedule_id': task[0],
-                        'duration': task[2]
-                    }
+        try:
+            for task in tasks:
+                self.rmq.publish_message(
+                    json.dumps(
+                        {
+                            'sid': task[1],
+                            'schedule_id': task[0],
+                            'duration': task[2]
+                        }
+                    )
                 )
-            )
+        except TypeError as e:
+            print(e)
 
     def start_threaded(self, check_interval):
         Thread(target=self.start, args=(check_interval,)).start()
