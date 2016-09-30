@@ -174,8 +174,15 @@
         $scope.scheduleModel = {};
         this.submitAddSchedule = function() {
         };
-        this.submitEditSchedule = function() {
-            //stuff
+        this.addScheduleButton = function() {
+            $scope.scheduleModel = undefined;
+            $scope.scheduleModel = {
+
+            };
+            pc.addNewRowToSchedList();
+            $scope.schedule.unshift($scope.scheduleModel)
+        };
+        this.convertScheduleBoolToInt = function() {
             if ($scope.scheduleModel.sunday) {
                 $scope.scheduleModel.sunday = 1;
             }
@@ -224,8 +231,9 @@
             else {
                 $scope.scheduleModel.repeat = 0;
             }
-
-
+        };
+        this.submitEditSchedule = function() {
+            this.convertScheduleBoolToInt();
             $http.post('/schedule/edit', $scope.scheduleModel)
             .success(function(data, status, headers, config) {
                 console.log($scope.scheduleModel, data)
@@ -266,9 +274,9 @@
         };
 
         this.refresh = function() {
-            this.getSchedule();
             this.loadStations();
             this.loadGPIO();
+            this.getSchedule();
         };
         this.loadStations = function() {
             $http.get('/station/list')

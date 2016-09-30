@@ -25,3 +25,24 @@ insert into history (id, sid, schedule_id, duration, starttime) values (1, 45, 0
 (12, 45, 0, 60,'2016-09-29 20:41:52.935246'),
 (13, 46, 0, 60,'2016-09-29 20:42:39.325506'),
 (14, 54, 0, 60,'2016-09-29 21:01:12.130410')
+
+
+insert into schedule (startdate, enddate, sunday, monday, tuesday, wednesday, thursday, friday, station, starttime, duration, repeat) values (
+20160928, 20170923, 1, 1, 1, 1, 1, 1, 1, 1, 1,1)
+
+CREATE TABLE schedule (
+    "id" PK AUTOINCREMENT NOT NULL,
+    "startdate" INTEGER NOT NULL DEFAULT (18990101),
+    "enddate" INTEGER,
+    "sunday" INTEGER NOT NULL DEFAULT (0),
+    "monday" INTEGER NOT NULL DEFAULT (0),
+    "tuesday" INTEGER NOT NULL DEFAULT (0),
+    "wednesday" INTEGER NOT NULL DEFAULT (0),
+    "thursday" INTEGER NOT NULL DEFAULT (0),
+    "friday" INTEGER NOT NULL DEFAULT (0),
+    "saturday" INTEGER NOT NULL DEFAULT (0),
+    "station" INTEGER NOT NULL DEFAULT (0),
+    "starttime" INTEGER NOT NULL DEFAULT (0),
+    "duration" INTEGER NOT NULL DEFAULT (0),
+    "repeat" INTEGER NOT NULL DEFAULT (0)
+);

@@ -31,8 +31,9 @@ def schedule_edit(schedule):
         saturday={8},
         starttime={9},
         duration={10},
-        repeat={11}
-    WHERE id={12}""".format(
+        repeat={11},
+        station={12}
+    WHERE id={13}""".format(
         schedule['startdate'],
         schedule['enddate'],
         schedule['sunday'],
@@ -45,6 +46,7 @@ def schedule_edit(schedule):
         schedule['starttime'],
         schedule['duration'],
         schedule['repeat'],
+        schedule['station'],
         schedule['id']
     )
     print(sqlStr)
