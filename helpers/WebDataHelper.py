@@ -2,6 +2,7 @@ from helpers.SqlHelper import SqlHelper
 from models.Station import Station
 from datetime import datetime
 
+
 def list_gpio():
     sqlConn = SqlHelper()
     gpio_pins = []
@@ -16,11 +17,12 @@ def list_gpio():
 
 
 def get_schedule(station=None):
+    this_date = int(str(datetime.now().date()).replace('-', ''))
     result = []
     sqlConn = SqlHelper()
     schedules = []
     if station is None:
-        sqlStr = """SELECT * FROM schedule WHERE enddate > {0}""".format(str(datetime.now().date()).replace('-', ''))
+        sqlStr = """SELECT * FROM schedule WHERE enddate > {0} AND startdate <= {1}""".format(this_date, this_date)
         schedules = sqlConn.read(sqlStr)
         for sched in schedules:
             data = {
@@ -69,7 +71,7 @@ def station_history(sid=None, days=7):
     sqlConn = SqlHelper()
     sqlStr = ""
     if sid is None:
-        sqlStr = "SELECT * FROM history WHERE julianday(starttime)julianday(starttime) >= (julianday('now', '-{0} days')) ORDER BY id DESC".format(
+        sqlStr = "SELECT * FROM history WHERE julianday(starttime) >= (julianday('now', '-{0} days')) ORDER BY id DESC".format(
             days)
     else:
         pass
