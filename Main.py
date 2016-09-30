@@ -11,6 +11,7 @@ import time
 class Main:
 
     def __init__(self):
+        GPIO.setwarnings(False)
         GPIO.setmode(GPIO.BCM)
 
     def start(self):
