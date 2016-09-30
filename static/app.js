@@ -21,6 +21,7 @@
         $scope.showSearchResults = false;
         $scope.history = [];
         $scope.historyScope = "All Stations";
+        $scope.schedule = undefined;
         $scope.gpio_add_model = {
             default_message: "Select GPIO",
             GPIO: undefined
@@ -204,9 +205,16 @@
 
         this.prettyTime = function(uglyTime) {
             var pt = moment(uglyTime).calendar();
-            //console.log(pt);
             return pt
         }
+        this.getSchedule = function() {
+            $http.get('/schedule')
+            .success(function(data, status, headers, config) {
+                $scope.schedule = data.schedule;
+            })
+            .error(function(data, status, headers, config) {})
+        };
+
         this.loadStations();
         this.loadGPIO();
     });

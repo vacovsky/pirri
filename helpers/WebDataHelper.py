@@ -1,6 +1,6 @@
 from helpers.SqlHelper import SqlHelper
 from models.Station import Station
-
+from datetime import datetime
 
 def list_gpio():
     sqlConn = SqlHelper()
@@ -13,6 +13,34 @@ def list_gpio():
             'notes': i[1]
         })
     return gpio_pins
+
+
+def get_schedule(station=None):
+    result = []
+    sqlConn = SqlHelper()
+    schedules = []
+    if station is None:
+        sqlStr = """SELECT * FROM schedule WHERE enddate > {0}""".format(str(datetime.now().date()).replace('-', ''))
+        schedules = sqlConn.read(sqlStr)
+        for sched in schedules:
+            data = {
+                "id": sched[0],
+                "startdate": sched[1],
+                "enddate": sched[2],
+                "sunday": sched[3],
+                "monday": sched[4],
+                "tuesday": sched[5],
+                "wednesday": sched[6],
+                "thursday": sched[7],
+                "friday": sched[8],
+                "saturday": sched[9],
+                "station": sched[10],
+                "starttime": sched[11],
+                "duration": sched[12],
+                "repeat": sched[13]
+            }
+            result.append(data)
+        return result
 
 
 def list_stations():
@@ -41,7 +69,7 @@ def station_history(sid=None, days=7):
     sqlConn = SqlHelper()
     sqlStr = ""
     if sid is None:
-        sqlStr = "SELECT * FROM history WHERE julianday(starttime) >= (julianday('now', '-{0} days')) ORDER BY id DESC".format(
+        sqlStr = "SELECT * FROM history WHERE julianday(starttime)julianday(starttime) >= (julianday('now', '-{0} days')) ORDER BY id DESC".format(
             days)
     else:
         pass

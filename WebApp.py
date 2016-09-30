@@ -25,9 +25,11 @@ def gpio_list():
     return jsonify(response)
 
 
-@app.route('/station/schedule', methods=["GET", "POST"])
+@app.route('/schedule', methods=["GET", "POST"])
 def station_schedule():
-    response = {}
+    response = {
+        'schedule': WebDataHelper.get_schedule()
+    }
     return jsonify(response)
 
 
