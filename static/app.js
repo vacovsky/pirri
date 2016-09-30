@@ -81,6 +81,7 @@
             $scope.currentPage = pageName;
             if ($scope.currentPage == 'home') {
                 $scope.navTitle = "All Stations"
+                $scope.stats = false;
                 $scope.showEditStation = false;
                 $scope.showEditSchedule = false;
                 $scope.showHome = true;
@@ -89,6 +90,7 @@
                 this.resetAddForm();
             }
             else if ($scope.currentPage == 'add') {
+                $scope.stats = false;
                 $scope.showEditSchedule = false;
                 $scope.showEditStation = false;
                 $scope.navTitle = "Add a Station"
@@ -98,6 +100,7 @@
                 this.resetAddForm();
             }
             else if ($scope.currentPage == 'calendar') {
+                $scope.stats = false;
                 $scope.showEditSchedule = true;
                 $scope.showEditStation = false;
                 $scope.navTitle = "Add a Station"
@@ -107,6 +110,7 @@
                 this.resetAddForm();
             }
             else if ($scope.currentPage == 'editstation') {
+                $scope.stats = false;
                 $scope.navTitle = "Editing Station " + $scope.edit_station_model.SID + " - (" + $scope.edit_station_model.notes + ")";
                 $scope.showEditSchedule = false;
                 $scope.showEditStation = true;
@@ -117,10 +121,22 @@
             }
             else if ($scope.currentPage == 'history') {
                 this.loadHistory(0);
+                $scope.stats = false;
                 $scope.showEditSchedule = false;
                 $scope.navTitle = "Watering History"
                 $scope.showEditStation = false;
                 $scope.showHistory = true;
+                $scope.showAdd = false;
+                $scope.showHome = false;
+                this.resetAddForm();
+            }
+            else if ($scope.currentPage == 'stats') {
+                this.loadHistory(0);
+                $scope.stats = true;
+                $scope.showEditSchedule = false;
+                $scope.navTitle = "Watering History"
+                $scope.showEditStation = false;
+                $scope.showHistory = false;
                 $scope.showAdd = false;
                 $scope.showHome = false;
                 this.resetAddForm();
