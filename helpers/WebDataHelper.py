@@ -188,12 +188,12 @@ def get_chart_stats(cid, days=30):
     results = {
         "labels": [],
         "series": [],
-        "data": [[]]
+        "data": [[], []]
     }
     if cid == 1:  # chart1 in js app
         sqlStr = """SELECT DISTINCT sid, SUM(duration / 60)
             FROM history
-            WHERE julianday(starttime) >= (julianday('now', '-{0} days'))
+            WHERE julianday(starttime) >= (julianday('now', '-{0} days') AND schedule_id > 0)
             GROUP BY sid
             ORDER BY sid ASC""".format(days)
         td = sqlConn.read(sqlStr)
@@ -209,7 +209,7 @@ def get_chart_stats(cid, days=30):
             ORDER BY sid ASC""".format(days)
         td = sqlConn.read(sqlStr)
         for d in td:
-            results['data'][0].append(d[1])
+            results['data'][1].append(d[1])
             results['series'].append('Unscheduled usage / last {0} days'.format(days))
 
     elif cid == 2:
