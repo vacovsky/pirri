@@ -16,6 +16,47 @@ def list_gpio():
     return gpio_pins
 
 
+def schedule_edit(schedule):
+    print(schedule)
+    sqlConn = SqlHelper()
+    sqlStr = """UPDATE schedule SET
+        startdate={0},
+        enddate={1},
+        sunday={2},
+        monday={3},
+        tuesday={4},
+        wednesday={5},
+        thursday={6},
+        friday={7},
+        saturday={8},
+        starttime={9},
+        duration={10},
+        repeat={11}
+    WHERE id={12}""".format(
+        schedule['startdate'],
+        schedule['enddate'],
+        schedule['sunday'],
+        schedule['monday'],
+        schedule['tuesday'],
+        schedule['wednesday'],
+        schedule['thursday'],
+        schedule['friday'],
+        schedule['saturday'],
+        schedule['starttime'],
+        schedule['duration'],
+        schedule['repeat'],
+        schedule['id']
+    )
+    print(sqlStr)
+    sqlConn.execute(sqlStr)
+
+
+def schedule_delete(schedule_id):
+    sqlConn = SqlHelper()
+    sqlStr = """DELETE FROM schedule WHERE id={0}""".format(schedule_id)
+    sqlConn.execute(sqlStr)
+
+
 def get_schedule(station=None):
     this_date = int(str(datetime.now().date()).replace('-', ''))
     result = []

@@ -176,7 +176,57 @@
         };
         this.submitEditSchedule = function() {
             //stuff
-            $http.post('/schedule', $scope.scheduleModel)
+            if ($scope.scheduleModel.sunday) {
+                $scope.scheduleModel.sunday = 1;
+            }
+            else {
+                $scope.scheduleModel.sunday = 0;
+            }
+            if ($scope.scheduleModel.monday) {
+                $scope.scheduleModel.monday = 1;
+            }
+            else {
+                $scope.scheduleModel.monday = 0;
+            }
+            if ($scope.scheduleModel.tuesday) {
+                $scope.scheduleModel.tuesday = 1;
+            }
+            else {
+                $scope.scheduleModel.tuesday = 0;
+            }
+            if ($scope.scheduleModel.wednesday) {
+                $scope.scheduleModel.wednesday = 1;
+            }
+            else {
+                $scope.scheduleModel.wednesday = 0;
+            }
+            if ($scope.scheduleModel.thursday) {
+                $scope.scheduleModel.thursday = 1;
+            }
+            else {
+                $scope.scheduleModel.thursday = 0;
+            }
+            if ($scope.scheduleModel.friday) {
+                $scope.scheduleModel.friday = 1;
+            }
+            else {
+                $scope.scheduleModel.friday = 0;
+            }
+            if ($scope.scheduleModel.saturday) {
+                $scope.scheduleModel.saturday = 1;
+            }
+            else {
+                $scope.scheduleModel.saturday = 0;
+            }
+            if ($scope.scheduleModel.repeat) {
+                $scope.scheduleModel.repeat = 1;
+            }
+            else {
+                $scope.scheduleModel.repeat = 0;
+            }
+
+
+            $http.post('/schedule/edit', $scope.scheduleModel)
             .success(function(data, status, headers, config) {
                 console.log($scope.scheduleModel, data)
             })
@@ -184,15 +234,22 @@
             // cleanup
             $scope.scheduleModel = {};
             $scope.scheduleModel = undefined;
-            this.getSchedule();
+            this.refresh();
         };
         this.mapModelForSchedEdit = function(currentModel) {
             $scope.scheduleModel = currentModel;
             console.log($scope.scheduleModel)
         };
-
-
-        this.submitDeleteSchedule = function() {
+        this.submitDeleteSchedule = function(schedule_id) {
+            $http.post('/schedule/delete', {schedule_id: schedule_id})
+            .success(function(data, status, headers, config) {
+                console.log('deleted schedule id: ', schedule_id)
+            })
+            .error(function(data, status, headers, config) {})
+            // cleanup
+            $scope.scheduleModel = {};
+            $scope.scheduleModel = undefined;
+            this.refresh();
         };
 
         $scope.singleRunModel = {};
@@ -208,7 +265,11 @@
             $scope.singleRunMinField = undefined;
         };
 
-
+        this.refresh = function() {
+            this.getSchedule();
+            this.loadStations();
+            this.loadGPIO();
+        };
         this.loadStations = function() {
             $http.get('/station/list')
             .success(function(data, status, headers, config) {

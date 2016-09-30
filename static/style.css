@@ -18,6 +18,11 @@ body {
     overflow: hidden;
 }
 
+input {
+  background-color: #59b300;
+  color:  white;
+}
+
 #navTitle {
   
 }

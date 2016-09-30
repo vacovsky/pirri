@@ -25,15 +25,27 @@ def gpio_list():
     return jsonify(response)
 
 
-@app.route('/schedule', methods=["GET", "POST"])
-def station_schedule():
-    if request.method == "GET":
-        response = {
-            'schedule': WebDataHelper.get_schedule()
-        }
-    elif request.method == "POST":
-        data = json.loads(request.data.decode('utf8'))
-        response = {"status": "submitted"}
+@app.route('/schedule', methods=["GET"])
+def schedule_list():
+    response = {
+        'schedule': WebDataHelper.get_schedule()
+    }
+    return jsonify(response)
+
+
+@app.route('/schedule/edit', methods=["POST"])
+def schedule_edit():
+    data = json.loads(request.data.decode('utf8'))
+    WebDataHelper.schedule_edit(data)
+    response = {"status": "submitted"}
+    return jsonify(response)
+
+
+@app.route('/schedule/delete', methods=["POST"])
+def schedule_delete():
+    data = json.loads(request.data.decode('utf8'))
+    WebDataHelper.schedule_delete(data['schedule_id'])
+    response = {"status": "submitted"}
     return jsonify(response)
 
 
