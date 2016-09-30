@@ -193,7 +193,7 @@ def get_chart_stats(cid, days=30):
     if cid == 1:  # chart1 in js app
         sqlStr = """SELECT DISTINCT sid, SUM(duration / 60)
             FROM history
-            WHERE julianday(starttime) >= (julianday('now', '-{0} days') AND schedule_id > 0)
+            WHERE julianday(starttime) >= (julianday('now', '-{0} days') AND schedule_id>0)
             GROUP BY sid
             ORDER BY sid ASC""".format(days)
         td = sqlConn.read(sqlStr)
