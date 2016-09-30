@@ -83,21 +83,63 @@
                                 </tbody>
                             </table>
                         </div>
-                        <divid="botnav">
+                        <div id="botnav">
                             <a href><span lass="glyphicon glyphicon-plus pull-right" ng-click="pc.setPage('add')"></span></a>
                         </div>
                     </div>
                     <!-- END STATIONS LIST -->
-
                     <!-- START STATS-->
-                    <div ng-show="stats"> 
-                        stats
+                    <div ng-show="stats">
+                        <div class=col-md-6>
+                            <span ng-repeat="d in data[0]">{{d}}</span>
+                        </div>
+                        <div class="col-md-6">
+                            <canvas id="chart1" class="chart chart-bar" chart-data="chartData1.data" chart-labels="chartData1.labels" chart-series="chartData1.series"></canvas>
+                        </div>
                     </div>
                     <!-- END STATS -->
+                    <!-- START EDIT SCHEDULE -->
+                    <div ng-show="showEditSchedule">
+                        <div class="tbl-header">
+                            <table cellpadding="0" cellspacing="0" border="0">
+                                <thead>
+                                    <th class="col-md-1">Station</th>
+                                    <th class="col-md-2">Start Date</th>
+                                    <th class="col-md-2">Start Time</th>
+                                    <th class="col-md-1">Duration</th>
+                                    <th class="col-md-5">Days</th>
+                                    <th class="col-md-1"></th>
+                                </thead>
+                            </table>
+                        </div>
+                        <div class="tbl-content">
+                            <table cellpadding="0" cellspacing="0" border="0">
+                                <tbody>
+                                    <tr ng-repeat="sched in schedule">
+                                        <td class="col-md-1">{[sched.station]}</td>
+                                        <td class="col-md-2">{[sched.startdate]}</td>
+                                        <td class="col-md-2">{[sched.starttime]}</td>
+                                        <td class="col-md-1">{[sched.duration / 60]} min</td>
+                                        <td class="col-md-5">
+                                            <div class="checkbox">
+                                                <label><input type="checkbox" value="{[sched.sunday == 1]}">Sun </label>
+                                                <label><input type="checkbox" value="">Mon </label>
+                                                <label><input type="checkbox" value="">Tue </label>
+                                                <label><input type="checkbox" value="">Wed </label>
+                                                <label><input type="checkbox" value="">Thu </label>
+                                                <label><input type="checkbox" value="">Fri </label>
+                                                <label><input type="checkbox" value="">Sat </label>
+                                            </div>
+                                        </td>
+                                        <td class="col-md-1">
+                                            <a href><span class="glyphicon glyphicon-pencil" ng-click=""></span></a>
+                                            <a href><span class="glyphicon glyphicon-trash" ng-click=""></span></a>
 
-                    <!-- START EDIT SCHEDULE --> 
-                    <div ng-show="showEditSchedule"> 
-                        edit schedule
+                                        </td>
+                                    </tr>
+                                </tbody>
+                            </table>
+                        </div>
                     </div>
                     <!-- END EDIT SCHEDULE-->
                     <!-- START HISTORY -->
@@ -121,7 +163,7 @@
                                         <td class="col-md-1">{[hist.sid]}</td>
                                         <td class="col-md-1">{[hist.id]}</td>
                                         <td class="col-md-3">{[pc.prettyTime(hist.starttime)]}</td>
-                                        <td class="col-md-2">{[hist.duration / 60]} minutes</td>
+                                        <td class="col-md-2">{[hist.duration / 60]} min</td>
                                         <td>{[hist.schedule_id != 0]}</td>
                                         <td>{[hist.schedule_id]}</td>
                                     </tr>
@@ -227,6 +269,8 @@
 <script src="https://cdnjs.cloudflare.com/ajax/libs/angularjs-slider/5.5.0/rzslider.min.js"></script>
 <script src="https://cdnjs.cloudflare.com/ajax/libs/angular-ui-bootstrap/0.14.3/ui-bootstrap-tpls.js"></script>
 <script src="https://cdnjs.cloudflare.com/ajax/libs/bootstrap-slider/9.2.0/bootstrap-slider.min.js"></script>
+<script type="text/javascript" src="https://cdnjs.cloudflare.com/ajax/libs/Chart.js/2.3.0/Chart.min.js"></script>
+<script type="text/javascript" src="https://cdnjs.cloudflare.com/ajax/libs/angular-chart.js/1.0.3/angular-chart.min.js"></script>
 <script src="/static/app.js"></script>
 <script src="/static/table.js"></script>
 </html>

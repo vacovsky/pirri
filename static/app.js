@@ -1,5 +1,5 @@
 (function() {
-    var app = angular.module('pirriweb', []);
+    var app = angular.module('pirriweb', ['chart.js']);
     app.Root = '/';
     app.config(['$interpolateProvider',
         function($interpolateProvider) {
@@ -9,6 +9,9 @@
     ]); 
 
     app.controller('PirriControl', function ($rootScope, $scope, $http) {
+        $scope.chartData1 = {};
+        $scope.chartData2 = {};
+
         $scope.currentPage = 'home'; // history / home / settings / add
         $scope.stations = undefined;
         $scope.navTitle = "All Stations";
@@ -104,7 +107,7 @@
                 $scope.stats = false;
                 $scope.showEditSchedule = true;
                 $scope.showEditStation = false;
-                $scope.navTitle = "Add a Station"
+                $scope.navTitle = "Schedule"
                 $scope.showAdd = false;
                 $scope.showHistory =false;
                 $scope.showHome = false;
@@ -132,10 +135,10 @@
                 this.resetAddForm();
             }
             else if ($scope.currentPage == 'stats') {
-                this.loadHistory(0);
+                this.loadStatsData();
                 $scope.stats = true;
                 $scope.showEditSchedule = false;
-                $scope.navTitle = "Watering History"
+                $scope.navTitle = "Usage Stats"
                 $scope.showEditStation = false;
                 $scope.showHistory = false;
                 $scope.showAdd = false;
@@ -144,6 +147,29 @@
             }
             //console.log($scope.currentPage)
         };
+
+        
+        this.getUsageDataForChart1 = function() {
+            $http.get('/stats?id=1')
+            .success(function(data, status, headers, config) {
+                $scope.chartData1.labels = data.chartData.labels;
+                $scope.chartData1.series = data.chartData.series;
+                $scope.chartData1.data = data.chartData.data;
+            })
+            .error(function(data, status, headers, config) {})
+
+            console.log($scope.chartData1)
+            $scope.chartData1.options = {
+                
+            };
+        };
+
+        this.loadStatsData = function() {
+            Chart.defaults.global.colors = [ '#803690', '#00ADF9', '#DCDCDC', '#46BFBD', '#FDB45C', '#949FB1', '#4D5360'];
+            this.getUsageDataForChart1();
+        };
+        
+
 
         this.submitEditStation = function() {
         };
@@ -215,6 +241,7 @@
             .error(function(data, status, headers, config) {})
         };
 
+        this.getSchedule();
         this.loadStations();
         this.loadGPIO();
     });

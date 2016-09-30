@@ -22,24 +22,25 @@ def get_schedule(station=None):
     sqlConn = SqlHelper()
     schedules = []
     if station is None:
-        sqlStr = """SELECT * FROM schedule WHERE enddate > {0} AND startdate <= {1}""".format(this_date, this_date)
+        sqlStr = """SELECT * FROM schedule WHERE enddate > {0} AND startdate <= {1}""".format(
+            this_date, this_date)
         schedules = sqlConn.read(sqlStr)
         for sched in schedules:
             data = {
                 "id": sched[0],
                 "startdate": sched[1],
                 "enddate": sched[2],
-                "sunday": sched[3],
-                "monday": sched[4],
-                "tuesday": sched[5],
-                "wednesday": sched[6],
-                "thursday": sched[7],
-                "friday": sched[8],
-                "saturday": sched[9],
+                "sunday": sched[3] == 1,
+                "monday": sched[4] == 1,
+                "tuesday": sched[5] == 1,
+                "wednesday": sched[6] == 1,
+                "thursday": sched[7] == 1,
+                "friday": sched[8] == 1,
+                "saturday": sched[9] == 1,
                 "station": sched[10],
                 "starttime": sched[11],
                 "duration": sched[12],
-                "repeat": sched[13]
+                "repeat": sched[13] == 1
             }
             result.append(data)
         return result
@@ -87,6 +88,32 @@ def station_history(sid=None, days=7):
             'starttime': hist[4]
         })
     return history_json
+
+
+def get_chart_stats(cid, days=30):
+    sqlStr = ""
+    sqlConn = SqlHelper()
+    results = {
+        "labels": [],
+        "series": [],
+        "data": [[]]
+    }
+    if cid == 1:  # chart1 in js app
+        sqlStr = """SELECT DISTINCT sid, SUM(duration / 60)
+            FROM history
+            WHERE julianday(starttime) >= (julianday('now', '-{0} days'))
+            GROUP BY sid
+            ORDER BY sid ASC""".format(days)
+        td = sqlConn.read(sqlStr)
+        for d in td:
+            results['labels'].append('SID' + str(d[0]))
+            results['data'][0].append(d[1])
+        results['series'].append('Usage for the last {0} days'.format(days))
+
+    elif cid == 2:
+        pass
+
+    return results
 
 
 def add_station(sid, gpio_pin):
