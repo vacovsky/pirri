@@ -110,7 +110,7 @@
                                     <th class="col-md-1">Duration</th>
                                     <th class="col-md-5">Days</th>
                                     <th class="col-md-1">
-                                        <a href="#"><span id="navicons" ng-click="pc.addNewRowToSchedList()" class="glyphicon glyphicon-plus"></span></a>
+                                        <a href="#"><span id="navicons" ng-click="pc.addScheduleButton()" class="glyphicon glyphicon-plus"></span></a>
                                     </th>
                                 </thead>
                             </table>
@@ -172,7 +172,8 @@
                                             </div>
                                         </td>
                                         <td class="col-md-1">
-                                            <a href><span ng-show="scheduleModel.id == sched.id" class="glyphicon glyphicon-floppy-disk" ng-click="pc.submitEditSchedule();"></span></a>
+                                            <a href><span ng-show="scheduleModel.id == sched.id && scheduleModel.new != true" class="glyphicon glyphicon-floppy-disk" ng-click="pc.submitEditSchedule();"></span></a>
+                                            <a href><span ng-show="scheduleModel.id == sched.id && scheduleModel.new" class="glyphicon glyphicon-floppy-disk" ng-click="pc.submitAddSchedule();"></span></a>
                                             <a href><span ng-hide="scheduleModel.id == sched.id" class="glyphicon glyphicon-pencil" ng-click="pc.mapModelForSchedEdit(sched)"></span></a>
                                             - - <a href><span class="glyphicon glyphicon-trash" ng-click="pc.submitDeleteSchedule(sched.id);"></span></a>
                                         </td>

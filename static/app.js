@@ -174,12 +174,27 @@
         $scope.scheduleModel = {};
         this.submitAddSchedule = function() {
         };
+
         this.addScheduleButton = function() {
             $scope.scheduleModel = undefined;
             $scope.scheduleModel = {
-
+                id: 0,
+                sunday: false,
+                monday: false,
+                tuesday: false,
+                wednesday: false,
+                thursday: false,
+                friday: false,
+                saturday: false,
+                repeat: false,
+                station: undefined,
+                starttime: undefined,
+                startdate: undefined,
+                enddate: 30000000,
+                duration: 0,
+                new: true
             };
-            pc.addNewRowToSchedList();
+            console.log($scope.scheduleModel)
             $scope.schedule.unshift($scope.scheduleModel)
         };
         this.convertScheduleBoolToInt = function() {
@@ -244,6 +259,20 @@
             $scope.scheduleModel = undefined;
             this.refresh();
         };
+
+        this.submitAddSchedule = function() {
+            this.convertScheduleBoolToInt();
+            $http.post('/schedule/add', $scope.scheduleModel)
+            .success(function(data, status, headers, config) {
+                console.log($scope.scheduleModel, data)
+            })
+            .error(function(data, status, headers, config) {})
+            // cleanup
+            $scope.scheduleModel = {};
+            $scope.scheduleModel = undefined;
+            this.refresh();
+        };
+
         this.mapModelForSchedEdit = function(currentModel) {
             $scope.scheduleModel = currentModel;
             console.log($scope.scheduleModel)

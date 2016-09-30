@@ -16,7 +16,7 @@ def list_gpio():
     return gpio_pins
 
 
-def schedule_edit(schedule):
+def schedule_edit(schedule, new=False):
     print(schedule)
     sqlConn = SqlHelper()
     sqlStr = """UPDATE schedule SET
@@ -48,6 +48,55 @@ def schedule_edit(schedule):
         schedule['repeat'],
         schedule['station'],
         schedule['id']
+    )
+    print(sqlStr)
+    sqlConn.execute(sqlStr)
+
+
+def schedule_add(schedule):
+    print(schedule)
+    sqlConn = SqlHelper()
+    sqlStr = """INSERT INTO schedule (
+            startdate,
+            enddate,
+            sunday,
+            monday,
+            tuesday,
+            wednesday,
+            thursday,
+            friday,
+            saturday,
+            starttime,
+            duration,
+            repeat,
+            station
+        ) VALUES (
+            startdate={0},
+            enddate={1},
+            sunday={2},
+            monday={3},
+            tuesday={4},
+            wednesday={5},
+            thursday={6},
+            friday={7},
+            saturday={8},
+            starttime={9},
+            duration={10},
+            repeat={11},
+            station={12})""".format(
+        schedule['startdate'],
+        schedule['enddate'],
+        schedule['sunday'],
+        schedule['monday'],
+        schedule['tuesday'],
+        schedule['wednesday'],
+        schedule['thursday'],
+        schedule['friday'],
+        schedule['saturday'],
+        schedule['starttime'],
+        schedule['duration'],
+        schedule['repeat'],
+        schedule['station']
     )
     print(sqlStr)
     sqlConn.execute(sqlStr)

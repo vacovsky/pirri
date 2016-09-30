@@ -36,7 +36,19 @@ def schedule_list():
 @app.route('/schedule/edit', methods=["POST"])
 def schedule_edit():
     data = json.loads(request.data.decode('utf8'))
-    WebDataHelper.schedule_edit(data)
+    print(data)
+    if data['new']:
+        WebDataHelper.schedule_edit(data, True)
+    else:
+        WebDataHelper.schedule_edit(data)
+    response = {"status": "submitted"}
+    return jsonify(response)
+
+
+@app.route('/schedule/add', methods=["POST"])
+def schedule_add():
+    data = json.loads(request.data.decode('utf8'))
+    WebDataHelper.schedule_add(data)
     response = {"status": "submitted"}
     return jsonify(response)
 
