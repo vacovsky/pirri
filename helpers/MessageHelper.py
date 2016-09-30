@@ -1,7 +1,6 @@
 import pika
 from data import config as CONFIG
 import json
-# from threading import Thread
 from psutil import Process
 
 print(Process().name())
