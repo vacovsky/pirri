@@ -56,13 +56,6 @@
             }
         };
 
-        // $scope.publishChange = function() {
-        //     var queryString = "";
-        //     $http.get('/send?' + queryString)
-        //     .success(function(data, status, headers, config) {
-        //     })
-        //     .error(function(data, status, headers, config) {})
-        // };
         this.resetAddForm = function() {
             $scope.gpio_add_model = {
                 default_message: "Select GPIO", 
@@ -165,7 +158,7 @@
         };
 
         this.loadStatsData = function() {
-            Chart.defaults.global.colors = [ '#803690', '#00ADF9', '#DCDCDC', '#46BFBD', '#FDB45C', '#949FB1', '#4D5360'];
+            //Chart.defaults.global.colors = [ '#803690', '#00ADF9', '#DCDCDC', '#46BFBD', '#FDB45C', '#949FB1', '#4D5360'];
             this.getUsageDataForChart1();
         };
         
@@ -182,7 +175,23 @@
         this.submitAddSchedule = function() {
         };
         this.submitEditSchedule = function() {
+            //stuff
+            $http.post('/schedule', $scope.scheduleModel)
+            .success(function(data, status, headers, config) {
+                console.log($scope.scheduleModel, data)
+            })
+            .error(function(data, status, headers, config) {})
+            // cleanup
+            $scope.scheduleModel = {};
+            $scope.scheduleModel = undefined;
+            this.getSchedule();
         };
+        this.mapModelForSchedEdit = function(currentModel) {
+            $scope.scheduleModel = currentModel;
+            console.log($scope.scheduleModel)
+        };
+
+
         this.submitDeleteSchedule = function() {
         };
 
@@ -197,10 +206,6 @@
             // cleanup
             $scope.singleRunModel = {};
             $scope.singleRunMinField = undefined;
-        };
-
-        this.historyPage = function(sid) {
-
         };
 
 

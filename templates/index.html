@@ -104,10 +104,10 @@
                             <table cellpadding="0" cellspacing="0" border="0">
                                 <thead>
                                     <th class="col-md-1">Station</th>
-                                    <th class="col-md-2">Start Date</th>
-                                    <th class="col-md-2">Start Time</th>
+                                    <th class="col-md-1">Start Date</th>
+                                    <th class="col-md-1">Start Time</th>
                                     <th class="col-md-1">Duration</th>
-                                    <th class="col-md-5">Days</th>
+                                    <th class="col-md-7">Days</th>
                                     <th class="col-md-1"></th>
                                 </thead>
                             </table>
@@ -117,24 +117,44 @@
                                 <tbody>
                                     <tr ng-repeat="sched in schedule">
                                         <td class="col-md-1">{[sched.station]}</td>
-                                        <td class="col-md-2">{[sched.startdate]}</td>
-                                        <td class="col-md-2">{[sched.starttime]}</td>
+                                        <td class="col-md-1">{[sched.startdate]}</td>
+                                        <td class="col-md-1">{[sched.starttime]}</td>
                                         <td class="col-md-1">{[sched.duration / 60]} min</td>
-                                        <td class="col-md-5">
+                                        <td class="col-md-7">
                                             <div class="checkbox">
-                                                <label><input type="checkbox" value="{[sched.sunday == 1]}">Sun </label>
-                                                <label><input type="checkbox" value="">Mon </label>
-                                                <label><input type="checkbox" value="">Tue </label>
-                                                <label><input type="checkbox" value="">Wed </label>
-                                                <label><input type="checkbox" value="">Thu </label>
-                                                <label><input type="checkbox" value="">Fri </label>
-                                                <label><input type="checkbox" value="">Sat </label>
+                                                <label><span ng-show="sched.sunday && scheduleModel.id != sched.id " class="glyphicon glyphicon-check"></span></label>
+                                                <label><span ng-show="!sched.sunday && scheduleModel.id != sched.id " class="glyphicon glyphicon-unchecked"></span></label>
+                                                <label><input ng-show="scheduleModel.id == sched.id" type="checkbox" ng-model="scheduleModel.sunday">Sun </label>
+
+                                                <label><span ng-show="sched.monday && scheduleModel.id != sched.id " class="glyphicon glyphicon-check"></span></label>
+                                                <label><span ng-show="!sched.monday && scheduleModel.id != sched.id " class="glyphicon glyphicon-unchecked"></span></label>
+                                                <label><input ng-show="scheduleModel.id == sched.id" type="checkbox" ng-model="scheduleModel.monday">Mon </label>
+
+                                                <label><span ng-show="sched.tuesday && scheduleModel.id != sched.id " class="glyphicon glyphicon-check"></span></label>
+                                                <label><span ng-show="!sched.tuesday && scheduleModel.id != sched.id " class="glyphicon glyphicon-unchecked"></span></label>
+                                                <label><input ng-show="scheduleModel.id == sched.id" type="checkbox" ng-model="scheduleModel.tuesday">Tue </label>
+
+                                                <label><span ng-show="sched.wednesday && scheduleModel.id != sched.id " class="glyphicon glyphicon-check"></span></label>
+                                                <label><span ng-show="!sched.wednesday && scheduleModel.id != sched.id " class="glyphicon glyphicon-unchecked"></span></label>
+                                                <label><input ng-show="scheduleModel.id == sched.id" type="checkbox" ng-model="scheduleModel.wednesday">Wed </label>
+
+                                                <label><span ng-show="sched.thursday && scheduleModel.id != sched.id " class="glyphicon glyphicon-check"></span></label>
+                                                <label><span ng-show="!sched.thursday && scheduleModel.id != sched.id " class="glyphicon glyphicon-unchecked"></span></label>
+                                                <label><input ng-show="scheduleModel.id == sched.id" type="checkbox" ng-model="scheduleModel.thursday">Thu </label>
+
+                                                <label><span ng-show="sched.friday && scheduleModel.id != sched.id " class="glyphicon glyphicon-check"></span></label>
+                                                <label><span ng-show="!sched.friday && scheduleModel.id != sched.id " class="glyphicon glyphicon-unchecked"></span></label>
+                                                <label><input ng-show="scheduleModel.id == sched.id" type="checkbox" ng-model="scheduleModel.friday">Fri </label>
+
+                                                <label><span ng-show="sched.saturday && scheduleModel.id != sched.id " class="glyphicon glyphicon-check"></span></label>
+                                                <label><span ng-show="!sched.saturday && scheduleModel.id != sched.id " class="glyphicon glyphicon-unchecked"></span></label>
+                                                <label><input ng-show="scheduleModel.id == sched.id" type="checkbox" ng-model="scheduleModel.saturday">Sat </label>
                                             </div>
                                         </td>
                                         <td class="col-md-1">
-                                            <a href><span class="glyphicon glyphicon-pencil" ng-click=""></span></a>
-                                            <a href><span class="glyphicon glyphicon-trash" ng-click=""></span></a>
-
+                                            <a href><span ng-show="scheduleModel.id == sched.id" class="glyphicon glyphicon-floppy-disk" ng-click="pc.submitEditSchedule()"></span></a>
+                                            <a href><span ng-hide="scheduleModel.id == sched.id" class="glyphicon glyphicon-pencil" ng-click="pc.mapModelForSchedEdit(sched)"></span></a>
+                                            - - <a href><span class="glyphicon glyphicon-trash" ng-click=""></span></a>
                                         </td>
                                     </tr>
                                 </tbody>
