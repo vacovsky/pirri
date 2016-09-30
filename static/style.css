@@ -22,6 +22,11 @@ body {
   
 }
 
+#botnav {
+  padding-left: 25;
+  padding-right: 25;
+
+}
 #navicons {
   font-size: 25px;
 }
