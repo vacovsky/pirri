@@ -1,6 +1,7 @@
 from helpers.SqlHelper import SqlHelper
 from models.Station import Station
 from datetime import datetime
+import operator
 
 
 def list_gpio():
@@ -188,32 +189,69 @@ def get_chart_stats(cid, days=30):
     results = {
         "labels": [],
         "series": [],
-        "data": [[], []]
+        "data": []
     }
+    station_data = {}
+    stations = []
+    for s in sqlConn.read("SELECT DISTINCT id FROM stations WHERE common=0"):
+        stations.append(s[0])
+
+    for station in stations:
+        station_data[station] = {
+            station: {
+            }
+        }
+
     if cid == 1:  # chart1 in js app
+
+        d1 = []
         sqlStr = """SELECT DISTINCT sid, SUM(duration / 60)
             FROM history
-            WHERE julianday(starttime) >= (julianday('now', '-{0} days') AND schedule_id>0)
+            WHERE julianday(starttime) >= (julianday('now', '-{0} days'))  AND schedule_id>0
             GROUP BY sid
             ORDER BY sid ASC""".format(days)
         td = sqlConn.read(sqlStr)
         for d in td:
-            results['labels'].append('SID' + str(d[0]))
-            results['data'][0].append(d[1])
+            try:
+                station_data[d[0]]['scheduled'] = d[1]
+            except Exception as e:
+                station_data[d[0]]['scheduled'] = 0
         results['series'].append(
             'Scheduled Usage / last {0} days'.format(days))
 
+        d2 = []
         sqlStr = """SELECT DISTINCT sid, SUM(duration / 60)
             FROM history
-            WHERE julianday(starttime) >= (julianday('now', '-{0} days') AND schedule_id=0)
+            WHERE julianday(starttime) >= (julianday('now', '-{0} days')) AND schedule_id=0
             GROUP BY sid
             ORDER BY sid ASC""".format(days)
         td = sqlConn.read(sqlStr)
         for d in td:
-            continue
-            #  results['data'][1].append(d[1])
-            #  results['series'].append('Unscheduled usage / last {0} days'.format(days))
+            try:
+                station_data[d[0]]['unscheduled'] = d[1]
+            except Exception as e:
+                station_data[d[0]]['unscheduled'] = 0
+        results['series'].append(
+            'Unscheduled usage / last {0} days'.format(days))
 
+        results['labels'] = stations
+
+        sorted_data = sorted(station_data.items(), key=operator.itemgetter(0))
+        for i in sorted_data:
+            print(i)
+
+
+        for i in sorted_data:
+            if 'scheduled' in i[1]:
+                d1.append(i[1]['scheduled'])
+            else:
+                d1.append(0)
+            if 'unscheduled' in i[1]:
+                d2.append(i[1]['unscheduled'])
+            else:
+                d2.append(0)
+        results['data'].append(d1)
+        results['data'].append(d2)
     elif cid == 2:
         pass
 
