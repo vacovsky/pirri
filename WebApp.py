@@ -33,6 +33,22 @@ def schedule_list():
     return jsonify(response)
 
 
+@app.route('/station/lastruns', methods=["GET"])
+def station_lastruns():
+    response = {
+        'lastrunlist': WebDataHelper.get_last_station_run()
+    }
+    return jsonify(response)
+
+
+@app.route('/station/nextruns', methods=["GET"])
+def station_nextruns():
+    response = {
+        'lastrunlist': WebDataHelper.get_next_station_run()
+    }
+    return jsonify(response)
+
+
 @app.route('/schedule/edit', methods=["POST"])
 def schedule_edit():
     data = json.loads(request.data.decode('utf8'))

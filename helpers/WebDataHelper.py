@@ -17,6 +17,12 @@ def list_gpio():
     return gpio_pins
 
 
+def update_notes(notes, sid):
+    sqlConn = SqlHelper()
+    sqlStr = "UPDATE stations SET notes='{0}' WHERE id={1}".format(notes, sid)
+    sqlConn.execute(sqlStr)
+
+
 def schedule_edit(schedule, new=False):
     print(schedule)
     sqlConn = SqlHelper()
@@ -159,6 +165,29 @@ def list_stations():
             station_json['schedule'].append(s.__dict__)
         stations.append(station_json)
     return stations
+
+
+def get_last_station_run():
+    sqlConn = SqlHelper()
+    results = {}
+    stations = list_stations()
+    for station in stations:
+        sqlStr = "SELECT starttime FROM history WHERE sid={0}".format(station['sid'])
+        try:
+            results[station['sid']] = sqlConn.read(sqlStr)[0][0]
+        except:
+            results[station['sid']] = '1899-01-01 00:00:00.000000'
+    return results
+
+
+def get_next_station_run():
+    sqlConn = SqlHelper()
+    results = {}
+    stations = list_stations()
+    for station in stations:
+        sqlStr = "SELECT starttime FROM history WHERE sid={0}".format(station['sid'])
+        results[station['sid']] = sqlConn.read(sqlStr)[0]
+    return results
 
 
 def station_history(sid=None, days=7):

@@ -50,7 +50,7 @@
                                 <tbody>
                                     <tr ng-repeat="station in stations" ng-hide="showSearchResults">
                                         <td class="col-md-1"><a href="#"> {[station.sid]} <span ng-click="pc.setEditingStationInfo(station.sid, station.gpio_pin, station.notes); pc.setPage('editstation')" class="glyphicon glyphicon-cog"></span></a></td>
-                                        <td class="col-md-3">???????</td>
+                                        <td class="col-md-3">{[pc.prettyTime(lastStationRunHash[station.sid])]}</td>
                                         <td class="col-md-3">???????</td>
                                         <td class="col-md-1">{[station.gpio_pin]}</td>
                                         <td class="col-md-3">

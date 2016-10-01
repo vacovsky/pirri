@@ -344,8 +344,18 @@
             .error(function(data, status, headers, config) {})
         };
 
+        $scope.lastStationRunHash = {}
+        this.getLastStationRun = function() {
+            $http.get('/station/lastruns')
+            .success(function(data, status, headers, config) {
+                $scope.lastStationRunHash = data.lastrunlist;
+            })
+            .error(function(data, status, headers, config) {})
+            console.log($scope.lastStationRunHash);
+        };
         this.getSchedule();
         this.loadStations();
+        this.getLastStationRun();
         this.loadGPIO();
     });
 })();
