@@ -142,7 +142,7 @@ def get_schedule(station=None):
 def list_stations():
     sqlConn = SqlHelper()
     stations = []
-    sqlStr = 'SELECT * FROM STATIONS ORDER BY ID ASC LIMIT 500'
+    sqlStr = 'SELECT * FROM STATIONS WHERE common=0 ORDER BY ID ASC LIMIT 500'
     data = sqlConn.read(sqlStr)
     for s in data:
         sid = s[0]
@@ -239,7 +239,6 @@ def get_chart_stats(cid, days=30):
         sorted_data = sorted(station_data.items(), key=operator.itemgetter(0))
         for i in sorted_data:
             print(i)
-
 
         for i in sorted_data:
             if 'scheduled' in i[1]:
