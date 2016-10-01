@@ -200,7 +200,8 @@ def get_chart_stats(cid, days=30):
         for d in td:
             results['labels'].append('SID' + str(d[0]))
             results['data'][0].append(d[1])
-        results['series'].append('Scheduled Usage / last {0} days'.format(days))
+        results['series'].append(
+            'Scheduled Usage / last {0} days'.format(days))
 
         sqlStr = """SELECT DISTINCT sid, SUM(duration / 60)
             FROM history
@@ -209,8 +210,9 @@ def get_chart_stats(cid, days=30):
             ORDER BY sid ASC""".format(days)
         td = sqlConn.read(sqlStr)
         for d in td:
-            results['data'][1].append(d[1])
-            results['series'].append('Unscheduled usage / last {0} days'.format(days))
+            continue
+            #  results['data'][1].append(d[1])
+            #  results['series'].append('Unscheduled usage / last {0} days'.format(days))
 
     elif cid == 2:
         pass
@@ -220,10 +222,6 @@ def get_chart_stats(cid, days=30):
 
 def add_station(sid, gpio_pin):
     Station(sid).add(gpio_pin)
-
-
-def add_schedule(sid):
-    pass
 
 
 def list_schedules(sid):
