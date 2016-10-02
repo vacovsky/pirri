@@ -17,9 +17,17 @@ def list_gpio():
     return gpio_pins
 
 
-def update_notes(notes, sid):
+def station_edit(station):
     sqlConn = SqlHelper()
-    sqlStr = "UPDATE stations SET notes='{0}' WHERE id={1}".format(notes, sid)
+    sqlStr = """UPDATE stations SET
+        gpio='{0}',
+        notes='{1}'
+        WHERE id={2}""".format(
+        station['gpio_pin'],
+        station['notes'],
+        station['sid']
+    )
+    print(sqlStr)
     sqlConn.execute(sqlStr)
 
 
@@ -159,6 +167,7 @@ def list_stations():
             'gpio_pin': station.gpio_pin,
             'sid': station.sid,
             'notes': station.notes,
+            'details': station.details,
             'schedule': []
         }
         for s in schedules:
@@ -172,7 +181,8 @@ def get_last_station_run():
     results = {}
     stations = list_stations()
     for station in stations:
-        sqlStr = "SELECT starttime FROM history WHERE sid={0}".format(station['sid'])
+        sqlStr = "SELECT starttime FROM history WHERE sid={0} ORDER BY starttime DESC LIMIT 1".format(
+            station['sid'])
         try:
             results[station['sid']] = sqlConn.read(sqlStr)[0][0]
         except:
@@ -181,11 +191,17 @@ def get_last_station_run():
 
 
 def get_next_station_run():
+    today = datetime.now().strftime('%A').lower()
     sqlConn = SqlHelper()
     results = {}
     stations = list_stations()
     for station in stations:
-        sqlStr = "SELECT starttime FROM history WHERE sid={0}".format(station['sid'])
+        sqlStr = """SELECT * from schedule 
+WHERE station=53 
+AND (starttime > time(strftime('%H%M'), 'now'))
+
+""".format(station['sid'])
+
         results[station['sid']] = sqlConn.read(sqlStr)[0]
     return results
 

@@ -90,6 +90,14 @@ def station_add():
     return jsonify(response)
 
 
+@app.route('/station/edit', methods=["POST"])
+def station_edit():
+    response = {}
+    data = json.loads(request.data.decode('utf8'))
+    WebDataHelper.station_edit(data)
+    return jsonify(response)
+
+
 @app.route('/stats', methods=["GET"])
 def stats():
     response = {}

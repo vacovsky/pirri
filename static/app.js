@@ -67,11 +67,9 @@
             $scope.gpio_add_model.GPIO = gpio;
         };
 
-        this.setEditingStationInfo = function(id, gpio, notes) {
-            $scope.edit_station_model.SID = id;
-            $scope.edit_station_model.GPIO = gpio;
-            $scope.edit_station_model.notes = notes;
-            console.log($scope.edit_station_model);
+        this.setEditingStationInfo = function(station) {
+            $scope.stationModel = station;
+            console.log($scope.stationModel);
         };
 
         this.setPage = function(pageName) {
@@ -163,8 +161,16 @@
         };
         
 
-
+        $scope.stationModel = {}
         this.submitEditStation = function() {
+            $http.post('/station/edit', $scope.stationModel)
+            .success(function(data, status, headers, config) {
+                console.log($scope.singleRunModel, data)
+            })
+            .error(function(data, status, headers, config) {})
+            // cleanup
+            $scope.stationModel = {};
+            $scope.stationModel = undefined;
         };
         this.submitDeleteStation = function() {
         };

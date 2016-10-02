@@ -54,7 +54,11 @@
                                         <td class="col-md-3">???????</td>
                                         <td class="col-md-1">{[station.gpio_pin]}</td>
                                         <td class="col-md-3">
-                                            {[station.notes]}
+                                            <span ng-hide="stationModel.sid == station.sid">{[station.notes]}</span>
+                                            <div class="form-group" ng-show="stationModel.id == station.id">
+                                                <input class="form-control" ng-show="stationModel.sid == station.sid" type="text" ng-model="stationModel.notes">
+                                            </div>
+
                                             <div class="dropdown" ng-show="singleRunModel.sid == station.sid">
                                                 <button ng-hide="singleRunModel.duration != undefined" class="btn btn-success dropdown-toggle" type="button" data-toggle="dropdown">0 min</button>
                                                 <button ng-show="singleRunModel.duration != undefined" class="btn btn-success dropdown-toggle" type="button" data-toggle="dropdown">{[singleRunModel.duration]} min</button>
@@ -64,6 +68,8 @@
                                             </div>
                                         </td>
                                         <td class="col-md-1">
+                                            <a href="#"><span ng-hide="stationModel.sid == station.sid" ng-click="pc.setEditingStationInfo(station)" class="glyphicon glyphicon-pencil"></span></a>
+                                            <a href><span ng-show="stationModel.sid == station.sid" class="glyphicon glyphicon-floppy-disk" ng-click="pc.submitEditStation();"></span></a>
                                             <a href="#"><span class="glyphicon glyphicon-time"></span></a>
                                             <a href="#"><span class="glyphicon glyphicon-stats"></span></a>
                                             <a href="#"><span ng-hide="singleRunModel.sid == station.sid"" ng-click="singleRunModel.sid = station.sid; singleRunModel.sid = station.sid;" class="glyphicon glyphicon-play"></span></a>
@@ -120,21 +126,21 @@
                                 <tbody>
                                     <tr ng-repeat="sched in schedule">
                                         <td class="col-md-1">
-                                        <span ng-show="scheduleModel.id != sched.id">{[sched.station]}</span>
+                                            <span ng-show="scheduleModel.id != sched.id">{[sched.station]}</span>
                                             <div class="form-group">
-                                            <input class="form-control" ng-show="scheduleModel.id == sched.id" type="number" ng-model="scheduleModel.station">
+                                                <input class="form-control" ng-show="scheduleModel.id == sched.id" type="number" ng-model="scheduleModel.station">
                                             </div>
                                         </td>
                                         <td class="col-md-2">
                                             <span ng-show="scheduleModel.id != sched.id">{[sched.startdate]}</span>
                                             <div class="form-group">
-                                            <input class="form-control" ng-show="scheduleModel.id == sched.id" type="number" ng-model="scheduleModel.startdate">
+                                                <input class="form-control" ng-show="scheduleModel.id == sched.id" type="number" ng-model="scheduleModel.startdate">
                                             </div>
                                         </td>
                                         <td class="col-md-2">
-                                        <span ng-show="scheduleModel.id != sched.id">{[sched.starttime]}</span>
+                                            <span ng-show="scheduleModel.id != sched.id">{[sched.starttime]}</span>
                                             <div class="form-group">
-                                            <input class="form-control" ng-show="scheduleModel.id == sched.id" type="number" ng-model="scheduleModel.starttime">
+                                                <input class="form-control" ng-show="scheduleModel.id == sched.id" type="number" ng-model="scheduleModel.starttime">
                                             </div>
                                         </td>
                                         <td class="col-md-1">

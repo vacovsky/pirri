@@ -23,6 +23,7 @@ class Station:
             data = sqlConn.read(sqlStr)[0]
             self.gpio_pin = data[1]
             self.notes = data[2]
+            self.details = data[3]
         except Exception as e:
             raise e
 
