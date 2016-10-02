@@ -45,6 +45,14 @@ def schedule_edit():
     return jsonify(response)
 
 
+@app.route('/station/edit', methods=["POST"])
+def station_edit():
+    response = {}
+    data = json.loads(request.data.decode('utf8'))
+    WebDataHelper.station_edit(data)
+    return jsonify(response)
+
+
 @app.route('/station/lastruns', methods=["GET"])
 def station_lastruns():
     response = {
