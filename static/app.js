@@ -6,9 +6,9 @@
             $interpolateProvider.startSymbol('{[');
             $interpolateProvider.endSymbol(']}');
         }
-    ]); 
+    ]);
 
-    app.controller('PirriControl', function ($rootScope, $scope, $http) {
+    app.controller('PirriControl', function($rootScope, $scope, $http) {
         $scope.chartData1 = {};
         $scope.chartData2 = {
             options: {}
@@ -36,7 +36,7 @@
             GPIO: undefined,
             notes: undefined
         };
-        $scope.durationIntervals = [1,5,10,15,20,25,30,35,40,45,50,55,60];
+        $scope.durationIntervals = [1, 5, 10, 15, 20, 25, 30, 35, 40, 45, 50, 55, 60];
         $scope.show_gpio_diagram = false;
 
         this.filterForKeys = function(searchText) {
@@ -60,7 +60,7 @@
 
         this.resetAddForm = function() {
             $scope.gpio_add_model = {
-                default_message: "Select GPIO", 
+                default_message: "Select GPIO",
                 GPIO: undefined
             };
         };
@@ -85,38 +85,34 @@
                 $scope.showHistory = false;
                 $scope.showAdd = false;
                 this.resetAddForm();
-            }
-            else if ($scope.currentPage == 'add') {
+            } else if ($scope.currentPage == 'add') {
                 $scope.stats = false;
                 $scope.showEditSchedule = false;
                 $scope.showEditStation = false;
                 $scope.navTitle = "Add a Station"
                 $scope.showAdd = true;
-                $scope.showHistory =false;
+                $scope.showHistory = false;
                 $scope.showHome = false;
                 this.resetAddForm();
-            }
-            else if ($scope.currentPage == 'calendar') {
+            } else if ($scope.currentPage == 'calendar') {
                 $scope.stats = false;
                 $scope.showEditSchedule = true;
                 $scope.showEditStation = false;
                 $scope.navTitle = "Schedule"
                 $scope.showAdd = false;
-                $scope.showHistory =false;
+                $scope.showHistory = false;
                 $scope.showHome = false;
                 this.resetAddForm();
-            }
-            else if ($scope.currentPage == 'editstation') {
+            } else if ($scope.currentPage == 'editstation') {
                 $scope.stats = false;
                 $scope.navTitle = "Editing Station " + $scope.edit_station_model.SID + " - (" + $scope.edit_station_model.notes + ")";
                 $scope.showEditSchedule = false;
                 $scope.showEditStation = true;
                 $scope.showAdd = false;
-                $scope.showHistory =false;
+                $scope.showHistory = false;
                 $scope.showHome = false;
                 this.resetAddForm();
-            }
-            else if ($scope.currentPage == 'history') {
+            } else if ($scope.currentPage == 'history') {
                 this.loadHistory(0);
                 $scope.stats = false;
                 $scope.showEditSchedule = false;
@@ -126,8 +122,7 @@
                 $scope.showAdd = false;
                 $scope.showHome = false;
                 this.resetAddForm();
-            }
-            else if ($scope.currentPage == 'stats') {
+            } else if ($scope.currentPage == 'stats') {
                 this.loadStatsData();
                 $scope.stats = true;
                 $scope.showEditSchedule = false;
@@ -141,46 +136,66 @@
             //console.log($scope.currentPage)
         };
 
-        
+
         this.getUsageDataForChart1 = function() {
             $http.get('/stats?id=1')
-            .success(function(data, status, headers, config) {
-                $scope.chartData1.labels = data.chartData.labels;
-                $scope.chartData1.series = data.chartData.series;
-                $scope.chartData1.data = data.chartData.data;
-            })
-            .error(function(data, status, headers, config) {})
+                .success(function(data, status, headers, config) {
+                    $scope.chartData1.labels = data.chartData.labels;
+                    $scope.chartData1.series = data.chartData.series;
+                    $scope.chartData1.data = data.chartData.data;
+                })
+                .error(function(data, status, headers, config) {})
 
             console.log($scope.chartData1)
             $scope.chartData1.options = {
-                            scaleStartValue: 0,
-                            scales: {
-                    xAxes: [{
-                      type: 'time',
-                      unit: 'day',
-                      unitStepSize: 1,
-                      time: {
-                        displayFormats: {
-                           'day': 'MMM DD'
-                        }
+                title: {
+                    display: true,
+                    text: 'Station Usage in Minutes'
+                },
+                scaleStartValue: 0,
+                legend: {
+                    display: true,
+                    labels: {
+                        //fontColor: 'rgb(255, 99, 132)'
                     }
-                }]
-            }
+                },
             };
         };
 
         this.getUsageDataForChart2 = function() {
             $http.get('/stats?id=2')
-            .success(function(data, status, headers, config) {
-                $scope.chartData2.labels = data.chartData.labels;
-                $scope.chartData2.series = data.chartData.series;
-                $scope.chartData2.data = data.chartData.data;
-            })
-            .error(function(data, status, headers, config) {})
+                .success(function(data, status, headers, config) {
+                    $scope.chartData2.labels = data.chartData.labels;
+                    $scope.chartData2.series = data.chartData.series;
+                    $scope.chartData2.data = data.chartData.data;
+                })
+                .error(function(data, status, headers, config) {})
             console.log($scope.chartData2);
-            $scope.chartData1.options = {
+            $scope.chartData2.options = {
                 scaleStartValue: 0,
-
+                title: {
+                    display: true,
+                    text: 'Station Activity Time Chart'
+                },
+                scaleStartValue: 0,
+                legend: {
+                    display: true,
+                    labels: {
+                        //fontColor: 'rgb(255, 99, 132)'
+                    }
+                },
+                scales: {
+                    xAxes: [{
+                        type: 'time',
+                        unit: 'day',
+                        unitStepSize: 1,
+                        time: {
+                            displayFormats: {
+                                'day': 'MMM DD'
+                            }
+                        }
+                    }]
+                }
             };
         };
 
@@ -190,27 +205,24 @@
             this.getUsageDataForChart2();
 
         };
-        
+
 
         $scope.stationModel = {}
         this.submitEditStation = function() {
             $http.post('/station/edit', $scope.stationModel)
-            .success(function(data, status, headers, config) {
-                console.log($scope.singleRunModel, data)
-            })
-            .error(function(data, status, headers, config) {})
-            // cleanup
+                .success(function(data, status, headers, config) {
+                    console.log($scope.singleRunModel, data)
+                })
+                .error(function(data, status, headers, config) {})
+                // cleanup
             $scope.stationModel = {};
             $scope.stationModel = undefined;
         };
-        this.submitDeleteStation = function() {
-        };
-        this.submitAddStation = function() {
-        };
+        this.submitDeleteStation = function() {};
+        this.submitAddStation = function() {};
 
         $scope.scheduleModel = {};
-        this.submitAddSchedule = function() {
-        };
+        this.submitAddSchedule = function() {};
 
         this.addScheduleButton = function() {
             $scope.scheduleModel = undefined;
@@ -237,61 +249,53 @@
         this.convertScheduleBoolToInt = function() {
             if ($scope.scheduleModel.sunday) {
                 $scope.scheduleModel.sunday = 1;
-            }
-            else {
+            } else {
                 $scope.scheduleModel.sunday = 0;
             }
             if ($scope.scheduleModel.monday) {
                 $scope.scheduleModel.monday = 1;
-            }
-            else {
+            } else {
                 $scope.scheduleModel.monday = 0;
             }
             if ($scope.scheduleModel.tuesday) {
                 $scope.scheduleModel.tuesday = 1;
-            }
-            else {
+            } else {
                 $scope.scheduleModel.tuesday = 0;
             }
             if ($scope.scheduleModel.wednesday) {
                 $scope.scheduleModel.wednesday = 1;
-            }
-            else {
+            } else {
                 $scope.scheduleModel.wednesday = 0;
             }
             if ($scope.scheduleModel.thursday) {
                 $scope.scheduleModel.thursday = 1;
-            }
-            else {
+            } else {
                 $scope.scheduleModel.thursday = 0;
             }
             if ($scope.scheduleModel.friday) {
                 $scope.scheduleModel.friday = 1;
-            }
-            else {
+            } else {
                 $scope.scheduleModel.friday = 0;
             }
             if ($scope.scheduleModel.saturday) {
                 $scope.scheduleModel.saturday = 1;
-            }
-            else {
+            } else {
                 $scope.scheduleModel.saturday = 0;
             }
             if ($scope.scheduleModel.repeat) {
                 $scope.scheduleModel.repeat = 1;
-            }
-            else {
+            } else {
                 $scope.scheduleModel.repeat = 0;
             }
         };
         this.submitEditSchedule = function() {
             this.convertScheduleBoolToInt();
             $http.post('/schedule/edit', $scope.scheduleModel)
-            .success(function(data, status, headers, config) {
-                console.log($scope.scheduleModel, data)
-            })
-            .error(function(data, status, headers, config) {})
-            // cleanup
+                .success(function(data, status, headers, config) {
+                    console.log($scope.scheduleModel, data)
+                })
+                .error(function(data, status, headers, config) {})
+                // cleanup
             $scope.scheduleModel = {};
             $scope.scheduleModel = undefined;
             this.refresh();
@@ -300,11 +304,11 @@
         this.submitAddSchedule = function() {
             this.convertScheduleBoolToInt();
             $http.post('/schedule/add', $scope.scheduleModel)
-            .success(function(data, status, headers, config) {
-                console.log($scope.scheduleModel, data)
-            })
-            .error(function(data, status, headers, config) {})
-            // cleanup
+                .success(function(data, status, headers, config) {
+                    console.log($scope.scheduleModel, data)
+                })
+                .error(function(data, status, headers, config) {})
+                // cleanup
             $scope.scheduleModel = {};
             $scope.scheduleModel = undefined;
             this.refresh();
@@ -315,12 +319,14 @@
             console.log($scope.scheduleModel)
         };
         this.submitDeleteSchedule = function(schedule_id) {
-            $http.post('/schedule/delete', {schedule_id: schedule_id})
-            .success(function(data, status, headers, config) {
-                console.log('deleted schedule id: ', schedule_id)
-            })
-            .error(function(data, status, headers, config) {})
-            // cleanup
+            $http.post('/schedule/delete', {
+                    schedule_id: schedule_id
+                })
+                .success(function(data, status, headers, config) {
+                    console.log('deleted schedule id: ', schedule_id)
+                })
+                .error(function(data, status, headers, config) {})
+                // cleanup
             $scope.scheduleModel = {};
             $scope.scheduleModel = undefined;
             this.refresh();
@@ -330,11 +336,11 @@
         this.submitSingleRun = function() {
             //stuff
             $http.post('/station/run', $scope.singleRunModel)
-            .success(function(data, status, headers, config) {
-                console.log($scope.singleRunModel, data)
-            })
-            .error(function(data, status, headers, config) {})
-            // cleanup
+                .success(function(data, status, headers, config) {
+                    console.log($scope.singleRunModel, data)
+                })
+                .error(function(data, status, headers, config) {})
+                // cleanup
             $scope.singleRunModel = {};
             $scope.singleRunMinField = undefined;
         };
@@ -346,27 +352,27 @@
         };
         this.loadStations = function() {
             $http.get('/station/list')
-            .success(function(data, status, headers, config) {
-                $scope.stations = data.stations;
-            })
-            .error(function(data, status, headers, config) {})
+                .success(function(data, status, headers, config) {
+                    $scope.stations = data.stations;
+                })
+                .error(function(data, status, headers, config) {})
         };
 
         this.loadGPIO = function() {
             $http.get('/gpio/list')
-            .success(function(data, status, headers, config) {
-                $scope.gpio_pins = data.gpio_pins;
-            })
-            .error(function(data, status, headers, config) {})
+                .success(function(data, status, headers, config) {
+                    $scope.gpio_pins = data.gpio_pins;
+                })
+                .error(function(data, status, headers, config) {})
         };
 
         this.loadHistory = function(station) {
             var query = '?station=' + station + '&earliest=-168';
             $http.get('/history' + query)
-            .success(function(data, status, headers, config) {
-                $scope.history = data.history;
-            })
-            .error(function(data, status, headers, config) {})
+                .success(function(data, status, headers, config) {
+                    $scope.history = data.history;
+                })
+                .error(function(data, status, headers, config) {})
         };
 
         this.prettyTime = function(uglyTime) {
@@ -375,19 +381,19 @@
         }
         this.getSchedule = function() {
             $http.get('/schedule')
-            .success(function(data, status, headers, config) {
-                $scope.schedule = data.schedule;
-            })
-            .error(function(data, status, headers, config) {})
+                .success(function(data, status, headers, config) {
+                    $scope.schedule = data.schedule;
+                })
+                .error(function(data, status, headers, config) {})
         };
 
         $scope.lastStationRunHash = {}
         this.getLastStationRun = function() {
             $http.get('/station/lastruns')
-            .success(function(data, status, headers, config) {
-                $scope.lastStationRunHash = data.lastrunlist;
-            })
-            .error(function(data, status, headers, config) {})
+                .success(function(data, status, headers, config) {
+                    $scope.lastStationRunHash = data.lastrunlist;
+                })
+                .error(function(data, status, headers, config) {})
             console.log($scope.lastStationRunHash);
         };
         this.getSchedule();

@@ -211,6 +211,9 @@ def chart_stats_chrono(days=7):
     sqlStr = "SELECT sid, starttime, duration FROM history WHERE julianday(starttime) >= (julianday('now', '-{0} days'))".format(
         days)
     sqlConn = SqlHelper()
+    stationsSql = "SELECT DISTINCT id FROM stations WHERE common=0 ORDER BY id ASC"
+    stations = [i[0] for i in sqlConn.read(stationsSql)]
+    print(stations)
     results = {
         "labels": [],  # labels = hours?
         "series": [],  # series = station ids
@@ -218,11 +221,11 @@ def chart_stats_chrono(days=7):
     }
     data = sqlConn.read(sqlStr)
     for day in range(days):
-        results['labels'].insert(0, (datetime.now() - timedelta(days=day)).date())
+        results['labels'].insert(0, (datetime.now() - timedelta(days=day)))
 
     for d in data:
         results['data'][0].append(d[2] / 60)
-    results['series'].append('Active Relay Time (min)')
+    results['series'] = stations
     return results
     print(results)
 
