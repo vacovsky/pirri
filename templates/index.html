@@ -98,11 +98,12 @@
                     <!-- START STATS-->
                     <div ng-show="stats">
                         <div class=col-md-6>
-                            <span ng-repeat="d in data[0]">{{d}}</span>
+                            <canvas id="chart2" height="200" class="chart chart-line" chart-options="chartData2.options" chart-data="chartData2.data" chart-labels="chartData2.labels" chart-series="chartData2.series"></canvas>
                         </div>
                         <div class="col-md-6">
-                            <canvas id="chart1" class="chart chart-bar" chart-data="chartData1.data" chart-labels="chartData1.labels" chart-series="chartData1.series"></canvas>
+                            <canvas id="chart1" height="200" class="chart chart-bar" chart-data="chartData1.data" chart-labels="chartData1.labels" chart-series="chartData1.series"></canvas>
                         </div>
+
                     </div>
                     <!-- END STATS -->
                     <!-- START EDIT SCHEDULE -->

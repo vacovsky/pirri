@@ -102,8 +102,11 @@ def station_add():
 def stats():
     response = {}
     print(request.args.get('id'))
-    response['chartData'] = WebDataHelper.get_chart_stats(
-        int(request.args.get('id')))
+    if int(request.args.get('id')) == 1:
+        response['chartData'] = WebDataHelper.get_chart_stats(
+            int(request.args.get('id')))
+    elif int(request.args.get('id')) == 2:
+        response['chartData'] = WebDataHelper.chart_stats_chrono()
     return jsonify(response)
 
 

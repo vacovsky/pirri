@@ -10,7 +10,9 @@
 
     app.controller('PirriControl', function ($rootScope, $scope, $http) {
         $scope.chartData1 = {};
-        $scope.chartData2 = {};
+        $scope.chartData2 = {
+            options: {}
+        };
 
         $scope.currentPage = 'home'; // history / home / settings / add
         $scope.stations = undefined;
@@ -155,9 +157,21 @@
             };
         };
 
+        this.getUsageDataForChart2 = function() {
+            $http.get('/stats?id=2')
+            .success(function(data, status, headers, config) {
+                $scope.chartData2.labels = data.chartData.labels;
+                $scope.chartData2.series = data.chartData.series;
+                $scope.chartData2.data = data.chartData.data;
+            })
+            .error(function(data, status, headers, config) {})
+            console.log($scope.chartData2)
+        };
+
         this.loadStatsData = function() {
-            //Chart.defaults.global.colors = [ '#803690', '#00ADF9', '#DCDCDC', '#46BFBD', '#FDB45C', '#949FB1', '#4D5360'];
             this.getUsageDataForChart1();
+            this.getUsageDataForChart2();
+
         };
         
 

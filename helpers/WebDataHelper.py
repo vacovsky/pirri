@@ -1,7 +1,8 @@
 from helpers.SqlHelper import SqlHelper
 from models.Station import Station
-from datetime import datetime
+from datetime import datetime, timedelta
 import operator
+from dateutil import parser
 
 
 def list_gpio():
@@ -196,14 +197,33 @@ def get_next_station_run():
     results = {}
     stations = list_stations()
     for station in stations:
-        sqlStr = """SELECT * from schedule 
-WHERE station=53 
+        sqlStr = """SELECT * from schedule
+WHERE station=53
 AND (starttime > time(strftime('%H%M'), 'now'))
 
 """.format(station['sid'])
 
         results[station['sid']] = sqlConn.read(sqlStr)[0]
     return results
+
+
+def chart_stats_chrono(days=7):
+    sqlStr = "SELECT sid, starttime, duration FROM history WHERE julianday(starttime) >= (julianday('now', '-{0} days'))".format(
+        days)
+    sqlConn = SqlHelper()
+    results = {
+        "labels": [],  # labels = hours?
+        "series": [],  # series = station ids
+        "data": [[]],  # durations (starttime + sec(duration)), per series
+    }
+    data = sqlConn.read(sqlStr)
+    for d in data:
+        # + timedelta(seconds=d[2])))
+        results['labels'].append(str(parser.parse(d[1][0:18])))
+        results['data'][0].append(d[2] / 60)
+    results['series'].append('Active Relay Time (min)')
+    return results
+    print(results)
 
 
 def station_history(sid=None, days=7):
@@ -283,9 +303,6 @@ def get_chart_stats(cid, days=30):
 
         sorted_data = sorted(station_data.items(), key=operator.itemgetter(0))
         for i in sorted_data:
-            print(i)
-
-        for i in sorted_data:
             if 'scheduled' in i[1]:
                 d1.append(i[1]['scheduled'])
             else:
@@ -296,8 +313,6 @@ def get_chart_stats(cid, days=30):
                 d2.append(0)
         results['data'].append(d1)
         results['data'].append(d2)
-    elif cid == 2:
-        pass
 
     return results
 
