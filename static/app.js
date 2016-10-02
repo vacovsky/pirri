@@ -153,7 +153,7 @@
 
             console.log($scope.chartData1)
             $scope.chartData1.options = {
-                
+                            scaleStartValue: 0
             };
         };
 
@@ -165,10 +165,14 @@
                 $scope.chartData2.data = data.chartData.data;
             })
             .error(function(data, status, headers, config) {})
-            console.log($scope.chartData2)
+            console.log($scope.chartData2);
+            $scope.chartData1.options = {
+                scaleStartValue: 0
+            };
         };
 
         this.loadStatsData = function() {
+            Chart.defaults.global.defaultFontColor = "#fff";
             this.getUsageDataForChart1();
             this.getUsageDataForChart2();
 
