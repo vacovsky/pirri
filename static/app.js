@@ -153,7 +153,19 @@
 
             console.log($scope.chartData1)
             $scope.chartData1.options = {
-                            scaleStartValue: 0
+                            scaleStartValue: 0,
+                            scales: {
+                    xAxes: [{
+                      type: 'time',
+                      unit: 'day',
+                      unitStepSize: 1,
+                      time: {
+                        displayFormats: {
+                           'day': 'MMM DD'
+                        }
+                    }
+                }]
+            }
             };
         };
 
@@ -167,7 +179,8 @@
             .error(function(data, status, headers, config) {})
             console.log($scope.chartData2);
             $scope.chartData1.options = {
-                scaleStartValue: 0
+                scaleStartValue: 0,
+
             };
         };
 

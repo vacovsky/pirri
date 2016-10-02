@@ -15,7 +15,7 @@
             <div id="station-schedules">
                 <section>
                     <div id="nav">
-                        <h1 id="schedtitle"><img height="200" width="200" src="static/icon_text.png"></h1>
+                        <h1 id="schedtitle"><img height="100" width="150" src="static/icon_text.png"></h1>
                         <div id="searchTextDiv" class="col-sm-3 pull-right">
                             <p><input type="text" id="searchText" ng-model="searchText" placeholder="Search stations..." class="form-control col-sm-2" ng-change="pc.filterForKeys(searchText)"></p>
                         </div>
@@ -98,10 +98,10 @@
                     <!-- START STATS-->
                     <div ng-show="stats">
                         <div class=col-md-6>
-                            <canvas id="chart2" height="200" class="chart chart-line" chart-options="chartData2.options" chart-data="chartData2.data" chart-labels="chartData2.labels" chart-series="chartData2.series"></canvas>
+                            <canvas id="chart2" height="300" class="chart chart-line" chart-options="chartData2.options" chart-data="chartData2.data" chart-labels="chartData2.labels" chart-series="chartData2.series"></canvas>
                         </div>
                         <div class="col-md-6">
-                            <canvas id="chart1" height="200" class="chart chart-bar" chart-data="chartData1.data" chart-labels="chartData1.labels" chart-series="chartData1.series"></canvas>
+                            <canvas id="chart1" height="300" class="chart chart-bar" chart-data="chartData1.data" chart-labels="chartData1.labels" chart-series="chartData1.series"></canvas>
                         </div>
 
                     </div>

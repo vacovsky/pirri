@@ -217,9 +217,10 @@ def chart_stats_chrono(days=7):
         "data": [[]],  # durations (starttime + sec(duration)), per series
     }
     data = sqlConn.read(sqlStr)
+    for day in range(days):
+        results['labels'].insert(0, (datetime.now() - timedelta(days=day)).date())
+
     for d in data:
-        # + timedelta(seconds=d[2])))
-        results['labels'].append(str(parser.parse(d[1][0:18])))
         results['data'][0].append(d[2] / 60)
     results['series'].append('Active Relay Time (min)')
     return results
