@@ -175,7 +175,7 @@
                 scaleStartValue: 0,
                 title: {
                     display: true,
-                    text: 'Station Activity Time Chart'
+                    text: ' Usage by Day of Week'
                 },
                 scaleStartValue: 0,
                 legend: {
@@ -184,18 +184,6 @@
                         //fontColor: 'rgb(255, 99, 132)'
                     }
                 },
-                scales: {
-                    xAxes: [{
-                        type: 'time',
-                        unit: 'day',
-                        unitStepSize: 1,
-                        time: {
-                            displayFormats: {
-                                'day': 'MMM DD'
-                            }
-                        }
-                    }]
-                }
             };
         };
 

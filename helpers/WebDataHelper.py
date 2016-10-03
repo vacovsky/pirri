@@ -208,6 +208,50 @@ AND (starttime > time(strftime('%H%M'), 'now'))
 
 
 def chart_stats_chrono(days=7):
+    sqlConn = SqlHelper()
+    sqlStr = """SELECT DISTINCT strftime('%w', starttime) as [day], SUM(duration / 60) as [mins]
+            FROM history
+            WHERE julianday(starttime) >= (julianday('now', '-7 days'))
+            GROUP BY [day]
+            ORDER BY [day] ASC""".format(
+        days)
+    sqlStr2 = """SELECT DISTINCT strftime('%w', starttime) as [day], SUM(duration / 60) as [mins]
+            FROM history
+            WHERE julianday(starttime) >= (julianday('now', '-7 days')) AND schedule_id>0
+            GROUP BY [day]
+            ORDER BY [day] ASC""".format(
+        days)
+    sqlStr3 = """SELECT DISTINCT strftime('%w', starttime) as [day], SUM(duration / 60) as [mins]
+            FROM history
+            WHERE julianday(starttime) >= (julianday('now', '-7 days')) AND schedule_id=0
+            GROUP BY [day]
+            ORDER BY [day] ASC""".format(
+        days)
+    results = {
+        "labels": ['Sunday', 'Monday', 'Tuesday', 'Wednesday', 'Thursday', 'Friday', 'Saturday'],
+        "series": ['Total', 'Scheduled', 'Unscheduled'],
+        # durations (starttime + sec(duration)), per series
+        "data": [
+            [0, 0, 0, 0, 0, 0, 0],
+            [0, 0, 0, 0, 0, 0, 0],
+            [0, 0, 0, 0, 0, 0, 0]]
+    }
+    # parser.parse('January 11, 2010').strftime("%A")
+    sql_data = sqlConn.read(sqlStr)
+    sql_data2 = sqlConn.read(sqlStr2)
+    sql_data3 = sqlConn.read(sqlStr3)
+
+    for d in sql_data:
+        results['data'][0][int(d[0])] = int(d[1])
+    for d in sql_data2:
+        results['data'][1][int(d[0])] = int(d[1])
+    for d in sql_data3:
+        results['data'][2][int(d[0])] = int(d[1])
+
+    return results
+
+
+def chart_stats_chrono_old(days=7):
     sqlStr = "SELECT sid, starttime, duration FROM history WHERE julianday(starttime) >= (julianday('now', '-{0} days'))".format(
         days)
     sqlConn = SqlHelper()
