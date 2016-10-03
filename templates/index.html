@@ -32,7 +32,7 @@
                         </div>
                     </div>
                     <!-- START STATIONS LIST -->
-                    <div ng-show="showHome">
+                    <div ng-show="showHome" id="navpane">
                         <div class="tbl-header">
                             <table cellpadding="0" cellspacing="0" border="0">
                                 <thead>
@@ -58,7 +58,6 @@
                                             <div class="form-group" ng-show="stationModel.id == station.id">
                                                 <input class="form-control" ng-show="stationModel.sid == station.sid" type="text" ng-model="stationModel.notes">
                                             </div>
-
                                             <div class="dropdown" ng-show="singleRunModel.sid == station.sid">
                                                 <button ng-hide="singleRunModel.duration != undefined" class="btn btn-success dropdown-toggle" type="button" data-toggle="dropdown">0 min</button>
                                                 <button ng-show="singleRunModel.duration != undefined" class="btn btn-success dropdown-toggle" type="button" data-toggle="dropdown">{[singleRunModel.duration]} min</button>
@@ -97,13 +96,12 @@
                     <!-- END STATIONS LIST -->
                     <!-- START STATS-->
                     <div ng-show="stats">
-                        <div class=col-md-6>
-                            <canvas id="chart2" height="200" class="chart chart-line" chart-options="chartData2.options" chart-data="chartData2.data" chart-labels="chartData2.labels" chart-series="chartData2.series"></canvas>
-                        </div>
                         <div class="col-md-6">
                             <canvas id="chart1" height="200" class="chart chart-bar" chart-options="chartData1.options" chart-data="chartData1.data" chart-labels="chartData1.labels" chart-series="chartData1.series"></canvas>
                         </div>
-
+                        <div class=col-md-6>
+                            <canvas id="chart2" height="200" class="chart chart-line" chart-options="chartData2.options" chart-data="chartData2.data" chart-labels="chartData2.labels" chart-series="chartData2.series"></canvas>
+                        </div>
                     </div>
                     <!-- END STATS -->
                     <!-- START EDIT SCHEDULE -->

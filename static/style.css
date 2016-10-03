@@ -4,6 +4,12 @@
 a {
   color: #fff;
 }
+
+#navpane {
+  padding-top: 10px;
+}
+
+
 body {
     color: #fff;
     padding-top: 0px;

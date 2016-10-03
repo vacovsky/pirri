@@ -211,7 +211,7 @@ def chart_stats_chrono(days=7):
     sqlStr = "SELECT sid, starttime, duration FROM history WHERE julianday(starttime) >= (julianday('now', '-{0} days'))".format(
         days)
     sqlConn = SqlHelper()
-    stationsSql = "SELECT DISTINCT id FROM stations WHERE common=0 ORDER BY id ASC"
+    stationsSql = "SELECT id FROM stations WHERE common=0 ORDER BY id ASC"
     stations = [i[0] for i in sqlConn.read(stationsSql)]
     print(stations)
     results = {
