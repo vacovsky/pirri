@@ -95,7 +95,7 @@
                     </div>
                     <!-- END STATIONS LIST -->
                     <!-- START STATS-->
-                    <div ng-show="stats">
+                    <div ng-show="stats" id="navpane">
                         <div class="col-md-6">
                             <canvas id="chart1" height="200" class="chart chart-bar" chart-options="chartData1.options" chart-data="chartData1.data" chart-labels="chartData1.labels" chart-series="chartData1.series"></canvas>
                         </div>
@@ -105,7 +105,7 @@
                     </div>
                     <!-- END STATS -->
                     <!-- START EDIT SCHEDULE -->
-                    <div ng-show="showEditSchedule">
+                    <div ng-show="showEditSchedule" id="navpane">
                         <div class="tbl-header">
                             <table cellpadding="0" cellspacing="0" border="0">
                                 <thead>
@@ -189,7 +189,7 @@
                     </div>
                     <!-- END EDIT SCHEDULE-->
                     <!-- START HISTORY -->
-                    <div ng-show="showHistory">
+                    <div ng-show="showHistory" id="navpane">
                         <div class="tbl-header">
                             <table cellpadding="0" cellspacing="0" border="0">
                                 <thead>
@@ -219,7 +219,7 @@
                     </div>
                     <!-- START HISTORY -->
                     <!-- START STATION EDIT FORM -->
-                    <div id="addform" ng-show="showEditStation">
+                    <div id="navpane addform" ng-show="showEditStation">
                         <form class="form-horizontal">
                             <!-- make me an interactive svg if you're cool -->
                             <div ng-show="addMessage">{[gpio_add_model.message]}</div>
@@ -259,7 +259,7 @@
                     </div>
                     <!-- END STATION EDIT FORM -->
                     <!-- START ADD STATION FORM -->
-                    <div id="addform" ng-show="showAdd">
+                    <div id="navpane addform" ng-show="showAdd">
                         <form class="form-horizontal">
                             <!-- make me an interactive svg if you're cool -->
                             <div ng-show="addMessage">{[gpio_add_model.message]}</div>
