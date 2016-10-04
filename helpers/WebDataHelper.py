@@ -218,6 +218,7 @@ def get_next_station_run():
                                 'next_date'] = datetime.now().date() + timedelta(days=counter)
                             t = list('{0:04d}'.format(d[11]))
                             t.insert(2, ':')
+                            results[s['sid']]['duration'] = d[12]
                             results[s['sid']]['next_time'] = ''.join(t)
                             results[s['sid']]['next_datetime'] = datetime.combine(results[s['sid']]['next_date'], datetime.min.time()) + timedelta(
                                 hours=int(
@@ -231,6 +232,7 @@ def get_next_station_run():
                                     'next_date'] = datetime.now().date() + timedelta(days=counter)
                                 t = list('{0:04d}'.format(d[11]))
                                 t.insert(2, ':')
+                                results[s['sid']]['duration'] = d[12]
                                 results[s['sid']]['next_time'] = ''.join(t)
                                 results[s['sid']]['next_datetime'] = datetime.combine(results[s['sid']]['next_date'], datetime.min.time()) + timedelta(
                                     hours=int(
