@@ -1,3 +1,7 @@
+1. pirri process status
+1. pirri uptime for app and device
+1. pirri app restart button 
+
 2. view schedule for station (search box)
 2. ability to view message queue
 3. ability to delete all or one item from queue

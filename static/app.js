@@ -8,7 +8,8 @@
         }
     ]);
 
-    app.controller('PirriControl', function($rootScope, $scope, $http) {
+    app.controller('PirriControl', function($rootScope, $scope, $http, $timeout) {
+        $rootScope.updateInterval = 6000;
         $scope.chartData1 = {};
         $scope.chartData2 = {
             options: {}
@@ -334,9 +335,12 @@
         };
 
         this.refresh = function() {
-            this.loadStations();
-            this.loadGPIO();
             this.getSchedule();
+            this.loadStations();
+            this.getLastStationRun();
+            this.getNextStationRun();
+            this.loadGPIO();
+            this.loadStatsData();
         };
         this.loadStations = function() {
             $http.get('/station/list')
@@ -364,8 +368,13 @@
         };
 
         this.prettyTime = function(uglyTime) {
-            var pt = moment(uglyTime).calendar();
-            return pt
+            if (uglyTime !== undefined && uglyTime !== null) {
+                console.log(uglyTime)
+                var pt = moment(uglyTime).calendar();
+                return pt
+            } else {
+                return "Never"
+            }
         }
         this.getSchedule = function() {
             $http.get('/schedule')
@@ -384,9 +393,36 @@
                 .error(function(data, status, headers, config) {})
             console.log($scope.lastStationRunHash);
         };
-        this.getSchedule();
-        this.loadStations();
-        this.getLastStationRun();
-        this.loadGPIO();
+
+        $scope.nextStationRunHash = {}
+        this.getNextStationRun = function() {
+            $http.get('/station/nextruns')
+                .success(function(data, status, headers, config) {
+                    $scope.nextStationRunHash = data.nextrunlist;
+                })
+                .error(function(data, status, headers, config) {})
+            console.log($scope.nextStationRunHash);
+        };
+
+        this.autoLoader = function() {
+            this.getSchedule();
+            this.loadStations();
+            this.getLastStationRun();
+            this.getNextStationRun();
+            this.loadGPIO();
+            this.loadStatsData();
+        };
+        $scope.loader = this.autoLoader;
+
+        // $scope.intervalFunction = function() {
+        //     $timeout(function() {
+        //         $scope.loader();
+        //         $scope.intervalFunction();
+        //     }, $rootScope.updateInterval)
+        // };
+        //$scope.intervalFunction();
+
+        this.autoLoader();
+
     });
 })();

@@ -1,8 +1,9 @@
 from helpers.SqlHelper import SqlHelper
 from models.Station import Station
-from datetime import datetime, timedelta
+from datetime import datetime, timedelta, date
 import operator
 from dateutil import parser
+from time import time
 
 
 def list_gpio():
@@ -187,23 +188,56 @@ def get_last_station_run():
         try:
             results[station['sid']] = sqlConn.read(sqlStr)[0][0]
         except:
-            results[station['sid']] = '1899-01-01 00:00:00.000000'
+            results[station['sid']] = None
     return results
 
 
 def get_next_station_run():
-    today = datetime.now().strftime('%A').lower()
+    #  today = datetime.now().strftime('%A').lower()
+    today = int(datetime.now().strftime('%w'))
     sqlConn = SqlHelper()
     results = {}
     stations = list_stations()
-    for station in stations:
-        sqlStr = """SELECT * from schedule
-WHERE station=53
-AND (starttime > time(strftime('%H%M'), 'now'))
-
-""".format(station['sid'])
-
-        results[station['sid']] = sqlConn.read(sqlStr)[0]
+    sqlStr = """SELECT * FROM schedule
+                    WHERE (startdate <= replace(date('now'), '-', '')
+                        AND enddate > replace(date('now'), '-', ''))
+                        AND station={0}
+                    ORDER BY starttime DESC
+                            """
+    for s in stations:
+        results[s['sid']] = {}
+        for d in sqlConn.read(sqlStr.format(s['sid'])):
+            if s['sid'] == d[10]:
+                counter = 0
+                daylist = [d[3], d[4], d[5], d[6], d[7], d[8], d[9]]
+                if 1 in daylist:
+                    while counter <= 7:
+                        counter += 1
+                        if daylist[today] == 1 and d[11] > 0:
+                            results[s['sid']][
+                                'next_date'] = datetime.now().date() + timedelta(days=counter)
+                            t = list('{0:04d}'.format(d[11]))
+                            t.insert(2, ':')
+                            results[s['sid']]['next_time'] = ''.join(t)
+                            results[s['sid']]['next_datetime'] = datetime.combine(results[s['sid']]['next_date'], datetime.min.time()) + timedelta(
+                                hours=int(
+                                    results[s['sid']]['next_time'].split(':')[0]),
+                                minutes=int(
+                                    results[s['sid']]['next_time'].split(':')[1])
+                            )
+                        else:
+                            if (today + counter) < 6 and daylist[today + counter] == 1 > 0:
+                                results[s['sid']][
+                                    'next_date'] = datetime.now().date() + timedelta(days=counter)
+                                t = list('{0:04d}'.format(d[11]))
+                                t.insert(2, ':')
+                                results[s['sid']]['next_time'] = ''.join(t)
+                                results[s['sid']]['next_datetime'] = datetime.combine(results[s['sid']]['next_date'], datetime.min.time()) + timedelta(
+                                    hours=int(
+                                        results[s['sid']]['next_time'].split(':')[0]),
+                                    minutes=int(
+                                        results[s['sid']]['next_time'].split(':')[1])
+                                )
     return results
 
 

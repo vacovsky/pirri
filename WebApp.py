@@ -64,7 +64,7 @@ def station_lastruns():
 @app.route('/station/nextruns', methods=["GET"])
 def station_nextruns():
     response = {
-        'lastrunlist': WebDataHelper.get_next_station_run()
+        'nextrunlist': WebDataHelper.get_next_station_run()
     }
     return jsonify(response)
 
