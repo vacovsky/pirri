@@ -7,9 +7,11 @@
         <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/angular-material/1.1.1/angular-material.min.css" />
         <link rel="stylesheet" href="/static/style.css">
         <script src="https://code.jquery.com/jquery-3.1.0.min.js" integrity="sha256-cCueBR6CsyA4/9szpPfrX3s49M9vUU5BgtiJj06wt/s=" crossorigin="anonymous"></script>
+        <script src="//cdnjs.cloudflare.com/ajax/libs/underscore.js/1.7.0/underscore-min.js"></script>
         <script type="text/javascript" src="https://cdnjs.cloudflare.com/ajax/libs/moment.js/2.15.1/moment.min.js"></script>
         <link href="/static/easycal/easycal.css" rel="stylesheet">
         <link rel="icon" href="static/icon.png">
+        <script src="/static/easycal/easycal.js"></script>
     </head>
     <body>
         <div ng-controller="PirriControl as pc">
@@ -24,16 +26,23 @@
                             <div>
                                 <a href><span class="glyphicon glyphicon-refresh" ng-click="pc.refresh()"></span></a>
                                 <span> - - - </span>
-                                <a href><span class="glyphicon glyphicon-home" ng-click="pc.setPage('home')"></span></a>
-                                <a href><span class="glyphicon glyphicon-calendar" ng-click="pc.setPage('calendar')"></span></a>
-                                <a href><span class="glyphicon glyphicon-time" ng-click="pc.setPage('history')"></span></a>
-                                <a href><span class="glyphicon glyphicon-stats" ng-click="pc.setPage('stats')"></span></a>
+                                <a href><span class="glyphicon glyphicon-home" ng-click="currentPage = 'home'"></span></a>
+                                <span > - </span>
+                                <a href><span class="glyphicon glyphicon-calendar" ng-click="currentPage = 'mycal'"></span></a>
+                                
+                                <span > - </span>
+                                <a href><span class="glyphicon glyphicon-list" ng-click="currentPage = 'calendar'"></span></a>
+                                
+                                <span > - </span>
+                                <a href><span class="glyphicon glyphicon-time" ng-click="currentPage = 'history'"></span></a>
+                                <span > - </span>
+                                <a href><span class="glyphicon glyphicon-stats" ng-click="currentPage = 'stats'"></span></a>
                                 <span id="navTitle"> - - - {[navTitle]}</span>
                             </div>
                         </div>
                     </div>
                     <!-- START STATIONS LIST -->
-                    <div ng-show="showHome" id="navpane">
+                    <div ng-show="currentPage == 'home'" id="navpane">
                         <div class="tbl-header">
                             <table cellpadding="0" cellspacing="0" border="0">
                                 <thead>
@@ -96,36 +105,44 @@
                     </div>
                     <!-- END STATIONS LIST -->
                     <!-- START TESTING CAL -->
-                    <div class="mycal"></div>
-
+                    <div id="navpane" ng-show="currentPage == 'mycal'" class="mycal"></div>
                     <script>
-                    $('.mycal').easycal({
-
-                        minTime : '00:00:00',
-                        maxTime : '23:59:59',
-                        slotDuration : 30,
-                        startDate : '2016-10-06', 
-                        events : angular.element('#PirriControl').scope().loadCalendar()
-                    });
-
                         $('.mycal').easycal({
-                            columnDateFormat : 'dddd, DD MMM',
-                            timeFormat : 'HH:mm',
+
                             minTime : '00:00:00',
                             maxTime : '23:59:59',
-                            slotDuration : 5, //in mins
-                            dayClick : null,
-                            eventClick : null,
-                            events : [],
-                            widgetHeaderClass : 'ec-day-header',
-                            widgetSlotClass : 'ec-slot',
-                            widgetTimeClass : 'ec-time'
+                            slotDuration : 60,
+                            startDate : '2016-10-06', 
+                            events : [
+                                {
+                                    id: 'E01',
+                                    title: 'Fake test',
+                                    start: '2016-10-16 10:30:00',
+                                    end: '2016-10-16 11:00:00',
+                                    backgroundColor: '#000',
+                                    textColor: '#FFF'
+                                }
+                            ]
                         });
+
+                            $('.mycal').easycal({
+                                columnDateFormat : 'dddd, DD MMM',
+                                timeFormat : 'HH:mm',
+                                minTime : '00:00:00',
+                                maxTime : '23:59:59',
+                                slotDuration : 60, //in mins
+                                dayClick : null,
+                                eventClick : null,
+                                events : [],
+                                widgetHeaderClass : 'ec-day-header',
+                                widgetSlotClass : 'ec-slot',
+                                widgetTimeClass : 'ec-time'
+                            });
                     </script>
 
                     <!-- END TESTING CAL -->
                     <!-- START STATS-->
-                    <div ng-show="stats" id="navpane">
+                    <div ng-show="currentPage == 'stats'" id="navpane">
                         <div class="col-md-6">
                             <canvas id="chart1" height="200" class="chart chart-bar" chart-options="chartData1.options" chart-data="chartData1.data" chart-labels="chartData1.labels" chart-series="chartData1.series"></canvas>
                         </div>
@@ -135,7 +152,7 @@
                     </div>
                     <!-- END STATS -->
                     <!-- START EDIT SCHEDULE -->
-                    <div ng-show="showEditSchedule" id="navpane">
+                    <div ng-show="currentPage == 'calendar'" id="navpane">
                         <div class="tbl-header">
                             <table cellpadding="0" cellspacing="0" border="0">
                                 <thead>
@@ -219,7 +236,7 @@
                     </div>
                     <!-- END EDIT SCHEDULE-->
                     <!-- START HISTORY -->
-                    <div ng-show="showHistory" id="navpane">
+                    <div ng-show="currentPage == 'history'" id="navpane">
                         <div class="tbl-header">
                             <table cellpadding="0" cellspacing="0" border="0">
                                 <thead>
@@ -249,7 +266,7 @@
                     </div>
                     <!-- START HISTORY -->
                     <!-- START STATION EDIT FORM -->
-                    <div id="navpane addform" ng-show="showEditStation">
+                    <div id="navpane addform" ng-show="currentPage == 'editStation'">
                         <form class="form-horizontal">
                             <!-- make me an interactive svg if you're cool -->
                             <div ng-show="addMessage">{[gpio_add_model.message]}</div>
@@ -289,7 +306,7 @@
                     </div>
                     <!-- END STATION EDIT FORM -->
                     <!-- START ADD STATION FORM -->
-                    <div id="navpane addform" ng-show="showAdd">
+                    <div id="navpane addform" ng-show="currentPage == 'addStation'">
                         <form class="form-horizontal">
                             <!-- make me an interactive svg if you're cool -->
                             <div ng-show="addMessage">{[gpio_add_model.message]}</div>
@@ -347,8 +364,6 @@
 <script type="text/javascript" src="https://cdnjs.cloudflare.com/ajax/libs/Chart.js/2.3.0/Chart.min.js"></script>
 <script type="text/javascript" src="https://cdnjs.cloudflare.com/ajax/libs/angular-material/1.1.1/angular-material.min.js"></script>
 <script type="text/javascript" src="https://cdnjs.cloudflare.com/ajax/libs/angular-chart.js/1.0.3/angular-chart.min.js"></script>
-<script src="//cdnjs.cloudflare.com/ajax/libs/underscore.js/1.7.0/underscore-min.js"></script>
-<script src="/static/easycal/easycal.js"></script>
 <script src="/static/app.js"></script>
 <script src="/static/table.js"></script>
 </html>

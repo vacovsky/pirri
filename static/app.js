@@ -18,9 +18,6 @@
         $scope.currentPage = 'home'; // history / home / settings / add
         $scope.stations = undefined;
         $scope.navTitle = "All Stations";
-        $scope.showHome = true;
-        $scope.showAdd = false;
-        $scope.showEditStation = false;
         $scope.gpio_pins = undefined;
         $scope.searchResults = {};
         $scope.searchText = "";
@@ -40,13 +37,13 @@
         $scope.durationIntervals = [1, 5, 10, 15, 20, 25, 30, 35, 40, 45, 50, 55, 60];
         $scope.show_gpio_diagram = false;
 
-        $scope.loadCalendar = function() {
+        this.loadCalendar = function() {
             return [
                 {
                     id: 'E01',
-                    title: 'Meeting with BA',
-                    start: '27-10-2015 10:30:00',
-                    end: '27-10-2015 11:00:00',
+                    title: 'Fake test',
+                    start: '2016-10-16 10:30:00',
+                    end: '2016-10-16 11:00:00',
                     backgroundColor: '#443322',
                     textColor: '#FFF'
                 }
@@ -88,66 +85,10 @@
             // console.log($scope.stationModel);
         };
 
+
+        $scope.currentPage = 0;
         this.setPage = function(pageName) {
-            $scope.currentPage = pageName;
-            if ($scope.currentPage == 'home') {
-                $scope.navTitle = "All Stations"
-                $scope.stats = false;
-                $scope.showEditStation = false;
-                $scope.showEditSchedule = false;
-                $scope.showHome = true;
-                $scope.showHistory = false;
-                $scope.showAdd = false;
-                this.resetAddForm();
-            } else if ($scope.currentPage == 'add') {
-                $scope.stats = false;
-                $scope.showEditSchedule = false;
-                $scope.showEditStation = false;
-                $scope.navTitle = "Add a Station"
-                $scope.showAdd = true;
-                $scope.showHistory = false;
-                $scope.showHome = false;
-                this.resetAddForm();
-            } else if ($scope.currentPage == 'calendar') {
-                $scope.stats = false;
-                $scope.showEditSchedule = true;
-                $scope.showEditStation = false;
-                $scope.navTitle = "Schedule"
-                $scope.showAdd = false;
-                $scope.showHistory = false;
-                $scope.showHome = false;
-                this.resetAddForm();
-            } else if ($scope.currentPage == 'editstation') {
-                $scope.stats = false;
-                $scope.navTitle = "Editing Station " + $scope.edit_station_model.SID + " - (" + $scope.edit_station_model.notes + ")";
-                $scope.showEditSchedule = false;
-                $scope.showEditStation = true;
-                $scope.showAdd = false;
-                $scope.showHistory = false;
-                $scope.showHome = false;
-                this.resetAddForm();
-            } else if ($scope.currentPage == 'history') {
-                this.loadHistory(0);
-                $scope.stats = false;
-                $scope.showEditSchedule = false;
-                $scope.navTitle = "Watering History"
-                $scope.showEditStation = false;
-                $scope.showHistory = true;
-                $scope.showAdd = false;
-                $scope.showHome = false;
-                this.resetAddForm();
-            } else if ($scope.currentPage == 'stats') {
-                this.loadStatsData();
-                $scope.stats = true;
-                $scope.showEditSchedule = false;
-                $scope.navTitle = "Usage Stats"
-                $scope.showEditStation = false;
-                $scope.showHistory = false;
-                $scope.showAdd = false;
-                $scope.showHome = false;
-                this.resetAddForm();
-            }
-            //// console.log($scope.currentPage)
+            $scope.currentPage = pagename
         };
 
 
@@ -424,9 +365,10 @@
             this.getNextStationRun();
             this.loadGPIO();
             this.loadStatsData();
+            this.loadHistory();
         };
         $scope.loader = this.autoLoader;
-
+        $scope.currentPage = 'home';
         // $scope.intervalFunction = function() {
         //     $timeout(function() {
         //         $scope.loader();

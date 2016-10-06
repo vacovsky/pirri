@@ -21,7 +21,7 @@ body {
     background-repeat: no-repeat;
     background-position: right top;
     background-attachment: fixed;
-    overflow: hidden;
+    /* overflow: hidden; */
 }
 
 input {
@@ -78,7 +78,7 @@ table{
   background-color: rgba(255,255,255,0.3);
  }
 .tbl-content{
-  height:450px;
+  /* height:450px; */
   overflow-x:auto;
   margin-top: 0px;
   border: 1px solid rgba(255,255,255,0.3);
