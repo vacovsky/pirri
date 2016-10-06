@@ -209,6 +209,7 @@ def get_next_station_run():
         for d in sqlConn.read(sqlStr.format(s['sid'])):
             if s['sid'] == d[10]:
                 counter = 0
+                counter -= today
                 daylist = [d[3], d[4], d[5], d[6], d[7], d[8], d[9]]
                 if 1 in daylist:
                     while counter <= 7:
@@ -229,7 +230,10 @@ def get_next_station_run():
                             naive = results[s['sid']]['next_datetime']
                             localdt = local.localize(naive, is_dst=True)
                             utc_dt = localdt.astimezone(UTC)
+                            if utc_dt < datetime.now().replace(tzinfo=UTC):
+                                utc_dt = utc_dt + timedelta(weeks=1)
                             results[s['sid']]['next_datetime'] = utc_dt
+
                         else:
                             if (today + counter) < 6 and daylist[today + counter] == 1 > 0:
                                 results[s['sid']][
@@ -247,6 +251,8 @@ def get_next_station_run():
                                 naive = results[s['sid']]['next_datetime']
                                 localdt = local.localize(naive, is_dst=True)
                                 utc_dt = localdt.astimezone(UTC)
+                                if utc_dt < datetime.now().replace(tzinfo=UTC):
+                                    utc_dt = utc_dt + timedelta(weeks=1)
                                 results[s['sid']]['next_datetime'] = utc_dt
     print(results)
     return results
