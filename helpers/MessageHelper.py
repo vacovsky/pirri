@@ -33,12 +33,18 @@ class RMQ:
     def open_connection(self):
         self.CONNECTION = pika.BlockingConnection(pika.ConnectionParameters(
             heartbeat_interval=0,
-            host=CONFIG.RMQ_HOST,
-            port=CONFIG.RMQ_PORT,
-            credentials=pika.credentials.PlainCredentials(
-                CONFIG.RMQ_USER,
-                CONFIG.RMQ_PASS),))
+            host='localhost'))
         self.CHANNEL = self.CONNECTION.channel()
+
+    # def open_connection(self):
+    #     self.CONNECTION = pika.BlockingConnection(pika.ConnectionParameters(
+    #         heartbeat_interval=0,
+    #         host=CONFIG.RMQ_HOST,
+    #         port=CONFIG.RMQ_PORT,
+    #         credentials=pika.credentials.PlainCredentials(
+    #             CONFIG.RMQ_USER,
+    #             CONFIG.RMQ_PASS),))
+    #     self.CHANNEL = self.CONNECTION.channel()
 
     def close_connection(self):
         self.CONNECTION.close()
