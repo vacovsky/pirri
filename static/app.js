@@ -40,6 +40,19 @@
         $scope.durationIntervals = [1, 5, 10, 15, 20, 25, 30, 35, 40, 45, 50, 55, 60];
         $scope.show_gpio_diagram = false;
 
+        $scope.loadCalendar = function() {
+            return [
+                {
+                    id: 'E01',
+                    title: 'Meeting with BA',
+                    start: '27-10-2015 10:30:00',
+                    end: '27-10-2015 11:00:00',
+                    backgroundColor: '#443322',
+                    textColor: '#FFF'
+                }
+            ]
+        };
+
         this.filterForKeys = function(searchText) {
             $scope.searchResults = [];
             $scope.stations.forEach(function(k) {
@@ -72,7 +85,7 @@
 
         this.setEditingStationInfo = function(station) {
             $scope.stationModel = station;
-            console.log($scope.stationModel);
+            // console.log($scope.stationModel);
         };
 
         this.setPage = function(pageName) {
@@ -134,7 +147,7 @@
                 $scope.showHome = false;
                 this.resetAddForm();
             }
-            //console.log($scope.currentPage)
+            //// console.log($scope.currentPage)
         };
 
 
@@ -147,7 +160,7 @@
                 })
                 .error(function(data, status, headers, config) {})
 
-            console.log($scope.chartData1)
+            // console.log($scope.chartData1)
             $scope.chartData1.options = {
                 title: {
                     display: true,
@@ -171,7 +184,7 @@
                     $scope.chartData2.data = data.chartData.data;
                 })
                 .error(function(data, status, headers, config) {})
-            console.log($scope.chartData2);
+            // console.log($scope.chartData2);
             $scope.chartData2.options = {
                 scaleStartValue: 0,
                 title: {
@@ -200,7 +213,7 @@
         this.submitEditStation = function() {
             $http.post('/station/edit', $scope.stationModel)
                 .success(function(data, status, headers, config) {
-                    console.log($scope.singleRunModel, data)
+                    // console.log($scope.singleRunModel, data)
                 })
                 .error(function(data, status, headers, config) {})
                 // cleanup
@@ -232,7 +245,7 @@
                 duration: 0,
                 new: true
             };
-            console.log($scope.scheduleModel)
+            // console.log($scope.scheduleModel)
             $scope.schedule.unshift($scope.scheduleModel)
         };
         this.convertScheduleBoolToInt = function() {
@@ -281,7 +294,7 @@
             this.convertScheduleBoolToInt();
             $http.post('/schedule/edit', $scope.scheduleModel)
                 .success(function(data, status, headers, config) {
-                    console.log($scope.scheduleModel, data)
+                    // console.log($scope.scheduleModel, data)
                 })
                 .error(function(data, status, headers, config) {})
                 // cleanup
@@ -294,7 +307,7 @@
             this.convertScheduleBoolToInt();
             $http.post('/schedule/add', $scope.scheduleModel)
                 .success(function(data, status, headers, config) {
-                    console.log($scope.scheduleModel, data)
+                    // console.log($scope.scheduleModel, data)
                 })
                 .error(function(data, status, headers, config) {})
                 // cleanup
@@ -305,14 +318,14 @@
 
         this.mapModelForSchedEdit = function(currentModel) {
             $scope.scheduleModel = currentModel;
-            console.log($scope.scheduleModel)
+            // console.log($scope.scheduleModel)
         };
         this.submitDeleteSchedule = function(schedule_id) {
             $http.post('/schedule/delete', {
                     schedule_id: schedule_id
                 })
                 .success(function(data, status, headers, config) {
-                    console.log('deleted schedule id: ', schedule_id)
+                    // console.log('deleted schedule id: ', schedule_id)
                 })
                 .error(function(data, status, headers, config) {})
                 // cleanup
@@ -326,7 +339,7 @@
             //stuff
             $http.post('/station/run', $scope.singleRunModel)
                 .success(function(data, status, headers, config) {
-                    console.log($scope.singleRunModel, data)
+                    // console.log($scope.singleRunModel, data)
                 })
                 .error(function(data, status, headers, config) {})
                 // cleanup
@@ -369,7 +382,7 @@
 
         this.prettyTime = function(uglyTime) {
             if (uglyTime !== undefined && uglyTime !== null) {
-                console.log(uglyTime)
+                // console.log(uglyTime)
                 var pt = moment(uglyTime).calendar();
                 return pt
             } else {
@@ -391,7 +404,7 @@
                     $scope.lastStationRunHash = data.lastrunlist;
                 })
                 .error(function(data, status, headers, config) {})
-            console.log($scope.lastStationRunHash);
+            // console.log($scope.lastStationRunHash);
         };
 
         $scope.nextStationRunHash = {}
@@ -401,7 +414,7 @@
                     $scope.nextStationRunHash = data.nextrunlist;
                 })
                 .error(function(data, status, headers, config) {})
-            console.log($scope.nextStationRunHash);
+            // console.log($scope.nextStationRunHash);
         };
 
         this.autoLoader = function() {
