@@ -1,9 +1,8 @@
 from helpers.SqlHelper import SqlHelper
 from models.Station import Station
-from datetime import datetime, timedelta, date
+from datetime import datetime, timedelta
 import operator
-from dateutil import parser
-from time import time
+from pytz import timezone, UTC
 
 
 def list_gpio():
@@ -193,6 +192,7 @@ def get_last_station_run():
 
 
 def get_next_station_run():
+    local = timezone("America/Los_Angeles")
     #  today = datetime.now().strftime('%A').lower()
     today = int(datetime.now().strftime('%w'))
     sqlConn = SqlHelper()
@@ -226,6 +226,10 @@ def get_next_station_run():
                                 minutes=int(
                                     results[s['sid']]['next_time'].split(':')[1])
                             )
+                            naive = results[s['sid']]['next_datetime']
+                            localdt = local.localize(naive, is_dst=True)
+                            utc_dt = localdt.astimezone(UTC)
+                            results[s['sid']]['next_datetime'] = utc_dt
                         else:
                             if (today + counter) < 6 and daylist[today + counter] == 1 > 0:
                                 results[s['sid']][
@@ -240,6 +244,11 @@ def get_next_station_run():
                                     minutes=int(
                                         results[s['sid']]['next_time'].split(':')[1])
                                 )
+                                naive = results[s['sid']]['next_datetime']
+                                localdt = local.localize(naive, is_dst=True)
+                                utc_dt = localdt.astimezone(UTC)
+                                results[s['sid']]['next_datetime'] = utc_dt
+    print(results)
     return results
 
 
@@ -366,7 +375,7 @@ def get_chart_stats(cid, days=30):
             except Exception as e:
                 station_data[d[0]]['scheduled'] = 0
         results['series'].append(
-            'Scheduled Usage / last {0} days'.format(days))
+            'Scheduled'.format(days))
 
         d2 = []
         sqlStr = """SELECT DISTINCT sid, SUM(duration / 60)
@@ -381,7 +390,7 @@ def get_chart_stats(cid, days=30):
             except Exception as e:
                 station_data[d[0]]['unscheduled'] = 0
         results['series'].append(
-            'Unscheduled usage / last {0} days'.format(days))
+            'Unscheduled'.format(days))
 
         results['labels'] = stations
 

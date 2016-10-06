@@ -151,7 +151,7 @@
             $scope.chartData1.options = {
                 title: {
                     display: true,
-                    text: 'Station Usage in Minutes'
+                    text: 'Total Usage in Minutes (last 30 days)'
                 },
                 scaleStartValue: 0,
                 legend: {
@@ -176,7 +176,7 @@
                 scaleStartValue: 0,
                 title: {
                     display: true,
-                    text: ' Usage by Day of Week'
+                    text: 'Usage in Minutes by Day of Week (last 7 days)'
                 },
                 scaleStartValue: 0,
                 legend: {
