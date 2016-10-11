@@ -25,6 +25,12 @@ def gpio_list():
     return jsonify(response)
 
 
+@app.route('/stats/gallons', methods=["GET"])
+def stats_gallons():
+    response = WebDataHelper.water_usage_stats()
+    return jsonify(response)
+
+
 @app.route('/schedule', methods=["GET"])
 def schedule_list():
     response = {

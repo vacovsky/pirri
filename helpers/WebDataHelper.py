@@ -258,6 +258,29 @@ def get_next_station_run():
     return results
 
 
+def water_usage_stats():
+    sqlConn = SqlHelper()
+    sqlStr = """
+        SELECT DISTINCT dripnodes.sid, SUM((duration / 60 )) as runmins, (select sum((gph * [count])) as totalgph from dripnodes where dripnodes.sid=history.sid) as totalgph
+                FROM history
+            INNER JOIN dripnodes ON dripnodes.sid=history.sid
+                WHERE julianday(starttime) >= (julianday('now', '-30 days'))
+                GROUP BY dripnodes.sid
+                ORDER BY dripnodes.sid ASC;
+            """
+    results = {'water_usage': []}
+    for d in sqlConn.read(sqlStr):
+        results['water_usage'].append(
+            {
+                'sid': d[0],
+                'run_mins': d[1],
+                'total_gph': d[2],
+                'usage_last_30': (d[1] / 60) * d[2]
+            }
+        )
+    return results
+
+
 def chart_stats_chrono(days=7):
     sqlConn = SqlHelper()
     sqlStr = """SELECT DISTINCT strftime('%w', starttime) as [day], SUM(duration / 60) as [mins]
