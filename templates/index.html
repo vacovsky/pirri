@@ -26,17 +26,18 @@
                             <div>
                                 <a href><span class="glyphicon glyphicon-refresh" ng-click="pc.refresh()"></span></a>
                                 <span> - - - </span>
-                                <a href><span class="glyphicon glyphicon-home" ng-click="currentPage = 'home'"></span></a>
+                                <a href><span class="glyphicon glyphicon-home" ng-click="currentPage = 'home'; navTitle = 'Stations'; pc.refresh()"></span></a>
                                 <span > - </span>
-                                <a href><span class="glyphicon glyphicon-calendar" ng-click="currentPage = 'mycal'"></span></a>
-                                
+                                <a href><span class="glyphicon glyphicon-calendar" ng-click="currentPage = 'mycal'; navTitle = 'Calendar'; pc.refresh()"></span></a>
                                 <span > - </span>
-                                <a href><span class="glyphicon glyphicon-list" ng-click="currentPage = 'calendar'"></span></a>
-                                
+                                <a href><span class="glyphicon glyphicon-list" ng-click="currentPage = 'calendar'; navTitle = 'Schedule'; pc.refresh()"></span></a>
                                 <span > - </span>
-                                <a href><span class="glyphicon glyphicon-time" ng-click="currentPage = 'history'"></span></a>
+                                <a href><span class="glyphicon glyphicon-time" ng-click="currentPage = 'history'; navTitle = 'History'; pc.refresh()"></span></a>
                                 <span > - </span>
-                                <a href><span class="glyphicon glyphicon-stats" ng-click="currentPage = 'stats'"></span></a>
+                                <a href><span class="glyphicon glyphicon-stats" ng-click="currentPage = 'stats'; navTitle = 'Run Statistics'; pc.refresh()"></span></a>
+                                <span > - </span>
+                                <a href><span class="glyphicon glyphicon-tint" ng-click="currentPage = 'waterusage'; navTitle = 'Water Usage'; pc.getWaterUsageStats()"></span></a>
+                                <span> - - - </span>
                                 <span id="navTitle"> - - - {[navTitle]}</span>
                             </div>
                         </div>
@@ -346,6 +347,41 @@
                         </center>
                     </div>
                     <!-- END ADD STATION FORM -->
+                    <!-- BEGIN WATER USAGE -->
+                    <div id="navpane" ng-show="currentPage == 'waterusage'">
+                        <div class="tbl-header">
+                            <table cellpadding="0" cellspacing="0" border="0">
+                                <thead>
+                                    <th class="col-md-1">Station</th>
+                                    <th class="col-md-4">Notes</th>
+                                    <th class="col-md-1">Run Minutes</th>
+                                    <th class="col-md-1">Gallons per Hour (GPH)</th>
+                                    <th class="col-md-2">Est. Cost per minute</th>
+                                    <th class="col-md-2">Est. Cost / last 30 days</th>
+                                </thead>
+                            </table>
+                        </div>
+                        <div class="tbl-content">
+                            <table cellpadding="0" cellspacing="0" border="0">
+                                <tbody>
+                                    <tr ng-repeat="node in dripnodes">
+                                        <td class="col-md-1">{[node.sid]}</td>
+                                        <td class="col-md-4">{[node.notes]}</td>
+                                        <td class="col-md-1">{[node.run_mins]}</td>
+                                        <td class="col-md-1">{[node.total_gph]}</td>
+                                        <td class="col-md-2">{[node.total_gph / 60 | number:2]} gal per min / ${[ (node.total_gph / 60) * watercost | number:2]}</td>
+                                        <td class="col-md-2">{[(node.usage_last_30) | number:2]} gal / ${[ node.usage_last_30 * watercost | number:2]}</td>
+                                    </tr>
+                                </tbody>
+                            </table>
+                        </div>
+                        <div class="col-sm-5">
+                            <p class="col-sm-5"><input type="number" ng-model="watercost" placeholder="Cost per gallon" class="form-control col-sm-2" ng-change="pc.calcCost()"></p>
+                            <p>Estimated total watering cost for the last 30 days: {[ monthly_cost ]}</p>
+                        </div>
+                    </div>
+                    <!-- END WATER USAGE -->
+
                 </section>
             </section>
             <div class="made-with-love">

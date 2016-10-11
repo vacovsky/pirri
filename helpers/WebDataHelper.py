@@ -258,21 +258,44 @@ def get_next_station_run():
     return results
 
 
+def dripnodes_edit(nodes_data, new=False, delete=False):
+    sqlConn = SqlHelper()
+    sqlStr = ""
+    if new:
+        sqlStr = """
+            INSERT INTO dripnodes (gph, sid, count) VALUES ({0}, {1}, {2});
+        """.format(nodes_data['gph'], nodes_data['sid'], nodes_data['count'])
+    elif delete:
+        sqlStr = """
+            DELETE FROM dripnodes WHERE gph={0} AND sid={1}
+        """.format(nodes_data['gph'], nodes_data['sid'])
+    else:
+        sqlStr = """
+            UPDATE dripnodes SET gph={0}, sid={1}, count={2} WHERE sid={1} and gph={0};
+        """.format(nodes_data['gph'], nodes_data['sid'], nodes_data['count'])
+    sqlConn.execute(sqlStr)
+
+
 def water_usage_stats():
     sqlConn = SqlHelper()
     sqlStr = """
-        SELECT DISTINCT dripnodes.sid, SUM((duration / 60 )) as runmins, (select sum((gph * [count])) as totalgph from dripnodes where dripnodes.sid=history.sid) as totalgph
-                FROM history
-            INNER JOIN dripnodes ON dripnodes.sid=history.sid
-                WHERE julianday(starttime) >= (julianday('now', '-30 days'))
-                GROUP BY dripnodes.sid
-                ORDER BY dripnodes.sid ASC;
+        SELECT DISTINCT dripnodes.sid,
+            SUM((duration / 60 )) as runmins,
+            (select sum((gph * [count])) as totalgph from dripnodes where dripnodes.sid=history.sid) as totalgph,
+            stations.notes
+        FROM history
+        INNER JOIN dripnodes ON dripnodes.sid=history.sid
+        INNER JOIN stations ON stations.id=history.sid
+            WHERE julianday(starttime) >= (julianday('now', '-30 days'))
+            GROUP BY dripnodes.sid
+            ORDER BY dripnodes.sid ASC;
             """
     results = {'water_usage': []}
     for d in sqlConn.read(sqlStr):
         results['water_usage'].append(
             {
                 'sid': d[0],
+                'notes': d[3],
                 'run_mins': d[1],
                 'total_gph': d[2],
                 'usage_last_30': (d[1] / 60) * d[2]

@@ -25,6 +25,18 @@ def gpio_list():
     return jsonify(response)
 
 
+@app.route('/dripnodes/edit', methods=["POST"])
+def dripnodes_edit():
+    data = json.loads(request.data.decode('utf8'))
+    print(data)
+    if 'new' in data and data['new']:
+        WebDataHelper.dripnodes_edit(data, True)
+    else:
+        WebDataHelper.dripnodes_edit(data)
+    response = {"status": "submitted"}
+    return jsonify(response)
+
+
 @app.route('/stats/gallons', methods=["GET"])
 def stats_gallons():
     response = WebDataHelper.water_usage_stats()

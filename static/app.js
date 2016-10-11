@@ -92,6 +92,16 @@
         };
 
 
+        $scope.dripnodes = {};
+        $scope.watercost = 0;
+        this.getWaterUsageStats = function() {
+        $http.get('/stats/gallons')
+            .success(function(data, status, headers, config) {
+                $scope.dripnodes = data.water_usage;
+            })
+            .error(function(data, status, headers, config) {})        
+        };
+
         this.getUsageDataForChart1 = function() {
             $http.get('/stats?id=1')
                 .success(function(data, status, headers, config) {
@@ -295,6 +305,7 @@
             this.getNextStationRun();
             this.loadGPIO();
             this.loadStatsData();
+            this.getWaterUsageStats();
         };
         this.loadStations = function() {
             $http.get('/station/list')

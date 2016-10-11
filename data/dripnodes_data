@@ -1,0 +1,10 @@
+BEGIN TRANSACTION;
+insert into <any_table> ("sid", "gph", "count", "totalgph") values ('56', '2', '11', '22');
+insert into <any_table> ("sid", "gph", "count", "totalgph") values ('56', '4', '1', '4');
+insert into <any_table> ("sid", "gph", "count", "totalgph") values ('56', '15', '4', '60');
+insert into <any_table> ("sid", "gph", "count", "totalgph") values ('46', '1', '30', '30');
+insert into <any_table> ("sid", "gph", "count", "totalgph") values ('46', '2', '18', '36');
+insert into <any_table> ("sid", "gph", "count", "totalgph") values ('46', '5', '8', '40');
+insert into <any_table> ("sid", "gph", "count", "totalgph") values ('46', '10', '4', '40');
+insert into <any_table> ("sid", "gph", "count", "totalgph") values ('46', '15', '1', '15');
+COMMIT;
