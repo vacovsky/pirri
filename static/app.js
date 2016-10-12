@@ -128,6 +128,14 @@
             };
         };
 
+        $scope.monthly_cost = 0;
+        this.calcMonthlyCost = function() {
+            $scope.monthly_cost = 0;
+            angular.forEach($scope.dripnodes, function(value, key) {
+                $scope.monthly_cost += value['usage_last_30'] * $scope.watercost
+            })
+        };
+
         this.getUsageDataForChart2 = function() {
             $http.get('/stats?id=2')
                 .success(function(data, status, headers, config) {
@@ -440,6 +448,7 @@
             this.loadGPIO();
             this.loadStatsData();
             this.loadHistory();
+            this.calcMonthlyCost();
         };
         $scope.loader = this.autoLoader;
         $scope.currentPage = 'home';
