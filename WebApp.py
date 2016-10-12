@@ -43,6 +43,30 @@ def stats_gallons():
     return jsonify(response)
 
 
+@app.route('/station/nodes', methods=["GET", "POST"])
+def station_nodes():
+    if request.method == "GET":
+        response = WebDataHelper.get_station_nodes()
+        return jsonify(response)
+    elif request.method == "POST":
+        response = {'success': True}
+        data = json.loads(request.data.decode('utf8'))
+        if 'new' in data and data['new']:
+            WebDataHelper.add_or_edit_station_nodes(data, True)
+        else:
+            WebDataHelper.add_or_edit_station_nodes(data, False)
+        return jsonify(response)
+
+
+@app.route('/station/nodes/delete', methods=["POST"])
+def delete_station_node():
+    if request.method == "POST":
+        response = {'success': True}
+        data = json.loads(request.data.decode('utf8'))
+        WebDataHelper.delete_station_node(data['id'])
+        return jsonify(response)
+
+
 @app.route('/schedule', methods=["GET"])
 def schedule_list():
     response = {

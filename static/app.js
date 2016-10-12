@@ -99,7 +99,8 @@
             .success(function(data, status, headers, config) {
                 $scope.dripnodes = data.water_usage;
             })
-            .error(function(data, status, headers, config) {})        
+            .error(function(data, status, headers, config) {})
+            this.getWaterNodeEntries();
         };
 
         this.getUsageDataForChart1 = function() {
@@ -175,7 +176,6 @@
         this.submitAddStation = function() {};
 
         $scope.scheduleModel = {};
-        this.submitAddSchedule = function() {};
 
         this.addScheduleButton = function() {
             $scope.scheduleModel = undefined;
@@ -367,6 +367,69 @@
                 })
                 .error(function(data, status, headers, config) {})
             // console.log($scope.nextStationRunHash);
+        };
+
+        $scope.waterNodeEntries = [];
+        $scope.waterNodeModel = {};
+        this.getWaterNodeEntries = function() {
+            $http.get('/station/nodes')
+                .success(function(data, status, headers, config) {
+                    $scope.waterNodeEntries = data.dripnodes;
+                })
+                .error(function(data, status, headers, config) {})
+            // console.log($scope.nextStationRunHash);
+        }
+        this.submitEditNodeEntry = function() {
+            $http.post('/station/nodes', $scope.waterNodeModel)
+                .success(function(data, status, headers, config) {
+                    // console.log($scope.singleRunModel, data)
+                })
+                .error(function(data, status, headers, config) {})
+                // cleanup
+            $scope.waterNodeModel = undefined;
+            $scope.waterNodeModel = {};
+        };
+        
+        this.submitAddNodeEntry = function() {
+            $scope.waterNodeModel.new = true;
+            $http.post('/station/nodes', $scope.waterNodeModel)
+                .success(function(data, status, headers, config) {
+                    // console.log($scope.singleRunModel, data)
+                })
+                .error(function(data, status, headers, config) {})
+                // cleanup
+            $scope.waterNodeModel = undefined;
+            $scope.waterNodeModel = {};
+        };
+
+        this.submitDeleteNodeEntry = function(nodeid) {
+            $scope.waterNodeModel.id = nodeid;
+            $http.post('/station/nodes/delete', $scope.waterNodeModel)
+                .success(function(data, status, headers, config) {
+                    // console.log($scope.singleRunModel, data)
+                })
+                .error(function(data, status, headers, config) {})
+                // cleanup
+            $scope.waterNodeModel = undefined;
+            $scope.waterNodeModel = {};
+        };
+
+        this.mapModelForWaterNodeEdit = function(currentModel) {
+            $scope.waterNodeModel = currentModel;
+            // console.log($scope.scheduleModel)
+        };
+
+        this.addWaterNodeButton = function() {
+            $scope.waterNodeModel = undefined;
+            $scope.waterNodeModel = {
+                id: '-',
+                sid: 'Select Station ID',
+                gph: '',
+                count: 0,
+                new: true
+            };
+            // console.log($scope.scheduleModel)
+            $scope.waterNodeEntries.unshift($scope.waterNodeModel)
         };
 
         this.autoLoader = function() {

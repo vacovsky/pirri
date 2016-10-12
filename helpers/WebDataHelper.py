@@ -462,6 +462,47 @@ def get_chart_stats(cid, days=30):
     return results
 
 
+def get_station_nodes():
+    sqlConn = SqlHelper()
+    sqlStr = """
+        SELECT * FROM dripnodes ORDER BY sid ASC
+    """
+    results = {
+        'dripnodes': []
+    }
+    for dn in sqlConn.read(sqlStr):
+        node = {
+            'id': dn[0],
+            'sid': dn[2],
+            'gph': dn[1],
+            'count': dn[3]
+        }
+        results['dripnodes'].append(node)
+    return results
+
+
+def delete_station_node(id):
+    sqlConn = SqlHelper()
+    sqlStr = """
+        DELETE FROM dripnodes WHERE id={0}
+    """.format(id)
+    sqlConn.execute(sqlStr)
+
+
+def add_or_edit_station_nodes(dripnode, new=False):
+    sqlConn = SqlHelper()
+    sqlStr = ""
+    if new:
+        sqlStr = """
+            INSERT INTO dripnodes (gph, sid, count) VALUES ({0},{1},{2})
+        """.format(dripnode['gph'], dripnode['sid'], dripnode['count'])
+    else:
+        sqlStr = """
+            UPDATE dripnodes SET gph={0}, sid={1}, count={2} WHERE id={3}
+        """.format(dripnode['gph'], dripnode['sid'], dripnode['count'], dripnode['id'])
+    sqlConn.execute(sqlStr)
+
+
 def add_station(sid, gpio_pin):
     Station(sid).add(gpio_pin)
 
