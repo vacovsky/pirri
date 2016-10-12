@@ -93,7 +93,7 @@
 
 
         $scope.dripnodes = {};
-        $scope.watercost = 0;
+        $scope.watercost = 0.0021;
         this.getWaterUsageStats = function() {
         $http.get('/stats/gallons')
             .success(function(data, status, headers, config) {

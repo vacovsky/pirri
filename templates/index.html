@@ -28,13 +28,13 @@
                                 <span> - - - </span>
                                 <a href><span class="glyphicon glyphicon-home" ng-click="currentPage = 'home'; navTitle = 'Stations'; pc.refresh()"></span></a>
                                 <span > - </span>
-                                <a href><span class="glyphicon glyphicon-calendar" ng-click="currentPage = 'mycal'; navTitle = 'Calendar'; pc.refresh()"></span></a>
+                                <a href><span class="glyphicon glyphicon-calendar" ng-click="currentPage = 'mycal'; navTitle = 'Calendar'; pc.getSchedule();"></span></a>
                                 <span > - </span>
-                                <a href><span class="glyphicon glyphicon-list" ng-click="currentPage = 'calendar'; navTitle = 'Schedule'; pc.refresh()"></span></a>
+                                <a href><span class="glyphicon glyphicon-list" ng-click="currentPage = 'calendar'; navTitle = 'Schedule'; pc.getSchedule()"></span></a>
                                 <span > - </span>
-                                <a href><span class="glyphicon glyphicon-time" ng-click="currentPage = 'history'; navTitle = 'History'; pc.refresh()"></span></a>
+                                <a href><span class="glyphicon glyphicon-time" ng-click="currentPage = 'history'; navTitle = 'History'; pc.loadHistory()"></span></a>
                                 <span > - </span>
-                                <a href><span class="glyphicon glyphicon-stats" ng-click="currentPage = 'stats'; navTitle = 'Run Statistics'; pc.refresh()"></span></a>
+                                <a href><span class="glyphicon glyphicon-stats" ng-click="currentPage = 'stats'; navTitle = 'Run Statistics'; pc.loadStatsData()"></span></a>
                                 <span > - </span>
                                 <a href><span class="glyphicon glyphicon-tint" ng-click="currentPage = 'waterusage'; navTitle = 'Water Usage'; pc.getWaterUsageStats()"></span></a>
                                 <span> - - - </span>
@@ -78,12 +78,12 @@
                                             </div>
                                         </td>
                                         <td class="col-md-1">
-                                            <a ><span ng-hide="stationModel.sid == station.sid" ng-click="pc.setEditingStationInfo(station)" class="glyphicon glyphicon-pencil"></span></a>
-                                            <a href><span ng-show="stationModel.sid == station.sid" class="glyphicon glyphicon-floppy-disk" ng-click="pc.submitEditStation();"></span></a>
-                                            <a ><span class="glyphicon glyphicon-time"></span></a>
-                                            <a ><span class="glyphicon glyphicon-stats"></span></a>
-                                            <a ><span ng-hide="singleRunModel.sid == station.sid"" ng-click="singleRunModel.sid = station.sid; singleRunModel.sid = station.sid;" class="glyphicon glyphicon-play"></span></a>
-                                            <a ><span ng-show="singleRunModel.sid == station.sid"" ng-click="singleRunModel.sid = undefined; singleRunModel.duration = undefined;" class="glyphicon glyphicon-stop"></span></a>
+                                            <a><span ng-hide="stationModel.sid == station.sid" ng-click="pc.setEditingStationInfo(station)" class="glyphicon glyphicon-pencil"></span></a>
+                                            <a><span ng-show="stationModel.sid == station.sid" class="glyphicon glyphicon-floppy-disk" ng-click="pc.submitEditStation();"></span></a>
+                                            <a><span class="glyphicon glyphicon-time"></span></a>
+                                            <a><span class="glyphicon glyphicon-stats"></span></a>
+                                            <a><span ng-hide="singleRunModel.sid == station.sid"" ng-click="singleRunModel.sid = station.sid; singleRunModel.sid = station.sid;" class="glyphicon glyphicon-play"></span></a>
+                                            <a><span ng-show="singleRunModel.sid == station.sid"" ng-click="singleRunModel.sid = undefined; singleRunModel.duration = undefined;" class="glyphicon glyphicon-stop"></span></a>
                                         </td>
                                     </tr>
                                     <tr ng-repeat="station in searchResults" ng-show="showSearchResults">
@@ -108,39 +108,36 @@
                     <!-- START TESTING CAL -->
                     <div id="navpane" ng-show="currentPage == 'mycal'" class="mycal"></div>
                     <script>
-                        $('.mycal').easycal({
-
-                            minTime : '00:00:00',
-                            maxTime : '23:59:59',
-                            slotDuration : 60,
-                            startDate : '2016-10-06', 
-                            events : [
-                                {
-                                    id: 'E01',
-                                    title: 'Fake test',
-                                    start: '2016-10-16 10:30:00',
-                                    end: '2016-10-16 11:00:00',
-                                    backgroundColor: '#000',
-                                    textColor: '#FFF'
-                                }
-                            ]
-                        });
-
-                            $('.mycal').easycal({
-                                columnDateFormat : 'dddd, DD MMM',
-                                timeFormat : 'HH:mm',
-                                minTime : '00:00:00',
-                                maxTime : '23:59:59',
-                                slotDuration : 60, //in mins
-                                dayClick : null,
-                                eventClick : null,
-                                events : [],
-                                widgetHeaderClass : 'ec-day-header',
-                                widgetSlotClass : 'ec-slot',
-                                widgetTimeClass : 'ec-time'
-                            });
+                    $('.mycal').easycal({
+                    minTime : '00:00:00',
+                    maxTime : '23:59:59',
+                    slotDuration : 60,
+                    startDate : '2016-10-06',
+                    events : [
+                    {
+                    id: 'E01',
+                    title: 'Fake test',
+                    start: '2016-10-16 10:30:00',
+                    end: '2016-10-16 11:00:00',
+                    backgroundColor: '#000',
+                    textColor: '#FFF'
+                    }
+                    ]
+                    });
+                    $('.mycal').easycal({
+                    columnDateFormat : 'dddd, DD MMM',
+                    timeFormat : 'HH:mm',
+                    minTime : '00:00:00',
+                    maxTime : '23:59:59',
+                    slotDuration : 60, //in mins
+                    dayClick : null,
+                    eventClick : null,
+                    events : [],
+                    widgetHeaderClass : 'ec-day-header',
+                    widgetSlotClass : 'ec-slot',
+                    widgetTimeClass : 'ec-time'
+                    });
                     </script>
-
                     <!-- END TESTING CAL -->
                     <!-- START STATS-->
                     <div ng-show="currentPage == 'stats'" id="navpane">
@@ -375,13 +372,13 @@
                                 </tbody>
                             </table>
                         </div>
-                        <div class="col-sm-5">
-                            <p class="col-sm-5"><input type="number" ng-model="watercost" placeholder="Cost per gallon" class="form-control col-sm-2" ng-change="pc.calcCost()"></p>
-                            <p>Estimated total watering cost for the last 30 days: {[ monthly_cost ]}</p>
+                        <div class="col-sm-5" id="costinputdiv">
+                            <label for="costinput">Cost per gallon </label>
+                            <p class="col-sm-5"><input id="costinputfield" type="number" ng-model="watercost" placeholder="Cost per gallon" class="form-control col-sm-2" ng-change="pc.calcCost()"></p>
+                            <br/><p>Estimated total watering cost for the last 30 days: {[ monthly_cost ]}</p>
                         </div>
                     </div>
                     <!-- END WATER USAGE -->
-
                 </section>
             </section>
             <div class="made-with-love">

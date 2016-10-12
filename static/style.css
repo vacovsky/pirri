@@ -9,6 +9,11 @@ a {
   padding-top: 10px;
 }
 
+#costinputfield {
+}
+#costinputdiv {
+  padding-top: 20px;
+}
 
 body {
     color: #fff;
