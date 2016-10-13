@@ -1,1 +1,56 @@
 data/pirri.sql
+
+# C extensions
+*.py[cod]
+*,cover
+__pycache__/
+var/
+parts/
+build/
+*.sqlite3
+# Byte-compiled / optimized / DLL files
+*.mo
+.cache
+# Translations
+.coverage.*
+.eggs/
+nosetests.xml
+lib/
+pip-delete-this-directory.txt
+coverage.xml
+sdist/
+# Distribution / packaging
+#testing/
+# Installer logs
+# Sphinx documentation
+target/
+.installed.cfg
+*.pot
+*.db
+# Django stuff:
+eggs/
+# Unit test / coverage reports
+downloads/
+*.so
+migrations/
+develop-eggs/
+*.log
+htmlcov/
+# PyBuilder
+*.manifest
+docs/_build/
+.coverage
+#  Usually these files are written by a python script from a template
+/swaggregator/web/migrations
+lib64/
+env/
+*.egg
+pip-log.txt
+*.egg-info/
+venv/
+#  before PyInstaller builds the exe, so as to inject date/other infos into it.
+dist/
+.Python
+# PyInstaller
+*.spec
+.tox/
