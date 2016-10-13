@@ -4,6 +4,7 @@ import config
 from helpers import WebDataHelper
 from helpers.MessageHelper import RMQ
 import json
+from helpers.AuthHelper import requires_auth
 
 
 __author__ = 'Joe Vacovsky Jr.'
@@ -12,12 +13,14 @@ app = Flask(__name__)
 
 
 @app.route('/', methods=["GET"])
+@requires_auth
 def main():
     if request.method == "GET":
         return render_template("index.html")
 
 
 @app.route('/gpio/list', methods=["GET"])
+@requires_auth
 def gpio_list():
     response = {
         "gpio_pins": WebDataHelper.list_gpio()
@@ -26,6 +29,7 @@ def gpio_list():
 
 
 @app.route('/dripnodes/edit', methods=["POST"])
+@requires_auth
 def dripnodes_edit():
     data = json.loads(request.data.decode('utf8'))
     print(data)
@@ -38,12 +42,14 @@ def dripnodes_edit():
 
 
 @app.route('/stats/gallons', methods=["GET"])
+@requires_auth
 def stats_gallons():
     response = WebDataHelper.water_usage_stats()
     return jsonify(response)
 
 
 @app.route('/station/nodes', methods=["GET", "POST"])
+@requires_auth
 def station_nodes():
     if request.method == "GET":
         response = WebDataHelper.get_station_nodes()
@@ -59,6 +65,7 @@ def station_nodes():
 
 
 @app.route('/station/nodes/delete', methods=["POST"])
+@requires_auth
 def delete_station_node():
     if request.method == "POST":
         response = {'success': True}
@@ -68,6 +75,7 @@ def delete_station_node():
 
 
 @app.route('/schedule', methods=["GET"])
+@requires_auth
 def schedule_list():
     response = {
         'schedule': WebDataHelper.get_schedule()
@@ -76,6 +84,7 @@ def schedule_list():
 
 
 @app.route('/schedule/edit', methods=["POST"])
+@requires_auth
 def schedule_edit():
     data = json.loads(request.data.decode('utf8'))
     print(data)
@@ -88,6 +97,7 @@ def schedule_edit():
 
 
 @app.route('/station/edit', methods=["POST"])
+@requires_auth
 def station_edit():
     response = {}
     data = json.loads(request.data.decode('utf8'))
@@ -96,6 +106,7 @@ def station_edit():
 
 
 @app.route('/station/lastruns', methods=["GET"])
+@requires_auth
 def station_lastruns():
     response = {
         'lastrunlist': WebDataHelper.get_last_station_run()
@@ -104,6 +115,7 @@ def station_lastruns():
 
 
 @app.route('/station/nextruns', methods=["GET"])
+@requires_auth
 def station_nextruns():
     response = {
         'nextrunlist': WebDataHelper.get_next_station_run()
@@ -112,6 +124,7 @@ def station_nextruns():
 
 
 @app.route('/schedule/add', methods=["POST"])
+@requires_auth
 def schedule_add():
     data = json.loads(request.data.decode('utf8'))
     WebDataHelper.schedule_add(data)
@@ -120,6 +133,7 @@ def schedule_add():
 
 
 @app.route('/schedule/delete', methods=["POST"])
+@requires_auth
 def schedule_delete():
     data = json.loads(request.data.decode('utf8'))
     WebDataHelper.schedule_delete(data['schedule_id'])
@@ -128,6 +142,7 @@ def schedule_delete():
 
 
 @app.route('/history', methods=["GET"])
+@requires_auth
 def station_history():
     response = None
     response = WebDataHelper.station_history()
@@ -135,12 +150,14 @@ def station_history():
 
 
 @app.route('/station/add', methods=["GET", "POST"])
+@requires_auth
 def station_add():
     response = {}
     return jsonify(response)
 
 
 @app.route('/stats', methods=["GET"])
+@requires_auth
 def stats():
     response = {}
     print(request.args.get('id'))
@@ -153,6 +170,7 @@ def stats():
 
 
 @app.route('/station/run', methods=["POST"])
+@requires_auth
 def station_run():
     data = json.loads(request.data.decode('utf8'))
     RMQ().publish_message(json.dumps({
@@ -164,6 +182,7 @@ def station_run():
 
 
 @app.route('/station/list', methods=["GET"])
+@requires_auth
 def station_list():
     response = {}
     response['stations'] = WebDataHelper.list_stations()
