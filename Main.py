@@ -6,6 +6,7 @@ from helpers.ScheduleControl import ScheduleControl
 from threading import Thread
 from helpers.MessageHelper import RMQ
 import time
+from helpers.ButtonControl import ButtonControl
 
 
 class Main:
@@ -16,6 +17,7 @@ class Main:
 
     def start(self):
         Thread(target=RMQ().listen, args=()).start()
+        ButtonControl().init_button_listener()
 
 
 if __name__ == '__main__':
