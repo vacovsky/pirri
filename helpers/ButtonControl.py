@@ -9,7 +9,7 @@ class ButtonControl:
     gpio_list = []
 
     def __init__(self):
-        pass
+        GPIO.setup(CONFIG.BUTTON_GPIO, GPIO.IN, pull_up_down=GPIO.PUD_UP)
 
     def get_gpio(self):
         sqlConn = SqlHelper()
