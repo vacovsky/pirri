@@ -6,15 +6,31 @@
         <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.7/css/bootstrap-theme.min.css" integrity="sha384-rHyoN1iRsVXV4nD0JutlnGaslCJuC7uwjduW9SVrLvRYooPp2bWYgmgJQIXwl/Sp" crossorigin="anonymous">
         <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/angular-material/1.1.1/angular-material.min.css" />
         <link rel="stylesheet" href="/static/style.css">
+        <script src="https://ajax.googleapis.com/ajax/libs/angularjs/1.5.6/angular.min.js"></script>
         <script src="https://code.jquery.com/jquery-3.1.0.min.js" integrity="sha256-cCueBR6CsyA4/9szpPfrX3s49M9vUU5BgtiJj06wt/s=" crossorigin="anonymous"></script>
         <script src="//cdnjs.cloudflare.com/ajax/libs/underscore.js/1.7.0/underscore-min.js"></script>
         <script type="text/javascript" src="https://cdnjs.cloudflare.com/ajax/libs/moment.js/2.15.1/moment.min.js"></script>
+        <script src="https://ajax.googleapis.com/ajax/libs/angularjs/1.5.6/angular.min.js"></script>
+        <script src="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.7/js/bootstrap.min.js" integrity="sha384-Tc5IQib027qvyjSMfHjOMaLkfuWVxZxUPnCJA7l2mCWNIpG9mGCD8wGNIcPD7Txa" crossorigin="anonymous"></script>
+        <script src="https://cdnjs.cloudflare.com/ajax/libs/angular-ui-bootstrap/0.14.3/ui-bootstrap-tpls.js"></script>
+        <script type="text/javascript" src="https://cdnjs.cloudflare.com/ajax/libs/Chart.js/2.3.0/Chart.min.js"></script>
+        <script src="/static/randomcolor.js"></script>
         <link href="/static/easycal/easycal.css" rel="stylesheet">
         <link rel="icon" href="static/icon.png">
+        <script src="https://ajax.googleapis.com/ajax/libs/angularjs/1.5.6/angular.min.js"></script>
+        <script src="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.7/js/bootstrap.min.js" integrity="sha384-Tc5IQib027qvyjSMfHjOMaLkfuWVxZxUPnCJA7l2mCWNIpG9mGCD8wGNIcPD7Txa" crossorigin="anonymous"></script>
+        <script src="https://cdnjs.cloudflare.com/ajax/libs/angularjs-slider/5.5.0/rzslider.min.js"></script>
+        <script src="https://cdnjs.cloudflare.com/ajax/libs/angular-ui-bootstrap/0.14.3/ui-bootstrap-tpls.js"></script>
+        <script src="https://cdnjs.cloudflare.com/ajax/libs/bootstrap-slider/9.2.0/bootstrap-slider.min.js"></script>
+        <script type="text/javascript" src="https://cdnjs.cloudflare.com/ajax/libs/Chart.js/2.3.0/Chart.min.js"></script>
+        <script type="text/javascript" src="https://cdnjs.cloudflare.com/ajax/libs/angular-material/1.1.1/angular-material.min.js"></script>
+        <script type="text/javascript" src="https://cdnjs.cloudflare.com/ajax/libs/angular-chart.js/1.0.3/angular-chart.min.js"></script>
         <script src="/static/easycal/easycal.js"></script>
+        <script src="/static/app.js"></script>
+        <script src="/static/table.js"></script>
     </head>
     <body>
-        <div ng-controller="PirriControl as pc">
+        <div id="PirriControl" ng-controller="PirriControl as pc">
             <div id="station-schedules">
                 <section>
                     <div id="nav">
@@ -109,33 +125,26 @@
                     <div id="navpane" ng-show="currentPage == 'mycal'" class="mycal"></div>
                     <script>
                     $('.mycal').easycal({
-                    minTime : '00:00:00',
-                    maxTime : '23:59:59',
-                    slotDuration : 60,
-                    startDate : '2016-10-06',
-                    events : [
-                    {
-                    id: 'E01',
-                    title: 'Fake test',
-                    start: '2016-10-16 10:30:00',
-                    end: '2016-10-16 11:00:00',
-                    backgroundColor: '#000',
-                    textColor: '#FFF'
-                    }
-                    ]
-                    });
-                    $('.mycal').easycal({
-                    columnDateFormat : 'dddd, DD MMM',
+                    startDate :  moment().format("YYYY-MM-DD"), // OR 31/10/2104
                     timeFormat : 'HH:mm',
+                    columnDateFormat : 'dddd, DD MMM',
                     minTime : '00:00:00',
-                    maxTime : '23:59:59',
-                    slotDuration : 60, //in mins
-                    dayClick : null,
-                    eventClick : null,
-                    events : [],
-                    widgetHeaderClass : 'ec-day-header',
-                    widgetSlotClass : 'ec-slot',
-                    widgetTimeClass : 'ec-time'
+                    maxTime : '23:00:00',
+                    slotDuration : 60,
+                    timeGranularity : 5,
+                    
+                    dayClick : function(el, startTime){
+                    console.log('Slot selected: ' + startTime);
+                    },
+                    eventClick : function(eventId){
+                    console.log('Event was clicked with id: ' + eventId);
+                    },
+                    events : $.get('/schedule/cal'), function(data) {
+                                result = data
+                            };,//$('#PirriControl').scope().calList,
+                    overlapColor : '#FF0',
+                    overlapTextColor : '#000',
+                    overlapTitle : 'Multiple'
                     });
                     </script>
                     <!-- END TESTING CAL -->
@@ -443,14 +452,4 @@
         </div>
     </div>
 </body>
-<script src="https://ajax.googleapis.com/ajax/libs/angularjs/1.5.6/angular.min.js"></script>
-<script src="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.7/js/bootstrap.min.js" integrity="sha384-Tc5IQib027qvyjSMfHjOMaLkfuWVxZxUPnCJA7l2mCWNIpG9mGCD8wGNIcPD7Txa" crossorigin="anonymous"></script>
-<script src="https://cdnjs.cloudflare.com/ajax/libs/angularjs-slider/5.5.0/rzslider.min.js"></script>
-<script src="https://cdnjs.cloudflare.com/ajax/libs/angular-ui-bootstrap/0.14.3/ui-bootstrap-tpls.js"></script>
-<script src="https://cdnjs.cloudflare.com/ajax/libs/bootstrap-slider/9.2.0/bootstrap-slider.min.js"></script>
-<script type="text/javascript" src="https://cdnjs.cloudflare.com/ajax/libs/Chart.js/2.3.0/Chart.min.js"></script>
-<script type="text/javascript" src="https://cdnjs.cloudflare.com/ajax/libs/angular-material/1.1.1/angular-material.min.js"></script>
-<script type="text/javascript" src="https://cdnjs.cloudflare.com/ajax/libs/angular-chart.js/1.0.3/angular-chart.min.js"></script>
-<script src="/static/app.js"></script>
-<script src="/static/table.js"></script>
 </html>

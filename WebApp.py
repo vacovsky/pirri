@@ -83,6 +83,15 @@ def schedule_list():
     return jsonify(response)
 
 
+@app.route('/schedule/cal', methods=["GET"])
+@requires_auth
+def schedule_cal():
+    response = {
+        'schedule': WebDataHelper.get_schedule_cal()
+    }
+    return jsonify(response)
+
+
 @app.route('/schedule/edit', methods=["POST"])
 @requires_auth
 def schedule_edit():

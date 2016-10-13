@@ -31,8 +31,8 @@
 		},
 
 		format : {
-			dateLong : 'DD-MM-YYYY HH:mm:ss',
-			dateShort : 'DD-MM-YYYY',
+			dateLong : 'YYYY-MM-DD HH:mm:ss',
+			dateShort : 'YYYY-MM-DD',
 			timeLong : 'HH:mm:ss',
 			timeShort : 'HH:mm'
 		}

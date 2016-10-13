@@ -3,6 +3,7 @@ from models.Station import Station
 from datetime import datetime, timedelta
 import operator
 from pytz import timezone, UTC
+import random
 
 
 def list_gpio():
@@ -122,6 +123,60 @@ def schedule_delete(schedule_id):
     sqlConn = SqlHelper()
     sqlStr = """DELETE FROM schedule WHERE id={0}""".format(schedule_id)
     sqlConn.execute(sqlStr)
+
+
+def get_schedule_cal():
+    base = datetime.today()
+    date_list = [base - timedelta(days=x) for x in range(-6, 7)]
+    sqlConn = SqlHelper()
+    events = []
+    stations = [x[0] for x in sqlConn.read("SELECT id FROM stations")]
+    station_colors = {}
+    for i in stations:
+        station_colors[i] = "#%06x" % random.randint(0, 0xFFFFFF)
+    sqlStr = """
+        SELECT * FROM schedule
+            WHERE (startdate <= replace(date('now'), '-', '')
+                AND enddate > replace(date('now'), '-', ''))
+        """.format()
+
+    schedules = []
+    for sched in sqlConn.read(sqlStr):
+        schedules.append(
+            {
+                "id": sched[0],
+                "startdate": sched[1],
+                "enddate": sched[2],
+                "sunday": sched[3] == 1,
+                "monday": sched[4] == 1,
+                "tuesday": sched[5] == 1,
+                "wednesday": sched[6] == 1,
+                "thursday": sched[7] == 1,
+                "friday": sched[8] == 1,
+                "saturday": sched[9] == 1,
+                "station": sched[10],
+                "starttime": sched[11],
+                "duration": sched[12],
+                "repeat": sched[13] == 1
+            })
+    for date in date_list:
+        for event in schedules:
+            print(
+                str("%04d" % event['starttime'])[:2],
+                str("%04d" % event['starttime'])[-2:]
+            )
+            wd = date.weekday()
+            if wd == 0 and event['sunday']:
+                events.append({
+                    'id': event['id'],
+                    'title': "SID #" + str(event['station']) + " for " + str(event['duration'] / 60) + 'minutes',
+                    'start': date.replace(date.year, date.month, date.day, int(str("%04d" % event['starttime'])[:2]), int(str("%04d" % event['starttime'])[-2:]), 0),
+                    'end': date.replace(date.year, date.month, date.day, int(str("%04d" % event['starttime'])[:2]), int(str("%04d" % event['starttime'])[-2:]), 0) + timedelta(seconds=event['duration']),
+                    'backgroundColor': station_colors[event['station']],
+                    'textColor': '#FFF'
+                })
+
+    return events
 
 
 def get_schedule(station=None):

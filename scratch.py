@@ -38,5 +38,12 @@
 # converted_time = datetime.time(hour=int(miltime[0:2]), minute=int(miltime[2:4]))
 
 # print
+import datetime
+base = datetime.datetime.today()
+date_list = [base - datetime.timedelta(days=x) for x in range(-6, 7)]  
+for i in date_list:
+    print (i.date())
 
-print(list('thislist'))
+
+
+print("%04d" % (1,))

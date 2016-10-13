@@ -15,6 +15,15 @@
             options: {}
         };
 
+        $scope.randomColor = function() {
+            var letters = '0123456789ABCDEF';
+            var color = '#';
+            for (var i = 0; i < 6; i++) {
+                color += letters[Math.floor(Math.random() * 16)];
+            }
+            return color;
+        };
+
         $scope.currentPage = 'home'; // history / home / settings / add
         $scope.stations = undefined;
         $scope.navTitle = "All Stations";
@@ -38,16 +47,14 @@
         $scope.show_gpio_diagram = false;
 
         this.loadCalendar = function() {
-            return [
-                {
-                    id: 'E01',
-                    title: 'Fake test',
-                    start: '2016-10-16 10:30:00',
-                    end: '2016-10-16 11:00:00',
-                    backgroundColor: '#443322',
-                    textColor: '#FFF'
-                }
-            ]
+            return [{
+                id: 'E01',
+                title: 'Fake test',
+                start: '2016-10-16 10:30:00',
+                end: '2016-10-16 11:00:00',
+                backgroundColor: '#443322',
+                textColor: '#FFF'
+            }]
         };
 
         this.filterForKeys = function(searchText) {
@@ -95,11 +102,11 @@
         $scope.dripnodes = {};
         $scope.watercost = 0.0021;
         this.getWaterUsageStats = function() {
-        $http.get('/stats/gallons')
-            .success(function(data, status, headers, config) {
-                $scope.dripnodes = data.water_usage;
-            })
-            .error(function(data, status, headers, config) {})
+            $http.get('/stats/gallons')
+                .success(function(data, status, headers, config) {
+                    $scope.dripnodes = data.water_usage;
+                })
+                .error(function(data, status, headers, config) {})
             this.getWaterNodeEntries();
         };
 
@@ -144,7 +151,7 @@
                     $scope.chartData2.data = data.chartData.data;
                 })
                 .error(function(data, status, headers, config) {})
-            // console.log($scope.chartData2);
+                // console.log($scope.chartData2);
             $scope.chartData2.options = {
                 scaleStartValue: 0,
                 title: {
@@ -319,6 +326,9 @@
             $http.get('/station/list')
                 .success(function(data, status, headers, config) {
                     $scope.stations = data.stations;
+                    angular.forEach($scope.stations, function(value, key) {
+                        value['cal_color'] = $scope.randomColor();
+                    })
                 })
                 .error(function(data, status, headers, config) {})
         };
@@ -364,7 +374,7 @@
                     $scope.lastStationRunHash = data.lastrunlist;
                 })
                 .error(function(data, status, headers, config) {})
-            // console.log($scope.lastStationRunHash);
+                // console.log($scope.lastStationRunHash);
         };
 
         $scope.nextStationRunHash = {}
@@ -374,7 +384,7 @@
                     $scope.nextStationRunHash = data.nextrunlist;
                 })
                 .error(function(data, status, headers, config) {})
-            // console.log($scope.nextStationRunHash);
+                // console.log($scope.nextStationRunHash);
         };
 
         $scope.waterNodeEntries = [];
@@ -385,7 +395,7 @@
                     $scope.waterNodeEntries = data.dripnodes;
                 })
                 .error(function(data, status, headers, config) {})
-            // console.log($scope.nextStationRunHash);
+                // console.log($scope.nextStationRunHash);
         }
         this.submitEditNodeEntry = function() {
             $http.post('/station/nodes', $scope.waterNodeModel)
@@ -397,7 +407,7 @@
             $scope.waterNodeModel = undefined;
             $scope.waterNodeModel = {};
         };
-        
+
         this.submitAddNodeEntry = function() {
             $scope.waterNodeModel.new = true;
             $http.post('/station/nodes', $scope.waterNodeModel)
