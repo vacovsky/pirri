@@ -8,7 +8,7 @@
         }
     ]);
 
-    app.controller('PirriControl', function($rootScope, $scope, $http, $timeout) {
+    app.controller('PirriControl', function($rootScope, $scope, $http, $timeout, $filter) {
         $rootScope.updateInterval = 6000;
         $scope.chartData1 = {};
         $scope.chartData2 = {
@@ -215,6 +215,32 @@
             // console.log($scope.scheduleModel)
             $scope.schedule.unshift($scope.scheduleModel)
         };
+
+        this.addScheduleButtonFromCalendar = function(startTime) {
+            $scope.scheduleModel = undefined;
+            $scope.scheduleModel = {
+                id: 0,
+                sunday: false,
+                monday: false,
+                tuesday: false,
+                wednesday: false,
+                thursday: false,
+                friday: false,
+                saturday: false,
+                repeat: false,
+                station: undefined,
+                starttime: undefined,
+                startdate: undefined,
+                enddate: 30000000,
+                duration: 0,
+                new: true
+            };
+            $scope.currentPage = 'calendar';
+
+            // console.log($scope.scheduleModel)
+            $scope.schedule.unshift($scope.scheduleModel)
+        };
+
         this.convertScheduleBoolToInt = function() {
             if ($scope.scheduleModel.sunday) {
                 $scope.scheduleModel.sunday = 1;
@@ -287,6 +313,15 @@
             $scope.scheduleModel = currentModel;
             // console.log($scope.scheduleModel)
         };
+
+        this.mapModelForSchedEditFromCalClick = function(id) {
+            $scope.currentPage = 'calendar';
+            console.log($scope.currentPage);
+            var sch = $filter('filter')($scope.schedule, {id: id })[0];
+            $scope.scheduleModel = sch;
+            // console.log($scope.scheduleModel)
+        };
+
         this.submitDeleteSchedule = function(schedule_id) {
             $http.post('/schedule/delete', {
                     schedule_id: schedule_id

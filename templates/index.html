@@ -8,7 +8,6 @@
         <link rel="stylesheet" href="/static/libs/bootstrap.min.css">
         <link href="/static/easycal/easycal.css" rel="stylesheet">
         <link rel="stylesheet" href="/static/style.css">
-
         <script src="/static/libs/jquery-3.1.0.min.js"></script>
         <script src="/static/libs/angular.min.js"></script>
         <script src="/static/libs/bootstrap.min.js"></script>
@@ -131,10 +130,13 @@
                             slotDuration: 30,
                             timeGranularity: 30,
                             dayClick: function(el, startTime) {
-                            console.log('Slot selected: ' + startTime);
+                            angular.element(document.getElementById('PirriControl')).scope().pc.addScheduleButtonFromCalendar(startTime.split(':')[0] + startTime.split(':')[1]);
+                            angular.element(document.getElementById('PirriControl')).scope().$apply();
+                            console.log(startTime.split(':')[0] + startTime.split(':')[1]);
                             },
                             eventClick: function(eventId) {
-                            console.log('Event was clicked with id: ' + eventId);
+                            angular.element(document.getElementById('PirriControl')).scope().pc.mapModelForSchedEditFromCalClick(eventId);
+                            angular.element(document.getElementById('PirriControl')).scope().$apply();
                             },
                             events: {{ caldata | safe }},
                             overlapColor: '#FF0',
@@ -184,13 +186,13 @@
                                         <td class="col-md-2">
                                             <span ng-show="scheduleModel.id != sched.id">{[sched.startdate]}</span>
                                             <div class="form-group">
-                                                <input class="form-control" ng-show="scheduleModel.id == sched.id" type="number" ng-model="scheduleModel.startdate">
+                                                <input class="form-control" placeholder="YYYYMMDD" ng-show="scheduleModel.id == sched.id" type="number" ng-model="scheduleModel.startdate">
                                             </div>
                                         </td>
                                         <td class="col-md-2">
                                             <span ng-show="scheduleModel.id != sched.id">{[sched.starttime]}</span>
                                             <div class="form-group">
-                                                <input class="form-control" ng-show="scheduleModel.id == sched.id" type="number" ng-model="scheduleModel.starttime">
+                                                <input class="form-control" placeholder="HHmm" ng-show="scheduleModel.id == sched.id" type="number" ng-model="scheduleModel.starttime">
                                             </div>
                                         </td>
                                         <td class="col-md-1">
@@ -230,6 +232,7 @@
                                         <td class="col-md-1">
                                             <a href><span ng-show="scheduleModel.id == sched.id && scheduleModel.new != true" class="glyphicon glyphicon-floppy-disk" ng-click="pc.submitEditSchedule();"></span></a>
                                             <a href><span ng-show="scheduleModel.id == sched.id && scheduleModel.new" class="glyphicon glyphicon-floppy-disk" ng-click="pc.submitAddSchedule();"></span></a>
+                                            <a href><span ng-show="scheduleModel.id == sched.id" class="glyphicon glyphicon-ban-circle" ng-click="scheduleModel = undefined; pc.refresh();"></span></a>
                                             <a href><span ng-hide="scheduleModel.id == sched.id" class="glyphicon glyphicon-pencil" ng-click="pc.mapModelForSchedEdit(sched)"></span></a>
                                             - - <a href><span class="glyphicon glyphicon-trash" ng-click="pc.submitDeleteSchedule(sched.id);"></span></a>
                                         </td>
@@ -429,6 +432,7 @@
                                             <td class="col-md-1">
                                                 <a href><span ng-show="waterNodeModel.id == node.id && waterNodeModel.new != true" class="glyphicon glyphicon-floppy-disk" ng-click="pc.submitEditNodeEntry(); pc.getWaterUsageStats(); pc.getWaterNodeEntries();"></span></a>
                                                 <a href><span ng-show="waterNodeModel.id == node.id && waterNodeModel.new" class="glyphicon glyphicon-floppy-disk" ng-click="pc.submitAddNodeEntry(); pc.getWaterUsageStats(); pc.getWaterNodeEntries();"></span></a>
+                                                <a href><span ng-show="waterNodeModel.id == node.id" class="glyphicon glyphicon-ban-circle" ng-click="waterNodeModel = undefined; "></span></a>
                                                 <a href><span ng-hide="waterNodeModel.id == node.id" class="glyphicon glyphicon-pencil" ng-click="pc.mapModelForWaterNodeEdit(node)"></span></a>
                                                 - - <a href><span class="glyphicon glyphicon-trash" ng-click="pc.submitDeleteNodeEntry(node.id); pc.getWaterUsageStats(); pc.getWaterNodeEntries(); pc.getWaterUsageStats()"></span></a>
                                             </td>
