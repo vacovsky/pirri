@@ -16,7 +16,8 @@ app = Flask(__name__)
 @requires_auth
 def main():
     if request.method == "GET":
-        return render_template("index.html")
+        caldata = json.dumps(WebDataHelper.get_schedule_cal())
+        return render_template("index.html", caldata=caldata)
 
 
 @app.route('/gpio/list', methods=["GET"])

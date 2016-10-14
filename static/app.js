@@ -24,6 +24,18 @@
             return color;
         };
 
+        $scope.calEvents = []
+        this.getCalEvents = function() {
+            $http.get('/schedule/cal')
+                .success(function(data, status, headers, config) {
+                   $scope.calEvents = data.schedule;
+                   //$scope.$apply();
+                })
+                .error(function(data, status, headers, config) {})
+                console.log($scope.calEvents)
+                //loadCalendar();
+        };
+
         $scope.currentPage = 'home'; // history / home / settings / add
         $scope.stations = undefined;
         $scope.navTitle = "All Stations";
@@ -45,17 +57,6 @@
         };
         $scope.durationIntervals = [1, 5, 10, 15, 20, 25, 30, 35, 40, 45, 50, 55, 60];
         $scope.show_gpio_diagram = false;
-
-        this.loadCalendar = function() {
-            return [{
-                id: 'E01',
-                title: 'Fake test',
-                start: '2016-10-16 10:30:00',
-                end: '2016-10-16 11:00:00',
-                backgroundColor: '#443322',
-                textColor: '#FFF'
-            }]
-        };
 
         this.filterForKeys = function(searchText) {
             $scope.searchResults = [];
@@ -451,6 +452,7 @@
         };
 
         this.autoLoader = function() {
+            this.getCalEvents();
             this.getSchedule();
             this.loadStations();
             this.getLastStationRun();

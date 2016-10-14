@@ -1,5 +1,5 @@
 <!doctype html>
-<html ng-app="pirriweb" ng-cloak="true">
+<html ng-app="pirriweb" ng-cloak>
     <head>
         <title>Pirri</title>
         <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.7/css/bootstrap.min.css" integrity="sha384-BVYiiSIFeK1dGmJRAkycuHAHRg32OmUcww7on3RYdg4Va+PmSTsz/K68vbdEjh4u" crossorigin="anonymous">
@@ -14,7 +14,6 @@
         <script src="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.7/js/bootstrap.min.js" integrity="sha384-Tc5IQib027qvyjSMfHjOMaLkfuWVxZxUPnCJA7l2mCWNIpG9mGCD8wGNIcPD7Txa" crossorigin="anonymous"></script>
         <script src="https://cdnjs.cloudflare.com/ajax/libs/angular-ui-bootstrap/0.14.3/ui-bootstrap-tpls.js"></script>
         <script type="text/javascript" src="https://cdnjs.cloudflare.com/ajax/libs/Chart.js/2.3.0/Chart.min.js"></script>
-        <script src="/static/randomcolor.js"></script>
         <link href="/static/easycal/easycal.css" rel="stylesheet">
         <link rel="icon" href="static/icon.png">
         <script src="https://ajax.googleapis.com/ajax/libs/angularjs/1.5.6/angular.min.js"></script>
@@ -25,6 +24,7 @@
         <script type="text/javascript" src="https://cdnjs.cloudflare.com/ajax/libs/Chart.js/2.3.0/Chart.min.js"></script>
         <script type="text/javascript" src="https://cdnjs.cloudflare.com/ajax/libs/angular-material/1.1.1/angular-material.min.js"></script>
         <script type="text/javascript" src="https://cdnjs.cloudflare.com/ajax/libs/angular-chart.js/1.0.3/angular-chart.min.js"></script>
+        <script src="/static/calhelper.js"></script>
         <script src="/static/easycal/easycal.js"></script>
         <script src="/static/app.js"></script>
         <script src="/static/table.js"></script>
@@ -44,7 +44,7 @@
                                 <span> - - - </span>
                                 <a href><span class="glyphicon glyphicon-home" ng-click="currentPage = 'home'; navTitle = 'Stations'; pc.refresh()"></span></a>
                                 <span > - </span>
-                                <a href><span class="glyphicon glyphicon-calendar" ng-click="currentPage = 'mycal'; navTitle = 'Calendar'; pc.getSchedule();"></span></a>
+                                <a href><span class="glyphicon glyphicon-calendar" ng-click="currentPage = 'mycal'; navTitle = 'Calendar'; pc.getCalEvents();"></span></a>
                                 <span > - </span>
                                 <a href><span class="glyphicon glyphicon-list" ng-click="currentPage = 'calendar'; navTitle = 'Schedule'; pc.getSchedule()"></span></a>
                                 <span > - </span>
@@ -122,31 +122,31 @@
                     </div>
                     <!-- END STATIONS LIST -->
                     <!-- START TESTING CAL -->
-                    <div id="navpane" ng-show="currentPage == 'mycal'" class="mycal"></div>
-                    <script>
-                    $('.mycal').easycal({
-                    startDate :  moment().format("YYYY-MM-DD"), // OR 31/10/2104
-                    timeFormat : 'HH:mm',
-                    columnDateFormat : 'dddd, DD MMM',
-                    minTime : '00:00:00',
-                    maxTime : '23:00:00',
-                    slotDuration : 60,
-                    timeGranularity : 5,
-                    
-                    dayClick : function(el, startTime){
-                    console.log('Slot selected: ' + startTime);
-                    },
-                    eventClick : function(eventId){
-                    console.log('Event was clicked with id: ' + eventId);
-                    },
-                    events : $.get('/schedule/cal'), function(data) {
-                                result = data
-                            };,//$('#PirriControl').scope().calList,
-                    overlapColor : '#FF0',
-                    overlapTextColor : '#000',
-                    overlapTitle : 'Multiple'
-                    });
-                    </script>
+                    <div id="navpane" ng-show="currentPage == 'mycal'" >
+                        <div id="calpane" class="mycal">
+                            <script>
+                                $('.mycal').easycal({
+                                    startDate: moment().format("YYYY-MM-DD"),
+                                    timeFormat: 'HH:mm',
+                                    columnDateFormat: 'dddd, DD MMM',
+                                    minTime: '00:00:00',
+                                    maxTime: '23:59:59',
+                                    slotDuration: 60,
+                                    timeGranularity: 5,
+                                    dayClick: function(el, startTime) {
+                                        console.log('Slot selected: ' + startTime);
+                                    },
+                                    eventClick: function(eventId) {
+                                        console.log('Event was clicked with id: ' + eventId);
+                                    },
+                                    events: {{ caldata | safe }},
+                                    overlapColor: '#FF0',
+                                    overlapTextColor: '#000',
+                                    overlapTitle: 'Multiple'
+                                });
+                                </script>
+                        </div>
+                    </div>
                     <!-- END TESTING CAL -->
                     <!-- START STATS-->
                     <div ng-show="currentPage == 'stats'" id="navpane">
