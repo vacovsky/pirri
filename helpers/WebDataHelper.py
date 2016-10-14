@@ -175,6 +175,60 @@ def get_schedule_cal():
                     'backgroundColor': station_colors[event['station']],
                     'textColor': '#FFF'
                 })
+            if wd == 1 and event['monday']:
+                events.append({
+                    'id': event['id'],
+                    'title': "SID #" + str(event['station']) + " for " + str(event['duration'] / 60) + ' min',
+                    'start': str(date.replace(date.year, date.month, date.day, int(str("%04d" % event['starttime'])[:2]), int(str("%04d" % event['starttime'])[-2:]), 0)),
+                    'end': str(date.replace(date.year, date.month, date.day, int(str("%04d" % event['starttime'])[:2]), int(str("%04d" % event['starttime'])[-2:]), 0) + timedelta(seconds=event['duration'])),
+                    'backgroundColor': station_colors[event['station']],
+                    'textColor': '#FFF'
+                })
+            if wd == 2 and event['tuesday']:
+                events.append({
+                    'id': event['id'],
+                    'title': "SID #" + str(event['station']) + " for " + str(event['duration'] / 60) + ' min',
+                    'start': str(date.replace(date.year, date.month, date.day, int(str("%04d" % event['starttime'])[:2]), int(str("%04d" % event['starttime'])[-2:]), 0)),
+                    'end': str(date.replace(date.year, date.month, date.day, int(str("%04d" % event['starttime'])[:2]), int(str("%04d" % event['starttime'])[-2:]), 0) + timedelta(seconds=event['duration'])),
+                    'backgroundColor': station_colors[event['station']],
+                    'textColor': '#FFF'
+                })
+            if wd == 3 and event['wednesday']:
+                events.append({
+                    'id': event['id'],
+                    'title': "SID #" + str(event['station']) + " for " + str(event['duration'] / 60) + ' min',
+                    'start': str(date.replace(date.year, date.month, date.day, int(str("%04d" % event['starttime'])[:2]), int(str("%04d" % event['starttime'])[-2:]), 0)),
+                    'end': str(date.replace(date.year, date.month, date.day, int(str("%04d" % event['starttime'])[:2]), int(str("%04d" % event['starttime'])[-2:]), 0) + timedelta(seconds=event['duration'])),
+                    'backgroundColor': station_colors[event['station']],
+                    'textColor': '#FFF'
+                })
+            if wd == 4 and event['thursday']:
+                events.append({
+                    'id': event['id'],
+                    'title': "SID #" + str(event['station']) + " for " + str(event['duration'] / 60) + ' min',
+                    'start': str(date.replace(date.year, date.month, date.day, int(str("%04d" % event['starttime'])[:2]), int(str("%04d" % event['starttime'])[-2:]), 0)),
+                    'end': str(date.replace(date.year, date.month, date.day, int(str("%04d" % event['starttime'])[:2]), int(str("%04d" % event['starttime'])[-2:]), 0) + timedelta(seconds=event['duration'])),
+                    'backgroundColor': station_colors[event['station']],
+                    'textColor': '#FFF'
+                })
+            if wd == 5 and event['friday']:
+                events.append({
+                    'id': event['id'],
+                    'title': "SID #" + str(event['station']) + " for " + str(event['duration'] / 60) + ' min',
+                    'start': str(date.replace(date.year, date.month, date.day, int(str("%04d" % event['starttime'])[:2]), int(str("%04d" % event['starttime'])[-2:]), 0)),
+                    'end': str(date.replace(date.year, date.month, date.day, int(str("%04d" % event['starttime'])[:2]), int(str("%04d" % event['starttime'])[-2:]), 0) + timedelta(seconds=event['duration'])),
+                    'backgroundColor': station_colors[event['station']],
+                    'textColor': '#FFF'
+                })
+            if wd == 6 and event['saturday']:
+                events.append({
+                    'id': event['id'],
+                    'title': "SID #" + str(event['station']) + " for " + str(event['duration'] / 60) + ' min',
+                    'start': str(date.replace(date.year, date.month, date.day, int(str("%04d" % event['starttime'])[:2]), int(str("%04d" % event['starttime'])[-2:]), 0)),
+                    'end': str(date.replace(date.year, date.month, date.day, int(str("%04d" % event['starttime'])[:2]), int(str("%04d" % event['starttime'])[-2:]), 0) + timedelta(seconds=event['duration'])),
+                    'backgroundColor': station_colors[event['station']],
+                    'textColor': '#FFF'
+                })
 
     return events
 
