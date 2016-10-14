@@ -169,9 +169,9 @@ def get_schedule_cal():
             if wd == 0 and event['sunday']:
                 events.append({
                     'id': event['id'],
-                    'title': "SID #" + str(event['station']) + " for " + str(event['duration'] / 60) + 'minutes',
-                    'start': date.replace(date.year, date.month, date.day, int(str("%04d" % event['starttime'])[:2]), int(str("%04d" % event['starttime'])[-2:]), 0),
-                    'end': date.replace(date.year, date.month, date.day, int(str("%04d" % event['starttime'])[:2]), int(str("%04d" % event['starttime'])[-2:]), 0) + timedelta(seconds=event['duration']),
+                    'title': "SID #" + str(event['station']) + " for " + str(event['duration'] / 60) + ' min',
+                    'start': str(date.replace(date.year, date.month, date.day, int(str("%04d" % event['starttime'])[:2]), int(str("%04d" % event['starttime'])[-2:]), 0)),
+                    'end': str(date.replace(date.year, date.month, date.day, int(str("%04d" % event['starttime'])[:2]), int(str("%04d" % event['starttime'])[-2:]), 0) + timedelta(seconds=event['duration'])),
                     'backgroundColor': station_colors[event['station']],
                     'textColor': '#FFF'
                 })
