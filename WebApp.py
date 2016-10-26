@@ -16,8 +16,11 @@ app = Flask(__name__)
 @requires_auth
 def main():
     if request.method == "GET":
-        caldata = json.dumps(WebDataHelper.get_schedule_cal())
-        return render_template("index.html", caldata=caldata)
+        cal_dict = WebDataHelper.get_schedule_cal()
+        caldata = json.dumps(cal_dict)
+        calminmax = WebDataHelper.cal_minmax_times(cal_dict)
+        print(calminmax)
+        return render_template("index.html", caldata=caldata, mincaltime=calminmax['min'], maxcaltime=calminmax['max'])
 
 
 @app.route('/gpio/list', methods=["GET"])
@@ -88,7 +91,8 @@ def schedule_list():
 @requires_auth
 def schedule_cal():
     response = {
-        'schedule': WebDataHelper.get_schedule_cal()
+        'schedule': WebDataHelper.get_schedule_cal(),
+        'calboundaries': WebDataHelper.cal_minmax_times(WebDataHelper.get_schedule_cal())
     }
     return jsonify(response)
 

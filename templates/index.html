@@ -125,8 +125,8 @@
                             startDate: moment().format("YYYY-MM-DD"),
                             timeFormat: 'HH:mm',
                             columnDateFormat: 'dddd, DD MMM',
-                            minTime: '00:00:00',
-                            maxTime: '23:59:59',
+                            minTime: '{{ mincaltime }}',
+                            maxTime: '{{ maxcaltime }}',
                             slotDuration: 30,
                             timeGranularity: 30,
                             dayClick: function(el, startTime) {

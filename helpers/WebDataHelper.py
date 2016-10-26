@@ -125,9 +125,20 @@ def schedule_delete(schedule_id):
     sqlConn.execute(sqlStr)
 
 
+def cal_minmax_times(calvals):
+    result = {
+        'min': '00:00:00',
+        'max': '23:59:59'
+    }
+    result['min'] = format(min(int(str(cv["start"].split(' ')[1].split(':')[0])) for cv in calvals), '02d') + ':00:00'
+    result['max'] = format(max(int(str(cv["end"].split(' ')[1].split(':')[0])) for cv in calvals), '02d') + ':59:59'
+    print(result)
+    return result
+
+
 def get_schedule_cal():
     base = datetime.today()
-    date_list = [base - timedelta(days=x) for x in range(-6, 7)]
+    date_list = [base - timedelta(days=x) for x in range(-14, 14)]
     sqlConn = SqlHelper()
     events = []
     stations = [x[0] for x in sqlConn.read("SELECT id FROM stations")]
@@ -161,10 +172,10 @@ def get_schedule_cal():
             })
     for date in date_list:
         for event in schedules:
-            print(
-                str("%04d" % event['starttime'])[:2],
-                str("%04d" % event['starttime'])[-2:]
-            )
+            # print(
+            #     str("%04d" % event['starttime'])[:2],
+            #     str("%04d" % event['starttime'])[-2:]
+            # )
             wd = date.weekday()
             if wd == 0 and event['sunday']:
                 events.append({
@@ -207,7 +218,7 @@ def get_schedule_cal():
                     'id': event['id'],
                     'title': "SID #" + str(event['station']) + " for " + str(event['duration'] / 60) + ' min',
                     'start': str(date.replace(date.year, date.month, date.day, int(str("%04d" % event['starttime'])[:2]), int(str("%04d" % event['starttime'])[-2:]), 0) - timedelta(days=1)),
-                    'end': str(date.replace(date.year, date.month, date.day, int(str("%04d" % event['starttime'])[:2]), int(str("%04d" % event['starttime'])[-2:]), 0) + timedelta(seconds=event['duration'])  - timedelta(days=1)),
+                    'end': str(date.replace(date.year, date.month, date.day, int(str("%04d" % event['starttime'])[:2]), int(str("%04d" % event['starttime'])[-2:]), 0) + timedelta(seconds=event['duration']) - timedelta(days=1)),
                     'backgroundColor': station_colors[event['station']],
                     'textColor': '#FFF'
                 })
@@ -363,7 +374,7 @@ def get_next_station_run():
                                 if utc_dt < datetime.now().replace(tzinfo=UTC):
                                     utc_dt = utc_dt + timedelta(weeks=1)
                                 results[s['sid']]['next_datetime'] = utc_dt
-    print(results)
+    # print(results)
     return results
 
 

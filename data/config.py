@@ -15,4 +15,11 @@ GPIO_RELAY_ONSTATE = 0
 
 #for web app
 LOGINUSER = 'joe'
+
 LOGINPASS = 'vacovsky'
+
+
+OPEN_WEATHER_APP_ID = "0d9330204965c8852145c4a52b56fd1a"
+#  http://api.openweathermap.org/data/2.5/weather?zip=93422,us&units=imperial&appid=0d9330204965c8852145c4a52b56fd1a
+
+#  http://api.openweathermap.org/data/2.5/forecast/daily?lang=english&zip=93422,us&units=imperial&appid=0d9330204965c8852145c4a52b56fd1a
