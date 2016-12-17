@@ -1,3 +1,9 @@
+import config
+
+if config.USE_NEWRELIC:
+    import newrelic.agent
+    newrelic.agent.initialize('newrelic_main.ini')
+
 import setproctitle
 setproctitle.setproctitle("pirri")
 
