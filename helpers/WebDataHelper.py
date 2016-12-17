@@ -1,4 +1,14 @@
-from helpers.SqlHelper import SqlHelper
+
+from data import config as CONFIG
+
+if CONFIG.USE_MYSQL:
+    from helpers.MySqlHelper import SqlHelper
+elif CONFIG.USE_MYSQL:
+    from helpers.SqlHelper import SqlHelper
+else:
+    raise Exception(
+        "You probably don't have a SQL connector enabled in the data/config.py file.")
+
 from models.Station import Station
 from datetime import datetime, timedelta
 import operator
@@ -119,7 +129,7 @@ def schedule_add(schedule):
     sqlConn.execute(sqlStr)
 
 
-def schedule_delete(schedule_id):
+def schedule_delete(schedule_id):   
     sqlConn = SqlHelper()
     sqlStr = """DELETE FROM schedule WHERE id={0}""".format(schedule_id)
     sqlConn.execute(sqlStr)
@@ -130,9 +140,14 @@ def cal_minmax_times(calvals):
         'min': '00:00:00',
         'max': '23:59:59'
     }
-    result['min'] = format(min(int(str(cv["start"].split(' ')[1].split(':')[0])) for cv in calvals), '02d') + ':00:00'
-    result['max'] = format(max(int(str(cv["end"].split(' ')[1].split(':')[0])) for cv in calvals), '02d') + ':59:59'
-    print(result)
+
+    try:
+        result['min'] = format(min(int(str(cv["start"].split(' ')[1].split(':')[
+                               0])) for cv in calvals), '02d') + ':00:00'
+        result['max'] = format(max(int(str(cv["end"].split(' ')[1].split(':')[
+                               0])) for cv in calvals), '02d') + ':59:59'
+    except:
+        print("Could not find time boundaries for calendar.  Using defaults of 00:00:00 and 23:59:59")
     return result
 
 
@@ -147,9 +162,9 @@ def get_schedule_cal():
         station_colors[i] = "#%06x" % random.randint(0, 0xFFFFFF)
     sqlStr = """
         SELECT * FROM schedule
-            WHERE (startdate <= replace(date('now'), '-', '')
-                AND enddate > replace(date('now'), '-', ''))
-        """.format()
+            WHERE (startdate <= replace(date(NOW()), '-', '')
+                AND enddate > replace(date(NOW()), '-', '')
+)        """.format()
 
     schedules = []
     for sched in sqlConn.read(sqlStr):
@@ -277,7 +292,7 @@ def get_schedule(station=None):
 def list_stations():
     sqlConn = SqlHelper()
     stations = []
-    sqlStr = 'SELECT * FROM STATIONS WHERE common=0 ORDER BY ID ASC LIMIT 500'
+    sqlStr = 'SELECT * FROM stations WHERE common=0 ORDER BY ID ASC LIMIT 500'
     data = sqlConn.read(sqlStr)
     for s in data:
         sid = s[0]
@@ -401,12 +416,12 @@ def water_usage_stats():
     sqlStr = """
         SELECT DISTINCT dripnodes.sid,
             SUM((duration / 60 )) as runmins,
-            (select sum((gph * [count])) as totalgph from dripnodes where dripnodes.sid=history.sid) as totalgph,
+            (select sum((gph * count)) as totalgph from dripnodes where dripnodes.sid=history.sid) as totalgph,
             stations.notes
         FROM history
         INNER JOIN dripnodes ON dripnodes.sid=history.sid
         INNER JOIN stations ON stations.id=history.sid
-            WHERE julianday(starttime) >= (julianday('now', '-30 days'))
+            WHERE starttime >= (CURRENT_DATE - INTERVAL 30 DAY)
             GROUP BY dripnodes.sid
             ORDER BY dripnodes.sid ASC;
             """
@@ -426,23 +441,23 @@ def water_usage_stats():
 
 def chart_stats_chrono(days=7):
     sqlConn = SqlHelper()
-    sqlStr = """SELECT DISTINCT strftime('%w', starttime) as [day], SUM(duration / 60) as [mins]
+    sqlStr = """SELECT DISTINCT DATE_FORMAT('%w', starttime) as day, SUM(duration / 60) as mins
             FROM history
-            WHERE julianday(starttime) >= (julianday('now', '-7 days'))
-            GROUP BY [day]
-            ORDER BY [day] ASC""".format(
+            WHERE starttime >= (CURRENT_DATE - INTERVAL 7 DAY)
+            GROUP BY day
+            ORDER BY day ASC""".format(
         days)
-    sqlStr2 = """SELECT DISTINCT strftime('%w', starttime) as [day], SUM(duration / 60) as [mins]
+    sqlStr2 = """SELECT DISTINCT DATE_FORMAT('%w', starttime) as day, SUM(duration / 60) as mins
             FROM history
-            WHERE julianday(starttime) >= (julianday('now', '-7 days')) AND schedule_id>0
-            GROUP BY [day]
-            ORDER BY [day] ASC""".format(
+            WHERE starttime >= (CURRENT_DATE - INTERVAL 7 DAY) AND schedule_id>0
+            GROUP BY day
+            ORDER BY day ASC""".format(
         days)
-    sqlStr3 = """SELECT DISTINCT strftime('%w', starttime) as [day], SUM(duration / 60) as [mins]
+    sqlStr3 = """SELECT DISTINCT DATE_FORMAT('%w', starttime) as day, SUM(duration / 60) as mins
             FROM history
-            WHERE julianday(starttime) >= (julianday('now', '-7 days')) AND schedule_id=0
-            GROUP BY [day]
-            ORDER BY [day] ASC""".format(
+            WHERE starttime >= (CURRENT_DATE - INTERVAL 7 DAY) AND schedule_id=0
+            GROUP BY day
+            ORDER BY day ASC""".format(
         days)
     results = {
         "labels": ['Sunday', 'Monday', 'Tuesday', 'Wednesday', 'Thursday', 'Friday', 'Saturday'],
@@ -469,7 +484,7 @@ def chart_stats_chrono(days=7):
 
 
 def chart_stats_chrono_old(days=7):
-    sqlStr = "SELECT sid, starttime, duration FROM history WHERE julianday(starttime) >= (julianday('now', '-{0} days'))".format(
+    sqlStr = "SELECT sid, starttime, duration FROM history WHERE starttime >= (CURRENT_DATE - INTERVAL {0} DAY)".format(
         days)
     sqlConn = SqlHelper()
     stationsSql = "SELECT id FROM stations WHERE common=0 ORDER BY id ASC"
@@ -495,7 +510,7 @@ def station_history(sid=None, days=7):
     sqlConn = SqlHelper()
     sqlStr = ""
     if sid is None:
-        sqlStr = "SELECT * FROM history WHERE julianday(starttime) >= (julianday('now', '-{0} days')) ORDER BY id DESC".format(
+        sqlStr = "SELECT * FROM history WHERE starttime >= (CURRENT_DATE - INTERVAL {0} DAY) ORDER BY id DESC".format(
             days)
     else:
         pass
@@ -537,7 +552,7 @@ def get_chart_stats(cid, days=30):
         d1 = []
         sqlStr = """SELECT DISTINCT sid, SUM(duration / 60)
             FROM history
-            WHERE julianday(starttime) >= (julianday('now', '-{0} days'))  AND schedule_id>0
+            WHERE starttime >= (CURRENT_DATE - INTERVAL {0} DAY)  AND schedule_id>0
             GROUP BY sid
             ORDER BY sid ASC""".format(days)
         td = sqlConn.read(sqlStr)
@@ -552,7 +567,7 @@ def get_chart_stats(cid, days=30):
         d2 = []
         sqlStr = """SELECT DISTINCT sid, SUM(duration / 60)
             FROM history
-            WHERE julianday(starttime) >= (julianday('now', '-{0} days')) AND schedule_id=0
+            WHERE starttime >= (CURRENT_DATE - INTERVAL {0} DAY) AND schedule_id=0
             GROUP BY sid
             ORDER BY sid ASC""".format(days)
         td = sqlConn.read(sqlStr)

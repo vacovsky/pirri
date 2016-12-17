@@ -23,3 +23,14 @@ OPEN_WEATHER_APP_ID = "0d9330204965c8852145c4a52b56fd1a"
 #  http://api.openweathermap.org/data/2.5/weather?zip=93422,us&units=imperial&appid=0d9330204965c8852145c4a52b56fd1a
 
 #  http://api.openweathermap.org/data/2.5/forecast/daily?lang=english&zip=93422,us&units=imperial&appid=0d9330204965c8852145c4a52b56fd1a
+
+MYSQL_HOST = '192.168.111.50'
+MYSQL_DB = 'pirri'
+MYSQL_USER = 'pirri'
+MYSQL_PASS = 'pirri'
+
+USE_SQLITE3 = False
+USE_MYSQL = True
+
+# GRANT ALL PRIVILEGES ON * TO 'joe'@'%' WITH GRANT OPTION;
+# GRANT ALL PRIVILEGES ON mydb.* TO 'myuser'@'%' WITH GRANT OPTION;

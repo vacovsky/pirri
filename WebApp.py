@@ -21,10 +21,14 @@ app = Flask(__name__)
 @requires_auth
 def main():
     if request.method == "GET":
+        # try:
         cal_dict = WebDataHelper.get_schedule_cal()
         caldata = json.dumps(cal_dict)
         calminmax = WebDataHelper.cal_minmax_times(cal_dict)
-        print(calminmax)
+        # except:
+        #     cal_dict = None
+        #     caldata = None
+        #     calminmax = None
         return render_template("index.html", caldata=caldata, mincaltime=calminmax['min'], maxcaltime=calminmax['max'])
 
 
