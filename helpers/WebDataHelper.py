@@ -441,19 +441,19 @@ def water_usage_stats():
 
 def chart_stats_chrono(days=7):
     sqlConn = SqlHelper()
-    sqlStr = """SELECT DISTINCT DATE_FORMAT('%w', starttime) as day, SUM(duration / 60) as mins
+    sqlStr = """SELECT DISTINCT DAYOFWEEK(starttime) as day, SUM(duration / 60) as mins
             FROM history
             WHERE starttime >= (CURRENT_DATE - INTERVAL 7 DAY)
             GROUP BY day
             ORDER BY day ASC""".format(
         days)
-    sqlStr2 = """SELECT DISTINCT DATE_FORMAT('%w', starttime) as day, SUM(duration / 60) as mins
+    sqlStr2 = """SELECT DISTINCT DAYOFWEEK(starttime) as day, SUM(duration / 60) as mins
             FROM history
             WHERE starttime >= (CURRENT_DATE - INTERVAL 7 DAY) AND schedule_id>0
             GROUP BY day
             ORDER BY day ASC""".format(
         days)
-    sqlStr3 = """SELECT DISTINCT DATE_FORMAT('%w', starttime) as day, SUM(duration / 60) as mins
+    sqlStr3 = """SELECT DISTINCT DAYOFWEEK(starttime) as day, SUM(duration / 60) as mins
             FROM history
             WHERE starttime >= (CURRENT_DATE - INTERVAL 7 DAY) AND schedule_id=0
             GROUP BY day
@@ -473,12 +473,21 @@ def chart_stats_chrono(days=7):
     sql_data2 = sqlConn.read(sqlStr2)
     sql_data3 = sqlConn.read(sqlStr3)
 
-    for d in sql_data:
-        results['data'][0][int(d[0])] = int(d[1])
-    for d in sql_data2:
-        results['data'][1][int(d[0])] = int(d[1])
-    for d in sql_data3:
-        results['data'][2][int(d[0])] = int(d[1])
+    def sunday_fix(val):
+        if val == 7:
+            return 0
+        else:
+            return val
+
+    if sql_data is not None and len(sql_data) > 0: 
+        for d in sql_data:
+            results['data'][0][int(sunday_fix(d[0]))] = int(d[1])
+    if sql_data2 is not None and len(sql_data2) > 0:
+        for d in sql_data2:
+            results['data'][1][int(sunday_fix(d[0]))] = int(d[1])
+    if sql_data3 is not None and len(sql_data3) > 0:
+        for d in sql_data3:
+            results['data'][2][int(sunday_fix(d[0]))] = int(d[1])
 
     return results
 
@@ -558,7 +567,7 @@ def get_chart_stats(cid, days=30):
         td = sqlConn.read(sqlStr)
         for d in td:
             try:
-                station_data[d[0]]['scheduled'] = d[1]
+                station_data[d[0]]['scheduled'] = int(d[1])
             except Exception as e:
                 station_data[d[0]]['scheduled'] = 0
         results['series'].append(
@@ -573,7 +582,7 @@ def get_chart_stats(cid, days=30):
         td = sqlConn.read(sqlStr)
         for d in td:
             try:
-                station_data[d[0]]['unscheduled'] = d[1]
+                station_data[d[0]]['unscheduled'] = int(d[1])
             except Exception as e:
                 station_data[d[0]]['unscheduled'] = 0
         results['series'].append(
