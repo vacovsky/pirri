@@ -22,7 +22,7 @@ class Station:
     def load(self):
         sqlConn = SqlHelper()
         try:
-            sqlStr = ''' SELECT * FROM STATIONS WHERE id={0}'''.format(
+            sqlStr = ''' SELECT * FROM stations WHERE id={0}'''.format(
                 self.sid)
             data = sqlConn.read(sqlStr)[0]
             self.gpio_pin = data[1]
