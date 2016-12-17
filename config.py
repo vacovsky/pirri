@@ -1,1 +1,2 @@
 PORT = 8000
+USE_NEWRELIC = True

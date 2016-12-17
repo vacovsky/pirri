@@ -1,6 +1,11 @@
+import config
+
+if config.USE_NEWRELIC:
+    import newrelic.agent
+    newrelic.agent.initialize('newrelic_web.ini')
+
 from flask import Flask, render_template, request, jsonify
 import setproctitle
-import config
 from helpers import WebDataHelper
 from helpers.MessageHelper import RMQ
 import json
