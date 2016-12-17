@@ -1,7 +1,15 @@
+from data import config as CONFIG
+if CONFIG.USE_MYSQL:
+    from helpers.MySqlHelper import SqlHelper
+elif CONFIG.USE_MYSQL:
+    from helpers.SqlHelper import SqlHelper
+else:
+    raise Exception(
+        "You probably don't have a SQL connector enabled in the data/config.py file.")
+    
 import RPi.GPIO as GPIO
 from helpers.SqlHelper import SqlHelper
 from datetime import datetime
-from data import config as CONFIG
 from time import sleep
 
 

@@ -1,10 +1,17 @@
 # this needs to be run in a thread, and kick messages off to RMQ for
 # execution.
+from data import config as CONFIG
+if CONFIG.USE_MYSQL:
+    from helpers.MySqlHelper import SqlHelper
+elif CONFIG.USE_MYSQL:
+    from helpers.SqlHelper import SqlHelper
+else:
+    raise Exception(
+        "You probably don't have a SQL connector enabled in the data/config.py file.")
 
-from helpers.MessageHelper import RMQ
 import calendar
 from datetime import datetime
-from helpers.SqlHelper import SqlHelper
+from helpers.MySqlHelper import SqlHelper
 from threading import Thread
 import time
 import json
