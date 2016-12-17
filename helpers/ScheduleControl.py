@@ -71,8 +71,8 @@ class ScheduleControl:
         if str(self.today_cache['day']) + str(self.today_cache['time']) != self.last_datetime:
             sqlStr = """SELECT id, station, duration from schedule
                         WHERE (
-                            startdate <= CAST(replace(date(NOW()), '-', ''))
-                                and enddate > CAST(replace(date(NOW()), '-', ''))
+                            startdate <= CAST(replace(date(NOW()), '-', '') AS UNSIGNED)
+                                and enddate > CAST(replace(date(NOW()), '-', '') AS UNSIGNED)
                             )
                             and {0}=1
                             and starttime={1}
