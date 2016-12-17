@@ -8,7 +8,6 @@ else:
         "You probably don't have a SQL connector enabled in the data/config.py file.")
     
 import RPi.GPIO as GPIO
-from helpers.SqlHelper import SqlHelper
 from datetime import datetime
 from time import sleep
 

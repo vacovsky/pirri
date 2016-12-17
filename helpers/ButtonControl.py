@@ -1,8 +1,12 @@
 import RPi.GPIO as GPIO
 import time
 from threading import Thread
-from helpers.SqlHelper import SqlHelper
-import data.config as CONFIG
+from data import config as CONFIG
+
+if CONFIG.USE_MYSQL:
+    from helpers.MySqlHelper import SqlHelper
+elif CONFIG.USE_MYSQL:
+    from helpers.SqlHelper import SqlHelper
 
 
 class ButtonControl:
