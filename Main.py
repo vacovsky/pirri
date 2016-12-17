@@ -2,7 +2,7 @@ import config
 
 if config.USE_NEWRELIC:
     import newrelic.agent
-    newrelic.agent.initialize('newrelic_main.ini')
+    newrelic.agent.initialize(config.NEWRELIC_INI_PATH + 'newrelic_main.ini')
 
 import setproctitle
 setproctitle.setproctitle("pirri")
@@ -36,7 +36,7 @@ if __name__ == '__main__':
             time.sleep(15)
             ScheduleControl().start_threaded(59)
 
-        # ButtonControl(relay_pins=main.relay_pins).init_button_listener()
+        ButtonControl(relay_pins=main.relay_pins).init_button_listener()
         main.start()
     except KeyboardInterrupt:
         GPIO.cleanup()
