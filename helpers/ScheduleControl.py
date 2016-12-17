@@ -11,7 +11,7 @@ else:
 
 import calendar
 from datetime import datetime
-from helpers.MySqlHelper import SqlHelper
+from helpers.MessageHelper import RMQ
 from threading import Thread
 import time
 import json
@@ -70,9 +70,12 @@ class ScheduleControl:
         sqlConn = SqlHelper()
         if str(self.today_cache['day']) + str(self.today_cache['time']) != self.last_datetime:
             sqlStr = """SELECT id, station, duration from schedule
-                            where (startdate < date('now') and enddate < date('now'))
-                                and {0}=1
-                                and starttime={1}
+                        WHERE (
+                            startdate <= CAST(replace(date(NOW()), '-', ''))
+                                and enddate > CAST(replace(date(NOW()), '-', ''))
+                            )
+                            and {0}=1
+                            and starttime={1}
         """.format(
                 self.today_cache['day'],
                 self.today_cache['time']

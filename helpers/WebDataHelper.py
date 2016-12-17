@@ -162,8 +162,8 @@ def get_schedule_cal():
         station_colors[i] = "#%06x" % random.randint(0, 0xFFFFFF)
     sqlStr = """
         SELECT * FROM schedule
-            WHERE (startdate <= replace(date(NOW()), '-', '')
-                AND enddate > replace(date(NOW()), '-', '')
+            WHERE (startdate <= CAST(replace(date(NOW()), '-', '') AS UNSIGNED)
+                AND enddate > CAST(replace(date(NOW()), '-', '') AS UNSIGNED)
 )        """.format()
 
     schedules = []
