@@ -1,12 +1,15 @@
-import sqlite3
+import pymysql
 from data import config as CONFIG
 
 
 class SqlHelper:
     conn = None
 
-    def __init__(self, dbpath=CONFIG.DBPATH):
-        self.conn = sqlite3.connect(dbpath)
+    def __init__(self):
+        self.conn = pymysql.connect(CONFIG.MYSQL_HOST,
+                                    CONFIG.MYSQL_USER,
+                                    CONFIG.MYSQL_PASS,
+                                    CONFIG.MYSQL_DB)
 
     def setup(self):
         pass
@@ -30,7 +33,7 @@ class SqlHelper:
 
 
 if __name__ == '__main__':
-    sqlConn = SqlHelper(dbpath='/home/joe/Projects/pirri/data/pirri.sql')
+    sqlConn = SqlHelper()
     sid = 1
     sqlStr = ''' SELECT * FROM stations '''
     data = sqlConn.read(sqlStr)

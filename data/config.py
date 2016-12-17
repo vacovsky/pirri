@@ -29,5 +29,8 @@ MYSQL_DB = 'pirri'
 MYSQL_USER = 'pirri'
 MYSQL_PASS = 'pirri'
 
+USE_SQLITE3 = False
+USE_MYSQL = True
+
 # GRANT ALL PRIVILEGES ON * TO 'joe'@'%' WITH GRANT OPTION;
 # GRANT ALL PRIVILEGES ON mydb.* TO 'myuser'@'%' WITH GRANT OPTION;
