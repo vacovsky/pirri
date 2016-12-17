@@ -15,6 +15,7 @@ class SqlHelper:
         pass
 
     def read(self, query):
+        print(query)
         results = []
         c = self.conn.cursor()
         c.execute(query)
@@ -23,6 +24,7 @@ class SqlHelper:
         return results
 
     def execute(self, query):
+        print(query)
         c = self.conn.cursor()
         c.execute(query)
         self.conn.commit()
