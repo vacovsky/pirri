@@ -1,7 +1,11 @@
 # import RPi.GPIO as GPIO
 from models.StationSchedule import StationSchedule
-from helpers.SqlHelper import SqlHelper
+from data import config as CONFIG
 
+if CONFIG.USE_MYSQL:
+    from helpers.MySqlHelper import SqlHelper
+elif CONFIG.USE_MYSQL:
+    from helpers.SqlHelper import SqlHelper
 
 class Station:
     sid = None
