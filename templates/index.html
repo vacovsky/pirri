@@ -50,9 +50,9 @@
                                 <span > - </span>
                                 <a href><span class="glyphicon glyphicon-tint" ng-click="currentPage = 'waterusage'; navTitle = 'Water Usage'; pc.getWaterUsageStats(); pc.calcMonthlyCost();"></span></a>
                                 <span > - </span>
-                                <a href><span class="glyphicon glyphicon-cloud" ng-click="currentPage = 'weather'; navTitle = 'Weather Adjustments'; pc.weatherAdjustments();"></span></a>
+                                <a href><span class="glyphicon glyphicon-cloud" ng-click="currentPage = 'weatherEdit'; navTitle = 'Weather Adjustments'; pc.loadWeather();"></span></a>
                                 <span> - </span>
-                                <a href><span class="glyphicon glyphicon-cog" ng-click="currentPage = 'settings'; navTitle = 'Settings'; pc.settings();"></span></a>
+                                <a href><span class="glyphicon glyphicon-cog" ng-click="currentPage = 'settings'; navTitle = 'Settings'; pc.loadSettings();"></span></a>
                                 <span id="navTitle"> - - - {[navTitle]}</span>
                             </div>
                         </div>
@@ -448,7 +448,12 @@
                     <!-- END WATER USAGE -->
                     <!-- START WEATHER ADJUST PAGE -->
                     <div id="navpane" ng-show="currentPage == 'weatherEdit'">
-                        
+                        <div id="currentWeather">
+                            <h4>Current Weather {[weatherData.current.weather[0].icon]}</h4>
+                            <img ng-src="http://openweathermap.org/img/w/{[weatherData.current.weather[0].icon]}.png" alt="">
+                        </div>
+                        <!-- li ng-repeat=" day in weatherData.forecast.list " ng-click="pc.setGPIO(gpio.gpio)"
+                        <img src="http://openweathermap.org/img/w/02d.png" alt="" -->
                     </div>
                     <!-- END WEATHER ADJUST PAGE -->
                 </section>

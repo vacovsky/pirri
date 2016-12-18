@@ -36,6 +36,8 @@
                 //loadCalendar();
         };
 
+        $scope.weatherData = {};
+        $scope.settingsData = {};
         $scope.currentPage = 'home'; // history / home / settings / add
         $scope.stations = undefined;
         $scope.navTitle = "All Stations";
@@ -357,6 +359,8 @@
             this.loadGPIO();
             this.loadStatsData();
             this.getWaterUsageStats();
+            this.loadSettings();
+            this.loadWeather();
         };
         this.loadStations = function() {
             $http.get('/station/list')
@@ -370,11 +374,19 @@
         };
 
         this.loadSettings = function() {
-            
+            $http.get('/settings/load')
+                .success(function(data, status, headers, config) {
+                    $scope.settingsData = data;
+                })
+                .error(function(data, status, headers, config) {})
         };
 
-        this.loadWeatherStuff = function() {
-            
+        this.loadWeather = function() {
+            $http.get('/weather')
+                .success(function(data, status, headers, config) {
+                    $scope.weatherData = data;
+                })
+                .error(function(data, status, headers, config) {})
         };
 
         this.loadGPIO = function() {
@@ -504,6 +516,8 @@
             this.loadStatsData();
             this.loadHistory();
             this.calcMonthlyCost();
+            this.loadSettings();
+            this.loadWeather();
         };
         $scope.loader = this.autoLoader;
         $scope.currentPage = 'home';
