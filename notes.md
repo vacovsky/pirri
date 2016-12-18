@@ -29,18 +29,18 @@ insert into schedule (startdate, enddate, sunday, monday, tuesday, wednesday, th
 20160928, 20170923, 1, 1, 1, 1, 1, 1, 1, 1, 1,1)
 
 CREATE TABLE schedule (
-    "id" PK AUTOINCREMENT NOT NULL,
-    "startdate" INTEGER NOT NULL DEFAULT (18990101),
-    "enddate" INTEGER,
-    "sunday" INTEGER NOT NULL DEFAULT (0),
-    "monday" INTEGER NOT NULL DEFAULT (0),
-    "tuesday" INTEGER NOT NULL DEFAULT (0),
-    "wednesday" INTEGER NOT NULL DEFAULT (0),
-    "thursday" INTEGER NOT NULL DEFAULT (0),
-    "friday" INTEGER NOT NULL DEFAULT (0),
-    "saturday" INTEGER NOT NULL DEFAULT (0),
-    "station" INTEGER NOT NULL DEFAULT (0),
-    "starttime" INTEGER NOT NULL DEFAULT (0),
-    "duration" INTEGER NOT NULL DEFAULT (0),
-    "repeat" INTEGER NOT NULL DEFAULT (0)
+	"id" PK AUTOINCREMENT NOT NULL,
+	"startdate" INTEGER NOT NULL DEFAULT (18990101),
+	"enddate" INTEGER,
+	"sunday" INTEGER NOT NULL DEFAULT (0),
+	"monday" INTEGER NOT NULL DEFAULT (0),
+	"tuesday" INTEGER NOT NULL DEFAULT (0),
+	"wednesday" INTEGER NOT NULL DEFAULT (0),
+	"thursday" INTEGER NOT NULL DEFAULT (0),
+	"friday" INTEGER NOT NULL DEFAULT (0),
+	"saturday" INTEGER NOT NULL DEFAULT (0),
+	"station" INTEGER NOT NULL DEFAULT (0),
+	"starttime" INTEGER NOT NULL DEFAULT (0),
+	"duration" INTEGER NOT NULL DEFAULT (0),
+	"repeat" INTEGER NOT NULL DEFAULT (0)
 );

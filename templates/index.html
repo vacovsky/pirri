@@ -38,18 +38,21 @@
                             <div>
                                 <a href><span class="glyphicon glyphicon-refresh" ng-click="pc.refresh()"></span></a>
                                 <span> - - - </span>
-                                <a href><span class="glyphicon glyphicon-home" ng-click="currentPage = 'home'; navTitle = 'Stations'; pc.refresh()"></span></a>
+                                <a href><span class="glyphicon glyphicon-home" ng-click="currentPage = 'home'; navTitle = 'Stations'; pc.refresh();"></span></a>
                                 <span > - </span>
                                 <a href><span class="glyphicon glyphicon-calendar" ng-click="currentPage = 'mycal'; navTitle = 'Calendar'; pc.getCalEvents();"></span></a>
                                 <span > - </span>
-                                <a href><span class="glyphicon glyphicon-list" ng-click="currentPage = 'calendar'; navTitle = 'Schedule'; pc.getSchedule()"></span></a>
+                                <a href><span class="glyphicon glyphicon-list" ng-click="currentPage = 'calendar'; navTitle = 'Schedule'; pc.getSchedule();"></span></a>
                                 <span > - </span>
-                                <a href><span class="glyphicon glyphicon-time" ng-click="currentPage = 'history'; navTitle = 'History'; pc.loadHistory()"></span></a>
+                                <a href><span class="glyphicon glyphicon-time" ng-click="currentPage = 'history'; navTitle = 'History'; pc.loadHistory();"></span></a>
                                 <span > - </span>
-                                <a href><span class="glyphicon glyphicon-stats" ng-click="currentPage = 'stats'; navTitle = 'Run Statistics'; pc.loadStatsData()"></span></a>
+                                <a href><span class="glyphicon glyphicon-stats" ng-click="currentPage = 'stats'; navTitle = 'Run Statistics'; pc.loadStatsData();"></span></a>
                                 <span > - </span>
                                 <a href><span class="glyphicon glyphicon-tint" ng-click="currentPage = 'waterusage'; navTitle = 'Water Usage'; pc.getWaterUsageStats(); pc.calcMonthlyCost();"></span></a>
-                                <span> - - - </span>
+                                <span > - </span>
+                                <a href><span class="glyphicon glyphicon-cloud" ng-click="currentPage = 'weather'; navTitle = 'Weather Adjustments'; pc.weatherAdjustments();"></span></a>
+                                <span> - </span>
+                                <a href><span class="glyphicon glyphicon-cog" ng-click="currentPage = 'settings'; navTitle = 'Settings'; pc.settings();"></span></a>
                                 <span id="navTitle"> - - - {[navTitle]}</span>
                             </div>
                         </div>
@@ -443,6 +446,11 @@
                         </div>
                     </div>
                     <!-- END WATER USAGE -->
+                    <!-- START WEATHER ADJUST PAGE -->
+                    <div id="navpane" ng-show="currentPage == 'weatherEdit'">
+                        
+                    </div>
+                    <!-- END WEATHER ADJUST PAGE -->
                 </section>
             </section>
             <div class="made-with-love">

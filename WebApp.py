@@ -29,11 +29,11 @@ def main():
         #     cal_dict = None
         #     caldata = None
         #     calminmax = None
-        return render_template("index.html", 
-            caldata=caldata, 
-            mincaltime=calminmax['min'], 
-            maxcaltime=calminmax['max'],
-            version=config.VERSION)
+        return render_template("index.html",
+                               caldata=caldata,
+                               mincaltime=calminmax['min'],
+                               maxcaltime=calminmax['max'],
+                               version=config.VERSION)
 
 
 @app.route('/gpio/list', methods=["GET"])
@@ -43,6 +43,13 @@ def gpio_list():
         "gpio_pins": WebDataHelper.list_gpio()
     }
     return jsonify(response)
+
+
+@app.route('/weather', methods=["GET"])
+@requires_auth
+def get_weather_data():
+    response = WebDataHelper.get_weather_data()
+    return jsonify(response) #json.dumps(response)
 
 
 @app.route('/dripnodes/edit', methods=["POST"])

@@ -369,6 +369,14 @@
                 .error(function(data, status, headers, config) {})
         };
 
+        this.loadSettings = function() {
+            
+        };
+
+        this.loadWeatherStuff = function() {
+            
+        };
+
         this.loadGPIO = function() {
             $http.get('/gpio/list')
                 .success(function(data, status, headers, config) {
