@@ -449,8 +449,26 @@
                     <!-- START WEATHER ADJUST PAGE -->
                     <div id="navpane" ng-show="currentPage == 'weatherEdit'">
                         <div id="currentWeather">
-                            <h4>Current Weather {[weatherData.current.weather[0].icon]}</h4>
-                            <img ng-src="http://openweathermap.org/img/w/{[weatherData.current.weather[0].icon]}.png" alt="">
+                            <h3>Current Weather in {[weatherData.current.name]}:</h3>
+                            <h3><img ng-src="http://openweathermap.org/img/w/{[weatherData.current.weather[0].icon]}.png" alt=""> {[weatherData.current.weather[0].description]}</h3>
+                            <div>
+                                <h4>Wind blowing {[weatherData.current.wind.speed]} knots from the {[weatherData.current.wind.compass_direction]}.</h4>
+                                <h4>Temperature</h4>
+                                <h5>- Now: {[weatherData.current.main.temp]}</h5>
+                                <h5>- min: {[weatherData.current.main.temp_max]}</h5>
+                                <h5>- max: {[weatherData.current.main.temp_min]}</h5>
+                            </div>
+                            <div>
+                                <h4>Precipitation</h4>
+                                <h5>- pressure: {[weatherData.current.main.pressure]}</h5>
+                                <h5>- humidity: {[weatherData.current.main.humidity]}</h5>
+                            </div>
+                            <div>
+                                <h4>Solar</h4>
+                                <h5>- sunrise: </h5>
+                                <h5>- sunset: </h5>
+                                <h5></h5>
+                            </div>
                         </div>
                         <!-- li ng-repeat=" day in weatherData.forecast.list " ng-click="pc.setGPIO(gpio.gpio)"
                         <img src="http://openweathermap.org/img/w/02d.png" alt="" -->

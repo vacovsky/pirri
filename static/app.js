@@ -28,11 +28,11 @@
         this.getCalEvents = function() {
             $http.get('/schedule/cal')
                 .success(function(data, status, headers, config) {
-                   $scope.calEvents = data.schedule;
-                   //$scope.$apply();
+                    $scope.calEvents = data.schedule;
+                    //$scope.$apply();
                 })
                 .error(function(data, status, headers, config) {})
-                console.log($scope.calEvents)
+            console.log($scope.calEvents)
                 //loadCalendar();
         };
 
@@ -92,7 +92,6 @@
 
         this.setEditingStationInfo = function(station) {
             $scope.stationModel = station;
-            // console.log($scope.stationModel);
         };
 
 
@@ -154,7 +153,6 @@
                     $scope.chartData2.data = data.chartData.data;
                 })
                 .error(function(data, status, headers, config) {})
-                // console.log($scope.chartData2);
             $scope.chartData2.options = {
                 scaleStartValue: 0,
                 title: {
@@ -164,9 +162,7 @@
                 scaleStartValue: 0,
                 legend: {
                     display: true,
-                    labels: {
-                        //fontColor: 'rgb(255, 99, 132)'
-                    }
+                    labels: {}
                 },
             };
         };
@@ -182,11 +178,8 @@
         $scope.stationModel = {}
         this.submitEditStation = function() {
             $http.post('/station/edit', $scope.stationModel)
-                .success(function(data, status, headers, config) {
-                    // console.log($scope.singleRunModel, data)
-                })
+                .success(function(data, status, headers, config) {})
                 .error(function(data, status, headers, config) {})
-                // cleanup
             $scope.stationModel = {};
             $scope.stationModel = undefined;
         };
@@ -214,7 +207,6 @@
                 duration: 0,
                 new: true
             };
-            // console.log($scope.scheduleModel)
             $scope.schedule.unshift($scope.scheduleModel)
         };
 
@@ -239,7 +231,6 @@
             };
             $scope.currentPage = 'calendar';
 
-            // console.log($scope.scheduleModel)
             $scope.schedule.unshift($scope.scheduleModel)
         };
 
@@ -288,11 +279,8 @@
         this.submitEditSchedule = function() {
             this.convertScheduleBoolToInt();
             $http.post('/schedule/edit', $scope.scheduleModel)
-                .success(function(data, status, headers, config) {
-                    // console.log($scope.scheduleModel, data)
-                })
+                .success(function(data, status, headers, config) {})
                 .error(function(data, status, headers, config) {})
-                // cleanup
             $scope.scheduleModel = {};
             $scope.scheduleModel = undefined;
             this.refresh();
@@ -301,9 +289,7 @@
         this.submitAddSchedule = function() {
             this.convertScheduleBoolToInt();
             $http.post('/schedule/add', $scope.scheduleModel)
-                .success(function(data, status, headers, config) {
-                    // console.log($scope.scheduleModel, data)
-                })
+                .success(function(data, status, headers, config) {})
                 .error(function(data, status, headers, config) {})
                 // cleanup
             $scope.scheduleModel = {};
@@ -313,26 +299,23 @@
 
         this.mapModelForSchedEdit = function(currentModel) {
             $scope.scheduleModel = currentModel;
-            // console.log($scope.scheduleModel)
         };
 
         this.mapModelForSchedEditFromCalClick = function(id) {
             $scope.currentPage = 'calendar';
             console.log($scope.currentPage);
-            var sch = $filter('filter')($scope.schedule, {id: id })[0];
+            var sch = $filter('filter')($scope.schedule, {
+                id: id
+            })[0];
             $scope.scheduleModel = sch;
-            // console.log($scope.scheduleModel)
         };
 
         this.submitDeleteSchedule = function(schedule_id) {
             $http.post('/schedule/delete', {
                     schedule_id: schedule_id
                 })
-                .success(function(data, status, headers, config) {
-                    // console.log('deleted schedule id: ', schedule_id)
-                })
+                .success(function(data, status, headers, config) {})
                 .error(function(data, status, headers, config) {})
-                // cleanup
             $scope.scheduleModel = {};
             $scope.scheduleModel = undefined;
             this.refresh();
@@ -342,11 +325,8 @@
         this.submitSingleRun = function() {
             //stuff
             $http.post('/station/run', $scope.singleRunModel)
-                .success(function(data, status, headers, config) {
-                    // console.log($scope.singleRunModel, data)
-                })
+                .success(function(data, status, headers, config) {})
                 .error(function(data, status, headers, config) {})
-                // cleanup
             $scope.singleRunModel = {};
             $scope.singleRunMinField = undefined;
         };

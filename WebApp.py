@@ -1,8 +1,13 @@
 import config
 
 if config.USE_NEWRELIC:
-    import newrelic.agent
-    newrelic.agent.initialize(config.NEWRELIC_INI_PATH + 'newrelic_web.ini')
+    try:
+        import newrelic.agent
+        newrelic.agent.initialize(
+            config.NEWRELIC_INI_PATH + 'newrelic_web.ini')
+    except:
+        print(
+            'unable to load new relic.  is it installed, and do you have a config file for it?')
 
 from flask import Flask, render_template, request, jsonify
 import setproctitle
@@ -49,7 +54,7 @@ def gpio_list():
 @requires_auth
 def get_weather_data():
     response = WebDataHelper.get_weather_data()
-    return jsonify(response) #json.dumps(response)
+    return jsonify(response)  # json.dumps(response)
 
 
 @app.route('/dripnodes/edit', methods=["POST"])

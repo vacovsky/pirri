@@ -1,4 +1,5 @@
 from requests import get
+import json
 
 try:
     from data.helpers import CONFIG
@@ -27,10 +28,19 @@ class WeatherHelper:
         self.appid = appid
 
     def get_current_weather(self):
-        return get(self.wh_uris['current'].format(self.zip, self.units, self.appid))
+        data = json.loads(get(self.wh_uris['current'].format(self.zip, self.units, self.appid)).text)
+        data['wind']['compass_direction'] = self.deg_to_compass(data['wind']['deg'])
+        return data
 
     def get_forecast_weather(self):
-        return get(self.wh_uris['forecast'].format(self.zip, self.units, self.appid))
+        data = json.loads(get(self.wh_uris['forecast'].format(self.zip, self.units, self.appid)).text)
+        return data
+
+    def deg_to_compass(self, num):
+        val = int((num / 22.5) + .5)
+        arr = ["North", "North-Northeast", "Northeast", "East-Northeast", "East", "East-Southeast", "Southeast", "South-Southeast",
+               "South", "South-Southwest", "Southwest", "West-Southwest", "West", "West-Northwest", "Northwest", "North-Northwest"]
+        return arr[(val % 16)]
 
 
 if __name__ == '__main__':

@@ -21,8 +21,8 @@ import json
 def get_weather_data():
     wh = WeatherHelper()
     results = {
-        "current": json.loads(wh.get_current_weather().text),
-        "forecast": json.loads(wh.get_forecast_weather().text)
+        "current": wh.get_current_weather(),
+        "forecast": wh.get_forecast_weather()
     }
     return results
 
