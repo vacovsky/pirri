@@ -29,7 +29,11 @@ def main():
         #     cal_dict = None
         #     caldata = None
         #     calminmax = None
-        return render_template("index.html", caldata=caldata, mincaltime=calminmax['min'], maxcaltime=calminmax['max'])
+        return render_template("index.html", 
+            caldata=caldata, 
+            mincaltime=calminmax['min'], 
+            maxcaltime=calminmax['max'],
+            version=config.VERSION)
 
 
 @app.route('/gpio/list', methods=["GET"])
