@@ -58,7 +58,7 @@ def schedule_edit(schedule, new=False):
         saturday={8},
         starttime={9},
         duration={10},
-        repeat={11},
+        repeating={11},
         station={12}
     WHERE id={13}""".format(
         schedule['startdate'],
@@ -429,11 +429,11 @@ def water_usage_stats():
     for d in sqlConn.read(sqlStr):
         results['water_usage'].append(
             {
-                'sid': d[0],
-                'notes': d[3],
-                'run_mins': d[1],
-                'total_gph': d[2],
-                'usage_last_30': (d[1] / 60) * d[2]
+                'sid': int(d[0]),
+                'notes': str(d[3]),
+                'run_mins': int(d[1]),
+                'total_gph': float(d[2]),
+                'usage_last_30': float((d[1] / 60) * d[2])
             }
         )
     return results
