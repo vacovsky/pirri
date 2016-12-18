@@ -13,16 +13,13 @@ COMMON_WIRE_GPIO = 21
 GPIO_RELAY_OFFSTATE = 1
 GPIO_RELAY_ONSTATE = 0
 
-#for web app
+#for web app - put this in a database
 LOGINUSER = 'joe'
-
 LOGINPASS = 'vacovsky'
 
-
-OPEN_WEATHER_APP_ID = "0d9330204965c8852145c4a52b56fd1a"
-#  http://api.openweathermap.org/data/2.5/weather?zip=93422,us&units=imperial&appid=0d9330204965c8852145c4a52b56fd1a
-
-#  http://api.openweathermap.org/data/2.5/forecast/daily?lang=english&zip=93422,us&units=imperial&appid=0d9330204965c8852145c4a52b56fd1a
+OPENWEATHER_ZIP = 93422
+OPENWEATHER_UNITS = "imperial"
+OPENWEATHER_APPID = "0d9330204965c8852145c4a52b56fd1a"
 
 MYSQL_HOST = '192.168.111.50'
 MYSQL_DB = 'pirri'

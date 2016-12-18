@@ -1,8 +1,13 @@
 import config
 
 if config.USE_NEWRELIC:
-    import newrelic.agent
-    newrelic.agent.initialize(config.NEWRELIC_INI_PATH + 'newrelic_web.ini')
+    try:
+        import newrelic.agent
+        newrelic.agent.initialize(
+            config.NEWRELIC_INI_PATH + 'newrelic_web.ini')
+    except:
+        print(
+            'unable to load new relic.  is it installed, and do you have a config file for it?')
 
 from flask import Flask, render_template, request, jsonify
 import setproctitle
@@ -29,11 +34,11 @@ def main():
         #     cal_dict = None
         #     caldata = None
         #     calminmax = None
-        return render_template("index.html", 
-            caldata=caldata, 
-            mincaltime=calminmax['min'], 
-            maxcaltime=calminmax['max'],
-            version=config.VERSION)
+        return render_template("index.html",
+                               caldata=caldata,
+                               mincaltime=calminmax['min'],
+                               maxcaltime=calminmax['max'],
+                               version=config.VERSION)
 
 
 @app.route('/gpio/list', methods=["GET"])
@@ -43,6 +48,13 @@ def gpio_list():
         "gpio_pins": WebDataHelper.list_gpio()
     }
     return jsonify(response)
+
+
+@app.route('/weather', methods=["GET"])
+@requires_auth
+def get_weather_data():
+    response = WebDataHelper.get_weather_data()
+    return jsonify(response)  # json.dumps(response)
 
 
 @app.route('/dripnodes/edit', methods=["POST"])

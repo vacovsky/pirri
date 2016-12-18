@@ -2,8 +2,11 @@ import config
 import setproctitle
 setproctitle.setproctitle("pirri")
 if config.USE_NEWRELIC:
-    import newrelic.agent
-    newrelic.agent.initialize(config.NEWRELIC_INI_PATH + 'newrelic_main.ini')
+    try:
+        import newrelic.agent
+        newrelic.agent.initialize(config.NEWRELIC_INI_PATH + 'newrelic_main.ini')
+    except:
+        print('unable to load new relic.  is it installed, and do you have a config file for it?')
 
 
 

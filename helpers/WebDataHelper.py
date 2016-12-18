@@ -14,6 +14,17 @@ from datetime import datetime, timedelta
 import operator
 from pytz import timezone, UTC
 import random
+from helpers.WeatherHelper import WeatherHelper
+import json
+
+
+def get_weather_data():
+    wh = WeatherHelper()
+    results = {
+        "current": wh.get_current_weather(),
+        "forecast": wh.get_forecast_weather()
+    }
+    return results
 
 
 def list_gpio():
@@ -129,7 +140,7 @@ def schedule_add(schedule):
     sqlConn.execute(sqlStr)
 
 
-def schedule_delete(schedule_id):   
+def schedule_delete(schedule_id):
     sqlConn = SqlHelper()
     sqlStr = """DELETE FROM schedule WHERE id={0}""".format(schedule_id)
     sqlConn.execute(sqlStr)
@@ -479,7 +490,7 @@ def chart_stats_chrono(days=7):
         else:
             return val
 
-    if sql_data is not None and len(sql_data) > 0: 
+    if sql_data is not None and len(sql_data) > 0:
         for d in sql_data:
             results['data'][0][int(sunday_fix(d[0]))] = int(d[1])
     if sql_data2 is not None and len(sql_data2) > 0:
