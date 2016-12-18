@@ -10,7 +10,7 @@ a {
 }
 
 .text-shadow {
-  text-shadow: 2px 2px rgba(0,0,0,0.25);
+  text-shadow: 2px 2px rgba(0,0,0,0.90);
 }
 
 #costinputfield {
@@ -123,8 +123,8 @@ td{
 
 @import url(http://fonts.googleapis.com/css?family=Roboto:400,500,300,700);
 body{
-  background: -webkit-linear-gradient(left, #25c481, #25b7c4);
-  background: linear-gradient(to right, #25c481, #25b7c4);
+  background: -webkit-linear-gradient(left, #273956, #203a63);
+  background: linear-gradient(to right, #1a283f, #203a63);
   font-family: 'Roboto', sans-serif;
 }
 section{
@@ -179,8 +179,8 @@ section{
 }
 */
 body{
-  background: -webkit-linear-gradient(left, #0073e6, #59b300);
-  background: linear-gradient(to right, #0073e6, #59b300);
+  background: -webkit-linear-gradient(left, #273956, #203a63);
+  background: linear-gradient(to right, #273956, #203a63);
   font-family: 'Roboto', sans-serif;
 }
 section{
