@@ -365,6 +365,9 @@
             $http.get('/weather')
                 .success(function(data, status, headers, config) {
                     $scope.weatherData = data;
+                    $scope.weatherData.current.sys.sunrise_t = moment(data.current.sys.sunrise * 1000).fromNow();
+                    $scope.weatherData.current.sys.sunset_t = moment(data.current.sys.sunset * 1000).fromNow();
+
                 })
                 .error(function(data, status, headers, config) {})
         };
@@ -496,8 +499,8 @@
             this.loadStatsData();
             this.loadHistory();
             this.calcMonthlyCost();
-            this.loadSettings();
-            this.loadWeather();
+            //this.loadSettings();
+            //this.loadWeather();
         };
         $scope.loader = this.autoLoader;
         $scope.currentPage = 'home';
