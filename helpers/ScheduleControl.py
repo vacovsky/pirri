@@ -15,6 +15,7 @@ from helpers.MessageHelper import RMQ
 from threading import Thread
 import time
 import json
+import newrelic.agent
 
 
 class ScheduleControl:
@@ -23,6 +24,7 @@ class ScheduleControl:
     last_datetime = ''
     today_cache = None
 
+    @newrelic.agent.background_task()
     def __init__(self):
         self.post_runlist = []
         self.rmq = RMQ()
@@ -33,6 +35,7 @@ class ScheduleControl:
             self.queue_schedule_items()
             time.sleep(59)
 
+    @newrelic.agent.background_task()
     def queue_schedule_items(self):
         tasks = self.get_current_tasks()
         self.last_datetime = str(
@@ -55,17 +58,20 @@ class ScheduleControl:
     def start_threaded(self, check_interval):
         Thread(target=self.start, args=(check_interval,)).start()
 
+    @newrelic.agent.background_task()
     def find_curr_time(self):
         dtnow = str(datetime.now()).split(' ')[1]
         dtnow_miltime = dtnow.split(':')[0] + dtnow.split(':')[1]
         return int(dtnow_miltime)
 
+    @newrelic.agent.background_task()
     def find_now_info(self):
         self.today_cache = {
             'day': calendar.day_name[datetime.today().weekday()].lower(),
             'time': self.find_curr_time()
         }
 
+    @newrelic.agent.background_task()
     def get_current_tasks(self):
         sqlConn = SqlHelper()
         if str(self.today_cache['day']) + str(self.today_cache['time']) != self.last_datetime:
@@ -84,5 +90,6 @@ class ScheduleControl:
         else:
             pass
 
+    @newrelic.agent.background_task()
     def exec_schedule_item(self, task):
         RMQ().publish_message(task)

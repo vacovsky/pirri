@@ -1,5 +1,6 @@
 import pymysql
 from data import config as CONFIG
+import newrelic.agent
 
 
 class SqlHelper:
@@ -14,6 +15,7 @@ class SqlHelper:
     def setup(self):
         pass
 
+    @newrelic.agent.background_task()
     def read(self, query):
         print(query)
         results = []
@@ -23,6 +25,7 @@ class SqlHelper:
             results.append(row)
         return results
 
+    @newrelic.agent.background_task()
     def execute(self, query):
         print(query)
         c = self.conn.cursor()
@@ -30,6 +33,7 @@ class SqlHelper:
         self.conn.commit()
         return True
 
+    @newrelic.agent.background_task()
     def close(self):
         self.conn.close()
 

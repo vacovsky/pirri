@@ -2,6 +2,7 @@ import pika
 from data import config as CONFIG
 import json
 from psutil import Process
+import newrelic.agent
 
 print(Process().name())
 if Process().name() == 'pirri':
@@ -17,9 +18,11 @@ class RMQ:
     def __init__(self):
         pass
 
+    @newrelic.agent.background_task()
     def publish_message(self, message, queue=CONFIG.QUEUE):
         self.publish_messages([message], queue)
 
+    @newrelic.agent.background_task()
     def publish_messages(self, messages=[], queue=CONFIG.QUEUE):
         self.open_connection()
         for message in messages:
@@ -30,6 +33,7 @@ class RMQ:
             print(" [x] Sent %s" % message)
         self.close_connection()
 
+    @newrelic.agent.background_task()
     def open_connection(self):
         self.CONNECTION = pika.BlockingConnection(pika.ConnectionParameters(
             heartbeat_interval=0,
@@ -46,9 +50,11 @@ class RMQ:
     #             CONFIG.RMQ_PASS),))
     #     self.CHANNEL = self.CONNECTION.channel()
 
+    @newrelic.agent.background_task()
     def close_connection(self):
         self.CONNECTION.close()
 
+    @newrelic.agent.background_task()
     def callback(self, ch, method, properties, body):
         try:
             jobdata = body.decode("utf-8")
@@ -66,9 +72,10 @@ class RMQ:
 
         except Exception as e:
             print(e)
-        #finally:
+        # finally:
         #    self.ack_job(ch, method)
 
+    @newrelic.agent.background_task()
     def ack_job(self, ch, method):
         ch.basic_ack(delivery_tag=method.delivery_tag)
 
