@@ -454,20 +454,20 @@
                             <div>
                                 <h4>Wind blowing {[weatherData.current.wind.speed]} knots from the {[weatherData.current.wind.compass_direction]}.</h4>
                                 <h4>Temperature</h4>
-                                <h5>- Now: {[weatherData.current.main.temp]}</h5>
-                                <h5>- min: {[weatherData.current.main.temp_max]}</h5>
-                                <h5>- max: {[weatherData.current.main.temp_min]}</h5>
+                                <h5> - Now: {[weatherData.current.main.temp]}</h5>
+                                <h5> - min: {[weatherData.current.main.temp_max]}</h5>
+                                <h5> - max: {[weatherData.current.main.temp_min]}</h5>
                             </div>
                             <div>
                                 <h4>Precipitation</h4>
-                                <h5>- pressure: {[weatherData.current.main.pressure]}</h5>
-                                <h5>- humidity: {[weatherData.current.main.humidity]}</h5>
+                                <h5> - pressure: {[weatherData.current.main.pressure]}</h5>
+                                <h5> - humidity: {[weatherData.current.main.humidity]}%</h5>
                             </div>
                             <div>
                                 <h4>Solar</h4>
-                                <h5>- sunrise: </h5>
-                                <h5>- sunset: </h5>
-                                <h5></h5>
+                                <h5> - sunrise: {[ weatherData.current.sys.sunrise_t ]}
+                                </h5>
+                                <h5> - sunset: {[ weatherData.current.sys.sunset_t ]}</h5>
                             </div>
                         </div>
                         <!-- li ng-repeat=" day in weatherData.forecast.list " ng-click="pc.setGPIO(gpio.gpio)"

@@ -57,6 +57,13 @@ def get_weather_data():
     return jsonify(response)  # json.dumps(response)
 
 
+@app.route('/settings/load', methods=["GET"])
+@requires_auth
+def get_settings():
+    response = {}
+    return jsonify(response)
+
+
 @app.route('/dripnodes/edit', methods=["POST"])
 @requires_auth
 def dripnodes_edit():
