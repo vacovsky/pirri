@@ -158,7 +158,8 @@ def cal_minmax_times(calvals):
         result['max'] = format(max(int(str(cv["end"].split(' ')[1].split(':')[
                                0])) for cv in calvals), '02d') + ':59:59'
     except:
-        print("Could not find time boundaries for calendar.  Using defaults of 00:00:00 and 23:59:59")
+        print(
+            "Could not find time boundaries for calendar.  Using defaults of 00:00:00 and 23:59:59")
     return result
 
 
@@ -404,6 +405,13 @@ def get_next_station_run():
     return results
 
 
+def sunday_fix(val):
+    if val == 7:
+        return 0
+    else:
+        return val
+
+
 def dripnodes_edit(nodes_data, new=False, delete=False):
     sqlConn = SqlHelper()
     sqlStr = ""
@@ -454,19 +462,19 @@ def chart_stats_chrono(days=7):
     sqlConn = SqlHelper()
     sqlStr = """SELECT DISTINCT DAYOFWEEK(starttime) as day, SUM(duration / 60) as mins
             FROM history
-            WHERE starttime >= (CURRENT_DATE - INTERVAL 7 DAY)
+            WHERE starttime >= (CURRENT_DATE - INTERVAL {0} DAY)
             GROUP BY day
             ORDER BY day ASC""".format(
         days)
     sqlStr2 = """SELECT DISTINCT DAYOFWEEK(starttime) as day, SUM(duration / 60) as mins
             FROM history
-            WHERE starttime >= (CURRENT_DATE - INTERVAL 7 DAY) AND schedule_id>0
+            WHERE starttime >= (CURRENT_DATE - INTERVAL {0} DAY) AND schedule_id>0
             GROUP BY day
             ORDER BY day ASC""".format(
         days)
     sqlStr3 = """SELECT DISTINCT DAYOFWEEK(starttime) as day, SUM(duration / 60) as mins
             FROM history
-            WHERE starttime >= (CURRENT_DATE - INTERVAL 7 DAY) AND schedule_id=0
+            WHERE starttime >= (CURRENT_DATE - INTERVAL {0} DAY) AND schedule_id=0
             GROUP BY day
             ORDER BY day ASC""".format(
         days)
@@ -484,12 +492,6 @@ def chart_stats_chrono(days=7):
     sql_data2 = sqlConn.read(sqlStr2)
     sql_data3 = sqlConn.read(sqlStr3)
 
-    def sunday_fix(val):
-        if val == 7:
-            return 0
-        else:
-            return val
-
     if sql_data is not None and len(sql_data) > 0:
         for d in sql_data:
             results['data'][0][int(sunday_fix(d[0]))] = int(d[1])
@@ -503,27 +505,47 @@ def chart_stats_chrono(days=7):
     return results
 
 
-def chart_stats_chrono_old(days=7):
-    sqlStr = "SELECT sid, starttime, duration FROM history WHERE starttime >= (CURRENT_DATE - INTERVAL {0} DAY)".format(
-        days)
+def chart_minutes_by_station_per_dow(days=30):
     sqlConn = SqlHelper()
-    stationsSql = "SELECT id FROM stations WHERE common=0 ORDER BY id ASC"
-    stations = [i[0] for i in sqlConn.read(stationsSql)]
-    print(stations)
     results = {
-        "labels": [],  # labels = hours?
-        "series": [],  # series = station ids
-        "data": [[]],  # durations (starttime + sec(duration)), per series
+        "labels": ['Sunday', 'Monday', 'Tuesday', 'Wednesday', 'Thursday', 'Friday', 'Saturday'],
+        "series": [],
+        "data": []
     }
-    data = sqlConn.read(sqlStr)
-    for day in range(days):
-        results['labels'].insert(0, (datetime.now() - timedelta(days=day)))
 
-    for d in data:
-        results['data'][0].append(d[2] / 60)
-    results['series'] = stations
+    def fill_series():
+        stationsSql = "SELECT id FROM stations WHERE common=0 ORDER BY id ASC"
+        return [i[0] for i in sqlConn.read(stationsSql)]
+    results['series'] = fill_series()
+
+    def populate_data(sid):
+        dataSql = """SELECT
+                    sid,
+                    DAYOFWEEK(starttime) as day,
+                    SUM(duration / 60) as mins
+                FROM history
+                WHERE starttime >= (CURRENT_DATE - INTERVAL {0} DAY) AND sid = {1}
+                GROUP BY day
+                ORDER BY day ASC""".format(days, sid)
+        return [i for i in sqlConn.read(dataSql)]
+
+    def parse_day_data(table):
+        result = {
+            0: 0,
+            1: 0,
+            2: 0,
+            3: 0,
+            4: 0,
+            5: 0,
+            6: 0
+        }
+        for i in table:
+            ind = sunday_fix(i[1])
+            result[ind] = int(i[2])
+        return result.values()
+    for sid in results['series']:
+        results['data'].append(list(parse_day_data(populate_data(sid))))
     return results
-    print(results)
 
 
 def station_history(sid=None, days=7):
