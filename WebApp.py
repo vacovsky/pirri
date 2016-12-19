@@ -26,14 +26,9 @@ app = Flask(__name__)
 @requires_auth
 def main():
     if request.method == "GET":
-        # try:
         cal_dict = WebDataHelper.get_schedule_cal()
         caldata = json.dumps(cal_dict)
         calminmax = WebDataHelper.cal_minmax_times(cal_dict)
-        # except:
-        #     cal_dict = None
-        #     caldata = None
-        #     calminmax = None
         return render_template("index.html",
                                caldata=caldata,
                                mincaltime=calminmax['min'],
@@ -68,7 +63,6 @@ def get_settings():
 @requires_auth
 def dripnodes_edit():
     data = json.loads(request.data.decode('utf8'))
-    print(data)
     if 'new' in data and data['new']:
         WebDataHelper.dripnodes_edit(data, True)
     else:
@@ -133,7 +127,6 @@ def schedule_cal():
 @requires_auth
 def schedule_edit():
     data = json.loads(request.data.decode('utf8'))
-    print(data)
     if 'new' in data and data['new']:
         WebDataHelper.schedule_edit(data, True)
     else:
@@ -206,12 +199,14 @@ def station_add():
 @requires_auth
 def stats():
     response = {}
-    print(request.args.get('id'))
     if int(request.args.get('id')) == 1:
-        response['chartData'] = WebDataHelper.get_chart_stats(
-            int(request.args.get('id')))
+        response['chartData'] = WebDataHelper.get_chart_stats(int(request.args.get('id')))
     elif int(request.args.get('id')) == 2:
         response['chartData'] = WebDataHelper.chart_stats_chrono()
+    elif int(request.args.get('id')) == 3:
+        response['chartData'] = WebDataHelper.chart_minutes_by_station_per_dow()
+    elif int(request.args.get('id')) == 4:
+        response['chartData'] = WebDataHelper.station_activity_timechart()
     return jsonify(response)
 
 

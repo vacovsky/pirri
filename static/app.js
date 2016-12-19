@@ -11,9 +11,9 @@
     app.controller('PirriControl', function($rootScope, $scope, $http, $timeout, $filter) {
         $rootScope.updateInterval = 6000;
         $scope.chartData1 = {};
-        $scope.chartData2 = {
-            options: {}
-        };
+        $scope.chartData2 = {}; 
+        $scope.chartData3 = {};
+        $scope.chartData4 = {};
 
         $scope.randomColor = function() {
             var letters = '0123456789ABCDEF';
@@ -167,10 +167,57 @@
             };
         };
 
+
+        this.getUsageDataForChart3 = function() {
+            $http.get('/stats?id=3')
+                .success(function(data, status, headers, config) {
+                    $scope.chartData3.labels = data.chartData.labels;
+                    $scope.chartData3.series = data.chartData.series;
+                    $scope.chartData3.data = data.chartData.data;
+                })
+                .error(function(data, status, headers, config) {})
+            $scope.chartData3.options = {
+                scaleStartValue: 0,
+                title: {
+                    display: true,
+                    text: 'Usage in Minutes Per Station by Day of Week (last 30 days)'
+                },
+                scaleStartValue: 0,
+                legend: {
+                    display: true,
+                    labels: {}
+                },
+            };
+        };
+
+        this.getUsageDataForChart4 = function() {
+            $http.get('/stats?id=4')
+                .success(function(data, status, headers, config) {
+                    $scope.chartData4.labels = data.chartData.labels;
+                    $scope.chartData4.series = data.chartData.series;
+                    $scope.chartData4.data = data.chartData.data;
+                })
+                .error(function(data, status, headers, config) {})
+            $scope.chartData4.options = {
+                scaleStartValue: 0,
+                title: {
+                    display: true,
+                    text: 'Station Activity by Hour of the Day (last 30 days)'
+                },
+                scaleStartValue: 0,
+                legend: {
+                    display: true,
+                    labels: {}
+                },
+            };
+        };
+
         this.loadStatsData = function() {
             Chart.defaults.global.defaultFontColor = "#fff";
             this.getUsageDataForChart1();
             this.getUsageDataForChart2();
+            this.getUsageDataForChart3();
+            this.getUsageDataForChart4();
 
         };
 
