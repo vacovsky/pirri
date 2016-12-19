@@ -1,8 +1,9 @@
 from functools import wraps
 from flask import request, Response
 import data.config as config
+import newrelic.agent
 
-
+@newrelic.agent.background_task()
 def check_auth(username, password):
     """This function is called to check if a username /
     password combination is valid.
@@ -18,6 +19,7 @@ def authenticate():
         {'WWW-Authenticate': 'Basic realm="Login Required"'})
 
 
+@newrelic.agent.background_task()
 def requires_auth(f):
     @wraps(f)
     def decorated(*args, **kwargs):

@@ -10,14 +10,16 @@ else:
 import RPi.GPIO as GPIO
 from datetime import datetime
 from time import sleep
-
+import newrelic.agent
 
 class RelayController:
 
+    @newrelic.agent.background_task()
     def __init__(self):
         self.sqlConn = SqlHelper()
         self.__setup_pins()
 
+    @newrelic.agent.background_task()
     def __setup_pins(self):
         pins = []
         sqlStr = """SELECT gpio FROM gpio_pins"""
@@ -27,10 +29,12 @@ class RelayController:
         for pin in pins:
             GPIO.setup(pin, GPIO.OUT, initial=CONFIG.GPIO_RELAY_OFFSTATE)
 
+    @newrelic.agent.background_task()
     def __reset(self):
         GPIO.setmode(GPIO.BCM)
         self.__setup_pins
 
+    @newrelic.agent.background_task()
     def __log_relay_activity(self, sid, duration, schedule_id):
         sqlStr = """ INSERT INTO history (sid, schedule_id, duration, starttime)
         VALUES ({0},{1},{2},'{3}')""".format(
@@ -40,11 +44,13 @@ class RelayController:
             datetime.now())
         self.sqlConn.execute(sqlStr)
 
+    @newrelic.agent.background_task()
     def __get_gpio_from_sid(self, sid):
         sqlStr = """ SELECT gpio FROM stations WHERE id={0}""".format(sid)
         gpio = self.sqlConn.read(sqlStr)[0]
         return gpio
 
+    @newrelic.agent.background_task()
     def activate_relay(self, sid, duration, schedule_id=0):
         # self.__reset()
         pin = self.__get_gpio_from_sid(sid)

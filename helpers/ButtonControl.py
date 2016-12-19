@@ -2,6 +2,7 @@ import RPi.GPIO as GPIO
 import time
 from threading import Thread
 from data import config as CONFIG
+import newrelic.agent
 
 if CONFIG.USE_MYSQL:
     from helpers.MySqlHelper import SqlHelper
@@ -32,6 +33,7 @@ class ButtonControl:
                 self.execute_button_function()
                 time.sleep(0.2)
 
+    @newrelic.agent.background_task()
     def execute_button_function(self):
         for pin in self.gpio_list:
             GPIO.output(pin, CONFIG.GPIO_RELAY_OFFSTATE)

@@ -4,10 +4,11 @@ setproctitle.setproctitle("pirri")
 if config.USE_NEWRELIC:
     try:
         import newrelic.agent
-        newrelic.agent.initialize(config.NEWRELIC_INI_PATH + 'newrelic_main.ini')
+        newrelic.agent.initialize(
+            config.NEWRELIC_INI_PATH + 'newrelic_main.ini')
     except:
-        print('unable to load new relic.  is it installed, and do you have a config file for it?')
-
+        print(
+            'unable to load new relic.  is it installed, and do you have a config file for it?')
 
 
 import RPi.GPIO as GPIO
@@ -41,7 +42,7 @@ if __name__ == '__main__':
         try:
             ButtonControl(relay_pins=main.relay_pins).init_button_listener()
         except:
-            print("Could not start button controls.")    
+            print("Could not start button controls.")
         main.start()
     except KeyboardInterrupt:
         GPIO.cleanup()
