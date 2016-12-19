@@ -23,13 +23,11 @@ class WeatherHelper:
         'forecast': 'http://api.openweathermap.org/data/2.5/forecast/weekly?lang=english&zip={0},us&units={1}&appid={2}'
     }
 
-    @newrelic.agent.background_task()
     def __init__(self, units=OPENWEATHER_UNITS, zip=OPENWEATHER_ZIP, appid=OPENWEATHER_APPID):
         self.units = units
         self.zip = zip
         self.appid = appid
 
-    @newrelic.agent.background_task()
     def get_current_weather(self):
         data = json.loads(
             get(self.wh_uris['current'].format(self.zip, self.units, self.appid)).text)
@@ -37,13 +35,11 @@ class WeatherHelper:
             data['wind']['deg'])
         return data
 
-    @newrelic.agent.background_task()
     def get_forecast_weather(self):
         data = json.loads(
             get(self.wh_uris['forecast'].format(self.zip, self.units, self.appid)).text)
         return data
 
-    @newrelic.agent.background_task()
     def deg_to_compass(self, num):
         val = int((num / 22.5) + .5)
         arr = ["North", "North-Northeast", "Northeast", "East-Northeast", "East", "East-Southeast", "Southeast", "South-Southeast",

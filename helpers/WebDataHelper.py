@@ -140,14 +140,12 @@ def schedule_add(schedule):
     sqlConn.execute(sqlStr)
 
 
-@newrelic.agent.background_task()
 def schedule_delete(schedule_id):
     sqlConn = SqlHelper()
     sqlStr = """DELETE FROM schedule WHERE id={0}""".format(schedule_id)
     sqlConn.execute(sqlStr)
 
 
-@newrelic.agent.background_task()
 def cal_minmax_times(calvals):
     result = {
         'min': '00:00:00',
@@ -164,7 +162,7 @@ def cal_minmax_times(calvals):
             "Could not find time boundaries for calendar.  Using defaults of 00:00:00 and 23:59:59")
     return result
 
-@newrelic.agent.background_task()
+
 def get_schedule_cal():
     base = datetime.today()
     date_list = [base - timedelta(days=x) for x in range(-14, 14)]
@@ -273,7 +271,6 @@ def get_schedule_cal():
     return events
 
 
-@newrelic.agent.background_task()
 def get_schedule(station=None):
     this_date = int(str(datetime.now().date()).replace('-', ''))
     result = []
@@ -303,7 +300,7 @@ def get_schedule(station=None):
             result.append(data)
         return result
 
-@newrelic.agent.background_task()
+
 def list_stations():
     sqlConn = SqlHelper()
     stations = []
@@ -326,7 +323,7 @@ def list_stations():
         stations.append(station_json)
     return stations
 
-@newrelic.agent.background_task()
+
 def get_last_station_run():
     sqlConn = SqlHelper()
     results = {}
@@ -340,7 +337,7 @@ def get_last_station_run():
             results[station['sid']] = None
     return results
 
-@newrelic.agent.background_task()
+
 def get_next_station_run():
     local = timezone("America/Los_Angeles")
     #  today = datetime.now().strftime('%A').lower()
@@ -407,14 +404,14 @@ def get_next_station_run():
     # print(results)
     return results
 
-@newrelic.agent.background_task()
+
 def sunday_fix(val):
     if val == 7:
         return 0
     else:
         return val
 
-@newrelic.agent.background_task()
+
 def dripnodes_edit(nodes_data, new=False, delete=False):
     sqlConn = SqlHelper()
     sqlStr = ""
@@ -432,7 +429,7 @@ def dripnodes_edit(nodes_data, new=False, delete=False):
         """.format(nodes_data['gph'], nodes_data['sid'], nodes_data['count'])
     sqlConn.execute(sqlStr)
 
-@newrelic.agent.background_task()
+
 def station_activity_timechart(days=30):
     sqlConn = SqlHelper()
     results = {
@@ -497,7 +494,7 @@ def station_activity_timechart(days=30):
 
     return results
 
-@newrelic.agent.background_task()
+
 def water_usage_stats():
     sqlConn = SqlHelper()
     sqlStr = """
@@ -525,7 +522,7 @@ def water_usage_stats():
         )
     return results
 
-@newrelic.agent.background_task()
+
 def chart_stats_chrono(days=7):
     sqlConn = SqlHelper()
     sqlStr = """SELECT DISTINCT DAYOFWEEK(starttime) as day, SUM(duration / 60) as mins
@@ -572,7 +569,7 @@ def chart_stats_chrono(days=7):
 
     return results
 
-@newrelic.agent.background_task()
+
 def chart_minutes_by_station_per_dow(days=30):
     sqlConn = SqlHelper()
     results = {
@@ -615,7 +612,7 @@ def chart_minutes_by_station_per_dow(days=30):
         results['data'].append(list(parse_day_data(populate_data(sid))))
     return results
 
-@newrelic.agent.background_task()
+
 def station_history(sid=None, days=7):
     sqlConn = SqlHelper()
     sqlStr = ""
@@ -637,7 +634,7 @@ def station_history(sid=None, days=7):
         })
     return history_json
 
-@newrelic.agent.background_task()
+
 def get_chart_stats(cid, days=30):
     sqlStr = ""
     sqlConn = SqlHelper()
@@ -706,7 +703,7 @@ def get_chart_stats(cid, days=30):
 
     return results
 
-@newrelic.agent.background_task()
+
 def get_station_nodes():
     sqlConn = SqlHelper()
     sqlStr = """
@@ -725,7 +722,7 @@ def get_station_nodes():
         results['dripnodes'].append(node)
     return results
 
-@newrelic.agent.background_task()
+
 def delete_station_node(id):
     sqlConn = SqlHelper()
     sqlStr = """
@@ -733,7 +730,7 @@ def delete_station_node(id):
     """.format(id)
     sqlConn.execute(sqlStr)
 
-@newrelic.agent.background_task()
+
 def add_or_edit_station_nodes(dripnode, new=False):
     sqlConn = SqlHelper()
     sqlStr = ""
@@ -747,20 +744,20 @@ def add_or_edit_station_nodes(dripnode, new=False):
         """.format(dripnode['gph'], dripnode['sid'], dripnode['count'], dripnode['id'])
     sqlConn.execute(sqlStr)
 
-@newrelic.agent.background_task()
+
 def add_station(sid, gpio_pin):
     Station(sid).add(gpio_pin)
 
-@newrelic.agent.background_task()
+
 def list_schedules(sid):
     return Station(sid).list_schedules()
 
-@newrelic.agent.background_task()
+
 def find_last(station_list):
     for station in station_list:
         print()
 
-@newrelic.agent.background_task()
+
 def find_next(station_list):
     for station in station_list:
         print()
