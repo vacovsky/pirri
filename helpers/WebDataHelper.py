@@ -430,6 +430,71 @@ def dripnodes_edit(nodes_data, new=False, delete=False):
     sqlConn.execute(sqlStr)
 
 
+def station_activity_timechart(days=30):
+    sqlConn = SqlHelper()
+    results = {
+        "labels": ['00', '01', '02', '03', '04', '05', '06',
+                   '07', '08', '09', '10', '11', '12', '13', '14', '15',
+                   '16', '17', '18', '19', '20', '21', '22', '23'],
+        "series": [],
+        "data": []
+    }
+
+    def extract_hours(table):
+        result = {
+            '00': 0,
+            '01': 0,
+            '02': 0,
+            '03': 0,
+            '04': 0,
+            '05': 0,
+            '06': 0,
+            '07': 0,
+            '08': 0,
+            '09': 0,
+            '10': 0,
+            '11': 0,
+            '12': 0,
+            '13': 0,
+            '14': 0,
+            '15': 0,
+            '16': 0,
+            '17': 0,
+            '18': 0,
+            '19': 0,
+            '20': 0,
+            '21': 0,
+            '22': 0,
+            '23': 0,
+        }
+
+        if table[0][0] != None:
+            for row in table:
+                hour = str(str(row[1]).split(' ')[1].split(':')[0])
+                result[hour] = int(row[2])
+        return list(result.values())
+
+    def fill_series():
+        stationsSql = "SELECT id FROM stations WHERE common=0 ORDER BY id ASC"
+        return [i[0] for i in sqlConn.read(stationsSql)]
+    results['series'] = fill_series()
+
+    def populate_data(sid):
+        dataSql = """SELECT
+                    sid,
+                    starttime,
+                    SUM(duration / 60) as mins
+                FROM history
+                WHERE starttime >= (CURRENT_DATE - INTERVAL {0} DAY) AND sid = {1}
+                """.format(days, sid)
+        return [i for i in sqlConn.read(dataSql)]
+
+    for sid in results['series']:
+        results['data'].append(extract_hours(populate_data(sid)))
+
+    return results
+
+
 def water_usage_stats():
     sqlConn = SqlHelper()
     sqlStr = """

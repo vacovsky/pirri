@@ -202,7 +202,7 @@
                 scaleStartValue: 0,
                 title: {
                     display: true,
-                    text: 'Nothing yet.'
+                    text: 'Station Activity by Hour of the Day (last 30 days)'
                 },
                 scaleStartValue: 0,
                 legend: {

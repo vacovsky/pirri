@@ -205,6 +205,8 @@ def stats():
         response['chartData'] = WebDataHelper.chart_stats_chrono()
     elif int(request.args.get('id')) == 3:
         response['chartData'] = WebDataHelper.chart_minutes_by_station_per_dow()
+    elif int(request.args.get('id')) == 4:
+        response['chartData'] = WebDataHelper.station_activity_timechart()
     return jsonify(response)
 
 
