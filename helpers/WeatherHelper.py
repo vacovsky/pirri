@@ -49,17 +49,10 @@ class WeatherHelper:
         """
         weather = {
             "current": {
-                "base": "stations",
-                "clouds": {
-                    "all": 1
-                },
-                "cod": 200,
                 "coord": {
                     "lat": 35.49,
                     "lon": -120.67
                 },
-                "dt": 1482213360,
-                "id": 5325111,
                 "main": {
                     "humidity": 80,
                     "pressure": 1027,
@@ -67,16 +60,6 @@ class WeatherHelper:
                     "temp_max": 42.8,
                     "temp_min": 37.4
                 },
-                "name": "Atascadero",
-                "sys": {
-                    "country": "US",
-                    "id": 452,
-                    "message": 0.2057,
-                    "sunrise": 1482246482,
-                    "sunset": 1482281613,
-                    "type": 1
-                },
-                "visibility": 16093,
                 "weather": [
                     {
                         "description": "clear sky",
@@ -84,15 +67,13 @@ class WeatherHelper:
                         "id": 800,
                         "main": "Clear"
                     }
-                ],
-                "wind": {
-                    "compass_direction": "Northeast",
-                    "deg": 44.0045,
-                    "speed": 3.71
-                }
+                ]
             }
         }
         """
+        print(weather)
+        if "rain" in weather['main'] and weather['main']["rain"] > 1:
+            return 0.5
         pass
 
     def heat_extender(self, weather):
