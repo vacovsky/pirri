@@ -1,6 +1,5 @@
 import pymysql
 from data import config as CONFIG
-import newrelic.agent
 
 
 class SqlHelper:

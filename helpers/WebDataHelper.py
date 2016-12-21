@@ -15,7 +15,6 @@ import operator
 from pytz import timezone, UTC
 import random
 from helpers.WeatherHelper import WeatherHelper
-import json
 
 
 def get_weather_data():
