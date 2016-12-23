@@ -335,8 +335,8 @@ def get_next_station_run():
     results = {}
     stations = list_stations()
     sqlStr = """SELECT * FROM schedule
-                    WHERE (startdate <= replace(CAST(NOW() AS CHAR), '-', '')
-                        AND enddate > replace(CAST(NOW() AS CHAR), '-', ''))
+                    WHERE (startdate <= replace(CAST(CURDATE() AS CHAR), '-', '')
+                        AND enddate > replace(CAST(CURDATE() AS CHAR), '-', ''))
                         AND station={0}
                     ORDER BY starttime DESC
                             """
