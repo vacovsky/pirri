@@ -74,16 +74,16 @@ class ScheduleControl:
 
     def current_adjust(self, task):
         try:
-            if self.cw_checked is None or (datetime.now() - self.cw_checked > timedelta(
-                    minutes=CONFIG.WEATHER_CHECK_INTERVAL)):
-                self.current = self.wh.WeatherHelper().get_current_weather()
-                self.cw_checked = datetime.now()
-                modified = 1
-                modified *= self.wh.rain_skip(self.current_weather)
-                modified *= self.wh.heat_extender(self.current_weather)
-                modified *= self.wh.freeze_skip(self.current_weather)
-                task['duration'] *= modified
-                print(str(task))
+            # if self.cw_checked is None or (datetime.now() - self.cw_checked > timedelta(
+            #         minutes=CONFIG.WEATHER_CHECK_INTERVAL)):
+            self.current = self.wh.WeatherHelper().get_current_weather()
+            self.cw_checked = datetime.now()
+            modified = 1
+            modified *= self.wh.rain_skip(self.current_weather)
+            modified *= self.wh.heat_extender(self.current_weather)
+            modified *= self.wh.freeze_skip(self.current_weather)
+            task['duration'] *= modified
+            print(str(task))
         except:
             print("Unable to modify watering time based on weather.  Executing run at specified duration.")
         return task
