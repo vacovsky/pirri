@@ -1,11 +1,6 @@
-import dateutil.tz
-import datetime
 
 
-localtz = dateutil.tz.tzlocal()
-LOCALOFFSET = localtz.utcoffset(
-    datetime.datetime.now(localtz)).total_seconds() / 3600
-
+LOCALOFFSET = -8
 
 QUEUE = 'pirri'
 DBPATH = '/home/joe/Projects/pirri/data/pirri.sql'
@@ -38,9 +33,6 @@ MYSQL_PASS = 'pirri'
 USE_SQLITE3 = False
 USE_MYSQL = True
 
-
 ADJUST_FORECAST_WEATHER = True
 ADJUST_CURRENT_WEATHER = True
 WEATHER_CHECK_INTERVAL = 60
-# GRANT ALL PRIVILEGES ON * TO 'joe'@'%' WITH GRANT OPTION;
-# GRANT ALL PRIVILEGES ON mydb.* TO 'myuser'@'%' WITH GRANT OPTION;
