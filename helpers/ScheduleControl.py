@@ -10,24 +10,33 @@ else:
         "You probably don't have a SQL connector enabled in the data/config.py file.")
 
 import calendar
-from datetime import datetime
+from datetime import datetime, timedelta
 from helpers.MessageHelper import RMQ
 from threading import Thread
 import time
 import json
+
 import newrelic.agent
+
+from helpers.WeatherHelper import WeatherHelper
 
 
 class ScheduleControl:
-    rmq = RMQ()
+    wh = None
+    rmq = None
     last_queued_dur = 0
     last_datetime = ''
     today_cache = None
 
-    @newrelic.agent.background_task()
+    current_weather = None
+    cw_checked = None
+    forecast_weather = None
+    fw_checked = None
+
     def __init__(self):
         self.post_runlist = []
         self.rmq = RMQ()
+        self.wh = WeatherHelper()
 
     def start(self, check_interval):
         while True:
@@ -42,6 +51,7 @@ class ScheduleControl:
             self.today_cache['day']) + str(self.today_cache['time'])
 
         try:
+            tasks = self.adjust_watering_for_weather(tasks)
             for task in tasks:
                 self.rmq.publish_message(
                     json.dumps(
@@ -55,23 +65,44 @@ class ScheduleControl:
         except TypeError as e:
             print(e)
 
+    def forecast_adjust(self):
+        if self.fw_checked is None or (datetime.now() - self.fw_checked() > timedelta(
+                minutes=CONFIG.WEATHER_CHECK_INTERVAL * 5)):
+            self.forecast = self.wh.get_forecast_weather()
+            self.fw_checked = datetime.now()
+
+    def current_adjust(self):
+        if self.cw_checked is None or (datetime.now() - self.cw_checked() > timedelta(
+                minutes=CONFIG.WEATHER_CHECK_INTERVAL)):
+            self.current = self.wh.WeatherHelper().get_current_weather()
+            self.cw_checked = datetime.now()
+
+    def adjust_watering_for_weather(self, tasks):
+        if CONFIG.ADJUST_CURRENT_WEATHER or CONFIG.ADJUST_CURRENT_WEATHER:
+            new_tasks = []
+            for task in tasks:
+                if CONFIG.ADJUST_CURRENT_WEATHER:
+                    self.current_adjust(task)
+                if CONFIG.ADJUST_FORECAST_WEATHER:
+                    self.forecast_adjust(task)
+            return new_tasks
+        else:
+            return tasks
+
     def start_threaded(self, check_interval):
         Thread(target=self.start, args=(check_interval,)).start()
 
-    @newrelic.agent.background_task()
     def find_curr_time(self):
         dtnow = str(datetime.now()).split(' ')[1]
         dtnow_miltime = dtnow.split(':')[0] + dtnow.split(':')[1]
         return int(dtnow_miltime)
 
-    @newrelic.agent.background_task()
     def find_now_info(self):
         self.today_cache = {
             'day': calendar.day_name[datetime.today().weekday()].lower(),
             'time': self.find_curr_time()
         }
 
-    @newrelic.agent.background_task()
     def get_current_tasks(self):
         sqlConn = SqlHelper()
         if str(self.today_cache['day']) + str(self.today_cache['time']) != self.last_datetime:
@@ -90,6 +121,5 @@ class ScheduleControl:
         else:
             pass
 
-    @newrelic.agent.background_task()
     def exec_schedule_item(self, task):
         RMQ().publish_message(task)

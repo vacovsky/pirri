@@ -6,11 +6,12 @@ elif CONFIG.USE_MYSQL:
 else:
     raise Exception(
         "You probably don't have a SQL connector enabled in the data/config.py file.")
-    
+
 import RPi.GPIO as GPIO
 from datetime import datetime
 from time import sleep
 import newrelic.agent
+
 
 class RelayController:
 

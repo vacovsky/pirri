@@ -1,4 +1,4 @@
-import newrelic.agent
+import dateutil
 from data import config as CONFIG
 
 if CONFIG.USE_MYSQL:
@@ -15,7 +15,6 @@ import operator
 from pytz import timezone, UTC
 import random
 from helpers.WeatherHelper import WeatherHelper
-import json
 
 
 def get_weather_data():
@@ -329,8 +328,8 @@ def get_last_station_run():
     results = {}
     stations = list_stations()
     for station in stations:
-        sqlStr = "SELECT starttime FROM history WHERE sid={0} ORDER BY starttime DESC LIMIT 1".format(
-            station['sid'])
+        sqlStr = "SELECT (starttime - INTERVAL {0} HOUR) FROM history WHERE sid={1} ORDER BY starttime DESC LIMIT 1".format(
+            CONFIG.LOCALOFFSET, station['sid'])
         try:
             results[station['sid']] = sqlConn.read(sqlStr)[0][0]
         except:
@@ -482,11 +481,11 @@ def station_activity_timechart(days=30):
     def populate_data(sid):
         dataSql = """SELECT
                     sid,
-                    starttime,
+                    (starttime - INTERVAL {0} HOUR),
                     SUM(duration / 60) as mins
                 FROM history
-                WHERE starttime >= (CURRENT_DATE - INTERVAL {0} DAY) AND sid = {1}
-                """.format(days, sid)
+                WHERE starttime >= (CURRENT_DATE - INTERVAL {1} DAY) AND sid = {2}
+                """.format(CONFIG.LOCALOFFSET, days, sid)
         return [i for i in sqlConn.read(dataSql)]
 
     for sid in results['series']:
@@ -500,7 +499,7 @@ def water_usage_stats():
     sqlStr = """
         SELECT DISTINCT dripnodes.sid,
             SUM((duration / 60 )) as runmins,
-            (select sum((gph * count)) as totalgph from dripnodes where dripnodes.sid=history.sid) as totalgph,
+            (SELECT sum((gph * count)) as totalgph from dripnodes where dripnodes.sid=history.sid) as totalgph,
             stations.notes
         FROM history
         INNER JOIN dripnodes ON dripnodes.sid=history.sid
@@ -525,24 +524,21 @@ def water_usage_stats():
 
 def chart_stats_chrono(days=7):
     sqlConn = SqlHelper()
-    sqlStr = """SELECT DISTINCT DAYOFWEEK(starttime) as day, SUM(duration / 60) as mins
+    sqlStr = """SELECT DISTINCT DAYOFWEEK((starttime - INTERVAL {0} HOUR)) as day, SUM(duration / 60) as mins
             FROM history
-            WHERE starttime >= (CURRENT_DATE - INTERVAL {0} DAY)
+            WHERE starttime >= (CURRENT_DATE - INTERVAL {1} DAY)
             GROUP BY day
-            ORDER BY day ASC""".format(
-        days)
-    sqlStr2 = """SELECT DISTINCT DAYOFWEEK(starttime) as day, SUM(duration / 60) as mins
+            ORDER BY day ASC""".format(CONFIG.LOCALOFFSET, days)
+    sqlStr2 = """SELECT DISTINCT DAYOFWEEK((starttime - INTERVAL {0} HOUR)) as day, SUM(duration / 60) as mins
             FROM history
-            WHERE starttime >= (CURRENT_DATE - INTERVAL {0} DAY) AND schedule_id>0
+            WHERE starttime >= (CURRENT_DATE - INTERVAL {1} DAY) AND schedule_id>0
             GROUP BY day
-            ORDER BY day ASC""".format(
-        days)
-    sqlStr3 = """SELECT DISTINCT DAYOFWEEK(starttime) as day, SUM(duration / 60) as mins
+            ORDER BY day ASC""".format(CONFIG.LOCALOFFSET, days)
+    sqlStr3 = """SELECT DISTINCT DAYOFWEEK((starttime - INTERVAL {0} HOUR)) as day, SUM(duration / 60) as mins
             FROM history
-            WHERE starttime >= (CURRENT_DATE - INTERVAL {0} DAY) AND schedule_id=0
+            WHERE starttime >= (CURRENT_DATE - INTERVAL {1} DAY) AND schedule_id=0
             GROUP BY day
-            ORDER BY day ASC""".format(
-        days)
+            ORDER BY day ASC""".format(CONFIG.LOCALOFFSET, days)
     results = {
         "labels": ['Sunday', 'Monday', 'Tuesday', 'Wednesday', 'Thursday', 'Friday', 'Saturday'],
         "series": ['Total', 'Scheduled', 'Unscheduled'],
@@ -586,12 +582,12 @@ def chart_minutes_by_station_per_dow(days=30):
     def populate_data(sid):
         dataSql = """SELECT
                     sid,
-                    DAYOFWEEK(starttime) as day,
+                    DAYOFWEEK((starttime - INTERVAL {0} HOUR)) as day,
                     SUM(duration / 60) as mins
                 FROM history
-                WHERE starttime >= (CURRENT_DATE - INTERVAL {0} DAY) AND sid = {1}
+                WHERE starttime >= (CURRENT_DATE - INTERVAL {1} DAY) AND sid = {2}
                 GROUP BY day
-                ORDER BY day ASC""".format(days, sid)
+                ORDER BY day ASC""".format(CONFIG.LOCALOFFSET, days, sid)
         return [i for i in sqlConn.read(dataSql)]
 
     def parse_day_data(table):
