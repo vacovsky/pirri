@@ -471,7 +471,10 @@ def station_activity_timechart(days=30):
             for row in table:
                 hour = str(str(row[1]).split(' ')[1].split(':')[0])
                 result[hour] += int(row[2])
-        return list(result.values())
+
+        sorted_vals = sorted(result.items(), key=lambda x: x[0])
+
+        return [v[1] for v in sorted_vals]
 
     def fill_series():
         stationsSql = "SELECT id FROM stations WHERE common=0 ORDER BY id ASC"
