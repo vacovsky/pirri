@@ -55,13 +55,13 @@ class Settings:
         SETTINGS['LOGINUSER'] = settings_list[8]
         SETTINGS['LOGINPASS'] = settings_list[7]
         # WEATHER
-        SETTINGS['ADJUST_CURRENT_WEATHER'] = settings_list[9]
-        SETTINGS['ADJUST_FORECAST_WEATHER'] = settings_list[10]
+        SETTINGS['ADJUST_CURRENT_WEATHER'] = settings_list[9] == 1
+        SETTINGS['ADJUST_FORECAST_WEATHER'] = settings_list[10] == 1
         # GPIO
         SETTINGS['GPIO_RELAY_ONSTATE'] = settings_list[11]
         SETTINGS['GPIO_RELAY_OFFSTATE'] = settings_list[12]
         # MONITORING
-        SETTINGS['USE_NEWRELIC'] = settings_list[13]
+        SETTINGS['USE_NEWRELIC'] = settings_list[13] == 1
         # Locale
         SETTINGS['LOCALOFFSET'] = settings_list[14]
 
