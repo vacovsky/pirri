@@ -25,7 +25,8 @@ SETTINGS = {
     'ADJUST_CURRENT_WEATHER': False,
     'WEATHER_CHECK_INTERVAL': 60,
     'USE_NEWRELIC': None,
-    'SQL_DEBUG': False
+    'SQL_DEBUG': False,
+    'DEBUG_INFO': True
 }
 
 
@@ -77,3 +78,6 @@ class Settings:
 
 Settings()
 CONFIG.SETTINGS = SETTINGS
+if SETTINGS['DEBUG_INFO']:
+    for i in SETTINGS.items():
+        print(i)
