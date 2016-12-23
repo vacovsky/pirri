@@ -77,11 +77,11 @@ class WeatherHelper:
         }
         """
         if "rain" in weather:
-            if "rain" in weather and weather["rain"]['3h'] > 0.5:
+            if weather["rain"]['3h'] > 0.5:
                 return 0
-            elif weather['main']["rain"] > 0.25:
+            elif weather["rain"]['3h'] > 0.25:
                 return 0.25
-            elif weather['main']["rain"] > 0.1:
+            elif weather["rain"]['3h'] > 0.1:
                 return 0.5
         return 1
 
