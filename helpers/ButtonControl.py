@@ -9,7 +9,7 @@ class ButtonControl:
     gpio_list = []
 
     def __init__(self):
-        GPIO.setup(CONFIG.BUTTON_GPIO, GPIO.IN, pull_up_down=GPIO.PUD_UP)
+        GPIO.setup(CONFIG.SETTINGS['BUTTON_GPIO'], GPIO.IN, pull_up_down=GPIO.PUD_UP)
 
     def get_gpio(self):
         sqlConn = SqlHelper()
@@ -22,7 +22,7 @@ class ButtonControl:
 
     def button_listener(self):
         while True:
-            input_state = GPIO.input(CONFIG.BUTTON_GPIO)
+            input_state = GPIO.input(CONFIG.SETTINGS['BUTTON_GPIO'])
             if not input_state:
                 self.get_gpio()
                 self.execute_button_function()
@@ -30,4 +30,4 @@ class ButtonControl:
 
     def execute_button_function(self):
         for pin in self.gpio_list:
-            GPIO.output(pin, CONFIG.GPIO_RELAY_OFFSTATE)
+            GPIO.output(pin, CONFIG.SETTINGS['GPIO_RELAY_OFFSTATE'])
