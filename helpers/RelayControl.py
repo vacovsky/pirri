@@ -1,4 +1,4 @@
-from data import config as CONFIG
+import config as CONFIG
 from helpers.MySqlHelper import SqlHelper
 import RPi.GPIO as GPIO
 from datetime import datetime
