@@ -1,3 +1,12 @@
+import dateutil.tz
+import datetime
+
+
+localtz = dateutil.tz.tzlocal()
+LOCALOFFSET = localtz.utcoffset(
+    datetime.datetime.now(localtz)).total_seconds() / 3600
+
+
 QUEUE = 'pirri'
 DBPATH = '/home/joe/Projects/pirri/data/pirri.sql'
 
@@ -13,7 +22,7 @@ COMMON_WIRE_GPIO = 21
 GPIO_RELAY_OFFSTATE = 1
 GPIO_RELAY_ONSTATE = 0
 
-#for web app - put this in a database
+# for web app - put this in a database
 LOGINUSER = 'joe'
 LOGINPASS = 'vacovsky'
 
