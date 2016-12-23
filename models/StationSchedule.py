@@ -1,9 +1,4 @@
-from data import config as CONFIG
-
-if CONFIG.USE_MYSQL:
-    from helpers.MySqlHelper import SqlHelper
-elif CONFIG.USE_MYSQL:
-    from helpers.SqlHelper import SqlHelper
+from helpers.MySqlHelper import SqlHelper
 
 
 class StationSchedule:

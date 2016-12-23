@@ -9,7 +9,7 @@ try:
 
 except:
     OPENWEATHER_ZIP = 93422
-    OPENWEATHER_UNITS = "imperial,us"
+    OPENWEATHER_UNITS = "imperial"
     OPENWEATHER_APPID = "0d9330204965c8852145c4a52b56fd1a"
 
 
@@ -102,5 +102,5 @@ if __name__ == '__main__':
     # WeatherHelper(units='imperial', zip='93465', appid='0d9330204965c8852145c4a52b56fd1a')
     wh = WeatherHelper()
 
-    print(wh.get_forecast_weather().text)
-    print(wh.get_current_weather().text)
+    print(wh.get_forecast_weather())
+    print(wh.get_current_weather())

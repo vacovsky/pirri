@@ -1,3 +1,4 @@
+import helpers.SettingsHelper
 import config
 import setproctitle
 setproctitle.setproctitle("pirri")
@@ -8,7 +9,7 @@ if config.USE_NEWRELIC:
             config.NEWRELIC_INI_PATH + 'newrelic_main.ini')
     except:
         print(
-            'unable to load new relic.  is it installed, and do you have a config file for it?')
+            'unable to load new relic.  Is it installed, and do you have a config file?')
 
 
 import RPi.GPIO as GPIO

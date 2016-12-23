@@ -1,12 +1,5 @@
 from data import config as CONFIG
-if CONFIG.USE_MYSQL:
-    from helpers.MySqlHelper import SqlHelper
-elif CONFIG.USE_MYSQL:
-    from helpers.SqlHelper import SqlHelper
-else:
-    raise Exception(
-        "You probably don't have a SQL connector enabled in the data/config.py file.")
-
+from helpers.MySqlHelper import SqlHelper
 import RPi.GPIO as GPIO
 from datetime import datetime
 from time import sleep
@@ -25,7 +18,7 @@ class RelayController:
             pins.append(pin[0])
         GPIO.setmode(GPIO.BCM)
         for pin in pins:
-            GPIO.setup(pin, GPIO.OUT, initial=CONFIG.GPIO_RELAY_OFFSTATE)
+            GPIO.setup(pin, GPIO.OUT, initial=CONFIG.SETTINGS['GPIO_RELAY_OFFSTATE'])
 
     def __reset(self):
         GPIO.setmode(GPIO.BCM)
@@ -46,15 +39,14 @@ class RelayController:
         return gpio
 
     def activate_relay(self, sid, duration, schedule_id=0):
-        # self.__reset()
         pin = self.__get_gpio_from_sid(sid)
         self.__log_relay_activity(sid, duration, schedule_id)
 
         timer = 0
-        GPIO.output(pin, CONFIG.GPIO_RELAY_ONSTATE)
-        GPIO.output(CONFIG.COMMON_WIRE_GPIO, CONFIG.GPIO_RELAY_ONSTATE)
+        GPIO.output(pin, CONFIG.SETTINGS['GPIO_RELAY_ONSTATE'])
+        GPIO.output(CONFIG.SETTINGS['COMMON_WIRE_GPIO'], CONFIG.SETTINGS['GPIO_RELAY_ONSTATE'])
         while timer < duration:
             sleep(1)
             timer += 1
-        GPIO.output(pin, CONFIG.GPIO_RELAY_OFFSTATE)
-        GPIO.output(CONFIG.COMMON_WIRE_GPIO, CONFIG.GPIO_RELAY_OFFSTATE)
+        GPIO.output(pin, CONFIG.SETTINGS['GPIO_RELAY_OFFSTATE'])
+        GPIO.output(CONFIG.SETTINGS['COMMON_WIRE_GPIO'], CONFIG.SETTINGS['GPIO_RELAY_OFFSTATE'])

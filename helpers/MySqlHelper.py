@@ -1,5 +1,5 @@
 import pymysql
-from data import config as CONFIG
+import config as CONFIG
 
 
 class SqlHelper:
@@ -11,11 +11,9 @@ class SqlHelper:
                                     CONFIG.MYSQL_PASS,
                                     CONFIG.MYSQL_DB)
 
-    def setup(self):
-        pass
-
     def read(self, query):
-        print(query)
+        if CONFIG.SETTINGS['SQL_DEBUG']:
+            print(query)
         results = []
         c = self.conn.cursor()
         c.execute(query)
@@ -24,7 +22,8 @@ class SqlHelper:
         return results
 
     def execute(self, query):
-        print(query)
+        if CONFIG.SETTINGS['SQL_DEBUG']:
+            print(query)
         c = self.conn.cursor()
         c.execute(query)
         self.conn.commit()
