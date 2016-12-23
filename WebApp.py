@@ -1,6 +1,6 @@
+import helpers.SettingsHelper
 import config
-
-if config.USE_NEWRELIC:
+if config.SETTINGS['USE_NEWRELIC']:
     try:
         import newrelic.agent
         newrelic.agent.initialize(

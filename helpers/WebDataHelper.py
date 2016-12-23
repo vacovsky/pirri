@@ -1,14 +1,5 @@
-import dateutil
-from data import config as CONFIG
-
-if CONFIG.USE_MYSQL:
-    from helpers.MySqlHelper import SqlHelper
-elif CONFIG.USE_MYSQL:
-    from helpers.SqlHelper import SqlHelper
-else:
-    raise Exception(
-        "You probably don't have a SQL connector enabled in the data/config.py file.")
-
+import config as CONFIG
+from helpers.MySqlHelper import SqlHelper
 from models.Station import Station
 from datetime import datetime, timedelta
 import operator
@@ -329,7 +320,7 @@ def get_last_station_run():
     stations = list_stations()
     for station in stations:
         sqlStr = "SELECT (starttime + INTERVAL {0} HOUR) FROM history WHERE sid={1} ORDER BY starttime DESC LIMIT 1".format(
-            CONFIG.LOCALOFFSET, station['sid'])
+            CONFIG.SETTINGS['LOCALOFFSET'], station['sid'])
         try:
             results[station['sid']] = sqlConn.read(sqlStr)[0][0]
         except:
@@ -527,17 +518,17 @@ def chart_stats_chrono(days=7):
             FROM history
             WHERE starttime >= (CURRENT_DATE - INTERVAL {1} DAY)
             GROUP BY day
-            ORDER BY day ASC""".format(CONFIG.LOCALOFFSET, days)
+            ORDER BY day ASC""".format(CONFIG.SETTINGS['LOCALOFFSET'], days)
     sqlStr2 = """SELECT DISTINCT DAYOFWEEK((starttime + INTERVAL {0} HOUR)) as day, SUM(duration / 60) as mins
             FROM history
             WHERE starttime >= (CURRENT_DATE - INTERVAL {1} DAY) AND schedule_id>0
             GROUP BY day
-            ORDER BY day ASC""".format(CONFIG.LOCALOFFSET, days)
+            ORDER BY day ASC""".format(CONFIG.SETTINGS['LOCALOFFSET'], days)
     sqlStr3 = """SELECT DISTINCT DAYOFWEEK((starttime + INTERVAL {0} HOUR)) as day, SUM(duration / 60) as mins
             FROM history
             WHERE starttime >= (CURRENT_DATE - INTERVAL {1} DAY) AND schedule_id=0
             GROUP BY day
-            ORDER BY day ASC""".format(CONFIG.LOCALOFFSET, days)
+            ORDER BY day ASC""".format(CONFIG.SETTINGS['LOCALOFFSET'], days)
     results = {
         "labels": ['Sunday', 'Monday', 'Tuesday', 'Wednesday', 'Thursday', 'Friday', 'Saturday'],
         "series": ['Total', 'Scheduled', 'Unscheduled'],
@@ -586,7 +577,7 @@ def chart_minutes_by_station_per_dow(days=30):
                 FROM history
                 WHERE starttime >= (CURRENT_DATE - INTERVAL {1} DAY) AND sid = {2}
                 GROUP BY day
-                ORDER BY day ASC""".format(CONFIG.LOCALOFFSET, days, sid)
+                ORDER BY day ASC""".format(CONFIG.SETTINGS['LOCALOFFSET'], days, sid)
         return [i for i in sqlConn.read(dataSql)]
 
     def parse_day_data(table):

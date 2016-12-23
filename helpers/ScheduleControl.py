@@ -1,13 +1,7 @@
 # this needs to be run in a thread, and kick messages off to RMQ for
 # execution.
 from data import config as CONFIG
-if CONFIG.USE_MYSQL:
-    from helpers.MySqlHelper import SqlHelper
-elif CONFIG.USE_MYSQL:
-    from helpers.SqlHelper import SqlHelper
-else:
-    raise Exception(
-        "You probably don't have a SQL connector enabled in the data/config.py file.")
+from helpers.MySqlHelper import SqlHelper
 
 import calendar
 from datetime import datetime, timedelta
@@ -68,15 +62,15 @@ class ScheduleControl:
     def forecast_adjust(self, task):
         # TODO: wire this up
         if self.fw_checked is None or (datetime.now() - self.fw_checked > timedelta(
-                minutes=CONFIG.WEATHER_CHECK_INTERVAL * 5)):
+                minutes=CONFIG.SETTINGS['WEATHER_CHECK_INTERVAL'] * 5)):
             self.forecast = self.wh.get_forecast_weather()
             self.fw_checked = datetime.now()
 
     def current_adjust(self, task):
         try:
             # if self.cw_checked is None or (datetime.now() - self.cw_checked > timedelta(
-            #         minutes=CONFIG.WEATHER_CHECK_INTERVAL)):
-            self.current_weather = self.wh.get_current_weather()
+            #         minutes=CONFIG.SETTINGS['WEATHER_CHECK_INTERVAL'])):
+            self.current = self.wh.get_current_weather()
             self.cw_checked = datetime.now()
             modified = 1
             modified *= self.wh.rain_skip(self.current_weather)
@@ -89,11 +83,11 @@ class ScheduleControl:
         return task
 
     def adjust_watering_for_weather(self, tasks):
-        if CONFIG.ADJUST_CURRENT_WEATHER or CONFIG.ADJUST_FORECAST_WEATHER:
+        if CONFIG.SETTINGS['ADJUST_CURRENT_WEATHER'] or CONFIG.SETTINGS['ADJUST_FORECAST_WEATHER']:
             for task in tasks:
-                if CONFIG.ADJUST_CURRENT_WEATHER:
+                if CONFIG.SETTINGS['ADJUST_CURRENT_WEATHER']:
                     self.current_adjust(task)
-                if CONFIG.ADJUST_FORECAST_WEATHER:
+                if CONFIG.SETTINGS['ADJUST_FORECAST_WEATHER']:
                     self.forecast_adjust(task)
         return tasks
 
