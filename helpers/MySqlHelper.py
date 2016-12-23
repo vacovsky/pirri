@@ -6,10 +6,11 @@ class SqlHelper:
     conn = None
 
     def __init__(self):
-        self.conn = pymysql.connect(CONFIG.MYSQL_HOST,
-                                    CONFIG.MYSQL_USER,
-                                    CONFIG.MYSQL_PASS,
-                                    CONFIG.MYSQL_DB)
+        # self.conn = pymysql.connect(CONFIG.MYSQL_HOST,
+        #                             CONFIG.MYSQL_USER,
+        #                             CONFIG.MYSQL_PASS,
+        #                             CONFIG.MYSQL_DB)
+        self.conn = pymysql.connect()
 
     def setup(self):
         pass
