@@ -3,7 +3,7 @@ import config as CONFIG
 
 SETTINGS = {
     'LOCALOFFSET': 0,
-    'QUEUE': 'pirri',
+    'RMQ_QUEUE': 'pirri',
     'RMQ_HOST': '',
     'RMQ_PORT': 5672,
     'RMQ_USER': '',
