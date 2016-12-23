@@ -66,28 +66,36 @@ class ScheduleControl:
             print(e)
 
     def forecast_adjust(self):
+        # TODO: wire this up
         if self.fw_checked is None or (datetime.now() - self.fw_checked() > timedelta(
                 minutes=CONFIG.WEATHER_CHECK_INTERVAL * 5)):
             self.forecast = self.wh.get_forecast_weather()
             self.fw_checked = datetime.now()
 
-    def current_adjust(self):
-        if self.cw_checked is None or (datetime.now() - self.cw_checked() > timedelta(
-                minutes=CONFIG.WEATHER_CHECK_INTERVAL)):
-            self.current = self.wh.WeatherHelper().get_current_weather()
-            self.cw_checked = datetime.now()
+    def current_adjust(self, task):
+        try:
+            if self.cw_checked is None or (datetime.now() - self.cw_checked() > timedelta(
+                    minutes=CONFIG.WEATHER_CHECK_INTERVAL)):
+                self.current = self.wh.WeatherHelper().get_current_weather()
+                self.cw_checked = datetime.now()
+                modified = 1
+                modified *= self.wh.rain_skip(self.current_weather)
+                modified *= self.wh.heat_extender(self.current_weather)
+                modified *= self.wh.freeze_skip(self.current_weather)
+                task['duration'] *= modified
+                print(str(task))
+        except:
+            print("Unabloe to modify watering time based on weather.  Executing run at specified duration.")
+        return task
 
     def adjust_watering_for_weather(self, tasks):
-        if CONFIG.ADJUST_CURRENT_WEATHER or CONFIG.ADJUST_CURRENT_WEATHER:
-            new_tasks = []
+        if CONFIG.ADJUST_CURRENT_WEATHER or CONFIG.ADJUST_FORECAST_WEATHER:
             for task in tasks:
                 if CONFIG.ADJUST_CURRENT_WEATHER:
                     self.current_adjust(task)
                 if CONFIG.ADJUST_FORECAST_WEATHER:
                     self.forecast_adjust(task)
-            return new_tasks
-        else:
-            return tasks
+        return tasks
 
     def start_threaded(self, check_interval):
         Thread(target=self.start, args=(check_interval,)).start()

@@ -77,23 +77,23 @@ class WeatherHelper:
         }
         """
         if "rain" in weather:
-            if weather["rain"]['3h'] > 0.5:
-                return 0
-            elif weather["rain"]['3h'] > 0.25:
+            if weather["rain"]['3h'] > 0.75:
                 return 0.25
-            elif weather["rain"]['3h'] > 0.1:
+            elif weather["rain"]['3h'] > 0.5:
                 return 0.5
+            elif weather["rain"]['3h'] > 0.25:
+                return 0.75
         return 1
 
     def heat_extender(self, weather):
-        if weather['main']["temp_max"] > 95:
+        if weather['main']["temp_max"] > 100:
             return 1.5
         elif weather['main']["temp_max"] > 85:
-            return 1.35
+            return 1.25
         return 1
 
     def freeze_skip(self, weather):
-        if weather['main']["temp"] < 35 or weather['main']["temp_min"] < 35:
+        if weather['main']["temp"] < 35 or weather['main']["temp_min"] < 20:
             return 0
         return 1
 

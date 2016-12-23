@@ -339,7 +339,6 @@ def get_last_station_run():
 
 def get_next_station_run():
     local = timezone("America/Los_Angeles")
-    #  today = datetime.now().strftime('%A').lower()
     today = int(datetime.now().strftime('%w'))
     sqlConn = SqlHelper()
     results = {}
