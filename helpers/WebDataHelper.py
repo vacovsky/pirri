@@ -470,7 +470,7 @@ def station_activity_timechart(days=30):
         if len(table) > 0:
             for row in table:
                 hour = str(str(row[1]).split(' ')[1].split(':')[0])
-                result[hour] = int(row[2])
+                result[hour] += int(row[2])
         return list(result.values())
 
     def fill_series():
@@ -479,7 +479,7 @@ def station_activity_timechart(days=30):
     results['series'] = fill_series()
 
     def populate_data(sid):
-        dataSql = """SELECT sid, starttime, (duration / 60) as mins
+        dataSql = """SELECT sid, CAST(starttime AS CHAR), (duration / 60) as mins
                 FROM history
                 WHERE starttime >= (CURRENT_DATE - INTERVAL {0} DAY) AND sid = {1}
                 """.format(days, sid)
