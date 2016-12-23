@@ -328,7 +328,7 @@ def get_last_station_run():
     results = {}
     stations = list_stations()
     for station in stations:
-        sqlStr = "SELECT (starttime - INTERVAL {0} HOUR) FROM history WHERE sid={1} ORDER BY starttime DESC LIMIT 1".format(
+        sqlStr = "SELECT (starttime + INTERVAL {0} HOUR) FROM history WHERE sid={1} ORDER BY starttime DESC LIMIT 1".format(
             CONFIG.LOCALOFFSET, station['sid'])
         try:
             results[station['sid']] = sqlConn.read(sqlStr)[0][0]
@@ -432,9 +432,9 @@ def dripnodes_edit(nodes_data, new=False, delete=False):
 def station_activity_timechart(days=30):
     sqlConn = SqlHelper()
     results = {
-        "labels": ['00', '01', '02', '03', '04', '05', '06',
-                   '07', '08', '09', '10', '11', '12', '13', '14', '15',
-                   '16', '17', '18', '19', '20', '21', '22', '23'],
+        "labels": ['00:00', '01:00', '02:00', '03:00', '04:00', '05:00', '06:00', '07:00',
+                   '08:00', '09:00', '10:00', '11:00', '12:00', '13:00', '14:00', '15:00',
+                   '16:00', '17:00', '18:00', '19:00', '20:00', '21:00', '22:00', '23:00'],
         "series": [],
         "data": []
     }
@@ -467,7 +467,7 @@ def station_activity_timechart(days=30):
             '23': 0,
         }
 
-        if table[0][0] is not None:
+        if len(table) > 0:
             for row in table:
                 hour = str(str(row[1]).split(' ')[1].split(':')[0])
                 result[hour] = int(row[2])
@@ -479,13 +479,10 @@ def station_activity_timechart(days=30):
     results['series'] = fill_series()
 
     def populate_data(sid):
-        dataSql = """SELECT
-                    sid,
-                    (starttime - INTERVAL {0} HOUR),
-                    SUM(duration / 60) as mins
+        dataSql = """SELECT sid, starttime, (duration / 60) as mins
                 FROM history
-                WHERE starttime >= (CURRENT_DATE - INTERVAL {1} DAY) AND sid = {2}
-                """.format(CONFIG.LOCALOFFSET, days, sid)
+                WHERE starttime >= (CURRENT_DATE - INTERVAL {0} DAY) AND sid = {1}
+                """.format(days, sid)
         return [i for i in sqlConn.read(dataSql)]
 
     for sid in results['series']:
@@ -524,17 +521,17 @@ def water_usage_stats():
 
 def chart_stats_chrono(days=7):
     sqlConn = SqlHelper()
-    sqlStr = """SELECT DISTINCT DAYOFWEEK((starttime - INTERVAL {0} HOUR)) as day, SUM(duration / 60) as mins
+    sqlStr = """SELECT DISTINCT DAYOFWEEK((starttime + INTERVAL {0} HOUR)) as day, SUM(duration / 60) as mins
             FROM history
             WHERE starttime >= (CURRENT_DATE - INTERVAL {1} DAY)
             GROUP BY day
             ORDER BY day ASC""".format(CONFIG.LOCALOFFSET, days)
-    sqlStr2 = """SELECT DISTINCT DAYOFWEEK((starttime - INTERVAL {0} HOUR)) as day, SUM(duration / 60) as mins
+    sqlStr2 = """SELECT DISTINCT DAYOFWEEK((starttime + INTERVAL {0} HOUR)) as day, SUM(duration / 60) as mins
             FROM history
             WHERE starttime >= (CURRENT_DATE - INTERVAL {1} DAY) AND schedule_id>0
             GROUP BY day
             ORDER BY day ASC""".format(CONFIG.LOCALOFFSET, days)
-    sqlStr3 = """SELECT DISTINCT DAYOFWEEK((starttime - INTERVAL {0} HOUR)) as day, SUM(duration / 60) as mins
+    sqlStr3 = """SELECT DISTINCT DAYOFWEEK((starttime + INTERVAL {0} HOUR)) as day, SUM(duration / 60) as mins
             FROM history
             WHERE starttime >= (CURRENT_DATE - INTERVAL {1} DAY) AND schedule_id=0
             GROUP BY day
@@ -582,7 +579,7 @@ def chart_minutes_by_station_per_dow(days=30):
     def populate_data(sid):
         dataSql = """SELECT
                     sid,
-                    DAYOFWEEK((starttime - INTERVAL {0} HOUR)) as day,
+                    DAYOFWEEK((starttime + INTERVAL {0} HOUR)) as day,
                     SUM(duration / 60) as mins
                 FROM history
                 WHERE starttime >= (CURRENT_DATE - INTERVAL {1} DAY) AND sid = {2}
