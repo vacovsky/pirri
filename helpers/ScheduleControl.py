@@ -1,6 +1,6 @@
 # this needs to be run in a thread, and kick messages off to RMQ for
 # execution.
-from data import config as CONFIG
+import config as CONFIG
 from helpers.MySqlHelper import SqlHelper
 
 import calendar
