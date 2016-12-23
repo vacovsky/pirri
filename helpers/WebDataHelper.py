@@ -105,7 +105,7 @@ def schedule_add(schedule):
             saturday,
             starttime,
             duration,
-            repeat,
+            repeating,
             station
         ) VALUES (
             {0},

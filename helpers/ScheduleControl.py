@@ -65,16 +65,16 @@ class ScheduleControl:
         except TypeError as e:
             print(e)
 
-    def forecast_adjust(self):
+    def forecast_adjust(self, task):
         # TODO: wire this up
-        if self.fw_checked is None or (datetime.now() - self.fw_checked() > timedelta(
+        if self.fw_checked is None or (datetime.now() - self.fw_checked > timedelta(
                 minutes=CONFIG.WEATHER_CHECK_INTERVAL * 5)):
             self.forecast = self.wh.get_forecast_weather()
             self.fw_checked = datetime.now()
 
     def current_adjust(self, task):
         try:
-            if self.cw_checked is None or (datetime.now() - self.cw_checked() > timedelta(
+            if self.cw_checked is None or (datetime.now() - self.cw_checked > timedelta(
                     minutes=CONFIG.WEATHER_CHECK_INTERVAL)):
                 self.current = self.wh.WeatherHelper().get_current_weather()
                 self.cw_checked = datetime.now()
@@ -85,7 +85,7 @@ class ScheduleControl:
                 task['duration'] *= modified
                 print(str(task))
         except:
-            print("Unabloe to modify watering time based on weather.  Executing run at specified duration.")
+            print("Unable to modify watering time based on weather.  Executing run at specified duration.")
         return task
 
     def adjust_watering_for_weather(self, tasks):
