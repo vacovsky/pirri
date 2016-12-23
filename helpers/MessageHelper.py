@@ -19,7 +19,7 @@ class RMQ:
         self.queue = CONFIG.SETTINGS['RMQ_QUEUE']
 
     def publish_message(self, message):
-        self.publish_messages([message], self.queue)
+        self.publish_messages([message])
 
     def publish_messages(self, messages=[]):
         self.open_connection()
@@ -34,7 +34,7 @@ class RMQ:
     def open_connection(self):
         self.CONNECTION = pika.BlockingConnection(pika.ConnectionParameters(
             heartbeat_interval=0,
-            host='localhost'))
+            host=CONFIG.SETTINGS['RMQ_HOST']))
         self.CHANNEL = self.CONNECTION.channel()
 
     def close_connection(self):
