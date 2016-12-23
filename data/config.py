@@ -1,6 +1,11 @@
+import dateutil.tz
+import datetime
 
 
-LOCALOFFSET = -8
+localtz = dateutil.tz.tzlocal()
+LOCALOFFSET = localtz.utcoffset(
+    datetime.datetime.now(localtz)).total_seconds() / 3600
+
 
 QUEUE = 'pirri'
 DBPATH = '/home/joe/Projects/pirri/data/pirri.sql'

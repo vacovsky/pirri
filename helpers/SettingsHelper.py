@@ -4,10 +4,8 @@ import datetime
 from data import config as CONFIG
 
 SETTINGS = {
-
     'LOCALOFFSET': -8,
     'QUEUE': 'pirri',
-    'DBPATH': '/home/joe/Projects/pirri/data/pirri.sql',
     'RMQ_HOST': 'localhost',
     'RMQ_PORT': 5672,
     'RMQ_USER': '',
@@ -33,5 +31,46 @@ SETTINGS = {
 }
 
 
-def populate_settings():
-	self.conn = pymysql.connect()
+class Settings:
+    conn = None
+    settings_query = "SELECT * FROM SETTINGS"
+
+    def populate_settings(self):
+        self.conn = pymysql.connect(SETTINGS['MYSQL_HOST'],
+                                    SETTINGS['MYSQL_USER'],
+                                    SETTINGS['MYSQL_PASS'],
+                                    SETTINGS['MYSQL_DB'])
+        self._map_settings(self._get_settings())
+
+    def _map_settings(self, settings_list):
+        global SETTINGS
+        SETTINGS['OPENWEATHER_APPID'] = settings_list[1]
+        SETTINGS['OPENWEATHER_ZIP'] = settings_list[2]
+        SETTINGS['OPENWEATHER_UNITS'] = settings_list[3]
+
+        SETTINGS['RMQ_HOST'] = settings_list[3]
+        SETTINGS['OPENWEATHER_UNITS'] = settings_list[4]
+        SETTINGS['OPENWEATHER_UNITS'] = settings_list[5]
+        SETTINGS['OPENWEATHER_UNITS'] = settings_list[6]
+        SETTINGS['OPENWEATHER_UNITS'] = settings_list[7]
+        SETTINGS['OPENWEATHER_UNITS'] = settings_list[8]
+        SETTINGS['OPENWEATHER_UNITS'] = settings_list[9]
+        SETTINGS['OPENWEATHER_UNITS'] = settings_list[10]
+        SETTINGS['OPENWEATHER_UNITS'] = settings_list[11]
+        SETTINGS['OPENWEATHER_UNITS'] = settings_list[12]
+        SETTINGS['OPENWEATHER_UNITS'] = settings_list[13]
+        SETTINGS['OPENWEATHER_UNITS'] = settings_list[14]
+        SETTINGS['OPENWEATHER_UNITS'] = settings_list[15]
+        # SETTINGS['OPENWEATHER_UNITS'] = settings_list[3]
+        # SETTINGS['OPENWEATHER_UNITS'] = settings_list[3]
+        # SETTINGS['OPENWEATHER_UNITS'] = settings_list[3]
+        # SETTINGS['OPENWEATHER_UNITS'] = settings_list[3]
+        # SETTINGS['OPENWEATHER_UNITS'] = settings_list[3]
+        # SETTINGS['OPENWEATHER_UNITS'] = settings_list[3]
+        # SETTINGS['OPENWEATHER_UNITS'] = settings_list[3]
+        # SETTINGS['OPENWEATHER_UNITS'] = settings_list[3]
+
+    def _get_settings(self):
+        c = self.conn.cursor()
+        c.execute(self.settings_query)
+        return c[0]
