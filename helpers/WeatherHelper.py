@@ -99,8 +99,6 @@ class WeatherHelper:
 
 
 if __name__ == '__main__':
-    # WeatherHelper(units='imperial', zip='93465', appid='0d9330204965c8852145c4a52b56fd1a')
     wh = WeatherHelper()
-
     print(wh.get_forecast_weather())
     print(wh.get_current_weather())
